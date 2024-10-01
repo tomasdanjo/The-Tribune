@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log In</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-white">
+    <div class="flex h-screen">
+        <div class="w-1/3 bg-gray-100 flex justify-center items-center">
+           
+            <div class="bg-white p-8 rounded-lg shadow-md">
+                <h1 class="text-center text-2xl mb-4">Sign in</h1>
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+                    {{ form.as_p }} 
+                    <button type="submit" class="w-full bg-blue-500 text-white py-2 rounded">Log in</button>
+                    <a href="{% url 'signup' %}">Sign up </a>
+                </form>
+                {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %} 
+            </div>
+        </div>
+
+        <div class="w-1/2 flex justify-center items-center">
+            <div name="log"></div>
+                <p>This is logo</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
