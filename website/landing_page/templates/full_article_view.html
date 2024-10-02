@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article.headline }}</title>
+    {% load static%}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Add your CSS file if any -->
+</head>
+<body>
+
+    <header>
+        <h1>{{ article.headline }}</h1>
+        <p> {{ article.date_published }}</p>
+        <p>{{ article.tag_id.tag_name }}</p>
+    </header>
+
+    {% if article.photo_id %}
+        <div>
+            <img src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" alt="Image for {{ article.headline }}" style="max-width:100%; height:auto;">
+            <p>{{ article.photo_id.caption }}</p>
+        </div>
+    {% endif %}
+
+    <section>
+        <article>
+            {% comment %} <h2>Article Content</h2> {% endcomment %}
+            <p>{{ article.content|linebreaks }}</p> <!-- Convert newlines to <br> for better formatting -->
+        </article>
+    </section>
+
+    <footer>
+        {% comment %} <p>Posted under <strong>{{ article.tag_id.tag_name }}</strong> tag.</p> {% endcomment %}
+        <a href="{% url 'home' %}">Back to Articles</a> <!-- Link back to the article listing page -->
+    </footer>
+
+</body>
+</html>
