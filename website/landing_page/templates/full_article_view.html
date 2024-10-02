@@ -31,6 +31,22 @@
         </article>
     </section>
 
+    <section>
+        <h2>Comments:</h2>
+        {% if comments %}
+            <ul>
+                {% for comment in comments %}
+                
+                    <li><strong>{{ comment.commenter_id.user_credentials.first_name }}</strong> said: {{ comment.content }} ({{ comment.date_published }})</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No comments yet.</p>
+        {% endif %}
+
+
+    </section>
+
     <footer>
         {% comment %} <p>Posted under <strong>{{ article.tag_id.tag_name }}</strong> tag.</p> {% endcomment %}
         <a href="{% url 'home' %}">Back to Articles</a> <!-- Link back to the article listing page -->
