@@ -1,3 +1,6 @@
 from django.shortcuts import render
+from .models import Article
 
-# Create your views here.
+def landing_page(request):
+    articles = Article.objects.all()
+    return render(request, 'landing_page.html', {'articles': articles})
