@@ -19,7 +19,7 @@
                 <p><strong>Photo Caption:</strong> {{ article.photo_id.caption }}</p>
             {% endif %}
             
-            <p>{{ article.content }}</p>
+            {% comment %} <p>{{ article.content }}</p> {% endcomment %}
             <hr>
         </div>
     {% empty %}
