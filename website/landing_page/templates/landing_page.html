@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Landing Page</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+
+{% block title %}
+    News Landing Page 
+{% endblock %}
+
+{% block content %}
     <form method="GET" action="{% url 'search' %}">
         <input type="text" name="query" placeholder="Search articles..." required>
         <button type="submit">Search</button>
@@ -33,5 +34,4 @@
         <p>No articles found.</p>
     {% endfor %}
 
-</body>
-</html>
+{% endblock %}

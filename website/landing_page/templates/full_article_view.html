@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ article.headline }}</title>
-    {% load static%}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Add your CSS file if any -->
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ article.headline }}
+{% endblock %}
+{% block content %}
+<article>
 
     <header>
         <p>{{ article.tag_id.tag_name }}</p>
@@ -81,5 +78,5 @@
         <a href="{% url 'home' %}">Back to Articles</a> <!-- Link back to the article listing page -->
     </footer>
 
-</body>
-</html>
+</article>
+{% endblock %}

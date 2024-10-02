@@ -1,13 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ article.headline }}</title>
-    {% load static%}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Add your CSS file if any -->
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block title %}
+    Search with The Tribune
+{% endblock %}
+
+{% block content %}
     {% for article in articles %}
         <div>
             <p><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p>
@@ -28,5 +25,5 @@
         <p>No articles found.</p>
     {% endfor %}
 
-</body>
-</html>
+{% endblock %}
+
