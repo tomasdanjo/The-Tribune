@@ -47,6 +47,35 @@
 
     </section>
 
+    <section>
+        <h2>Related Stories</h2>
+        {% if related_stories %}
+                {% for article in related_stories %}
+                    <div>
+                        {% comment %} <p><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p> {% endcomment %}
+                        <h2><a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a></h2>
+                        <p>{{ article.writer_id.user_credentials.first_name }} {{ article.writer_id.user_credentials.last_name }}</p>
+                        <p>{{ article.date_published }}</p>
+                        
+                        
+                        {% if article.photo_id %}
+                            <img src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" alt="Photo for {{ article.headline }}">
+                            {% comment %} <p><strong>Photo Caption:</strong> {{ article.photo_id.caption }}</p> {% endcomment %}
+                        {% endif %}
+                        
+                        {% comment %} <p>{{ article.content }}</p> {% endcomment %}
+                        <hr>
+                    </div>
+
+                
+                {% endfor %}
+        {% else %}
+            <p>No related stories yet.</p>
+        {% endif %}
+
+    </section>
+
+
     <footer>
         {% comment %} <p>Posted under <strong>{{ article.tag_id.tag_name }}</strong> tag.</p> {% endcomment %}
         <a href="{% url 'home' %}">Back to Articles</a> <!-- Link back to the article listing page -->

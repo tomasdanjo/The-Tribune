@@ -8,5 +8,6 @@ def landing_page(request):
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)
     comments = Comment.objects.filter(article_id=id)
-    return render(request,'full_article_view.html',{'article':article,'comments':comments})
+    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)
+    return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories})
 
