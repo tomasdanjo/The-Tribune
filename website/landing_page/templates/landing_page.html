@@ -10,15 +10,15 @@
 
     {% for article in articles %}
         <div>
-            
-            <h2><a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a></h2>
-   
-            <p><strong>Date Published:</strong> {{ article.date_published }}</p>
             <p><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p>
+            <h2><a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a></h2>
+            <p>{{ article.writer_id.user_credentials.first_name }} {{ article.writer_id.user_credentials.last_name }}</p>
+            <p>{{ article.date_published }}</p>
+            
             
             {% if article.photo_id %}
                 <img src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" alt="Photo for {{ article.headline }}">
-                <p><strong>Photo Caption:</strong> {{ article.photo_id.caption }}</p>
+                {% comment %} <p><strong>Photo Caption:</strong> {{ article.photo_id.caption }}</p> {% endcomment %}
             {% endif %}
             
             {% comment %} <p>{{ article.content }}</p> {% endcomment %}

@@ -10,9 +10,11 @@
 <body>
 
     <header>
-        <h1>{{ article.headline }}</h1>
-        <p> {{ article.date_published }}</p>
         <p>{{ article.tag_id.tag_name }}</p>
+        <h1>{{ article.headline }}</h1>
+        <p>{{ article.writer_id.user_credentials.first_name }} {{ article.writer_id.user_credentials.last_name }}</p>
+        <p> {{ article.date_published }}</p>
+        
     </header>
 
     {% if article.photo_id %}
