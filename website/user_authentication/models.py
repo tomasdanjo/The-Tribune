@@ -19,3 +19,11 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user_credentials.username
+    
+
+class Notification(models.Model):
+    message = models.TextField()
+    date_notified = models.DateTimeField()
+    user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    
+    
