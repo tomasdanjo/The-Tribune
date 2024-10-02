@@ -11,3 +11,7 @@ def full_article(request, id):
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)
     return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories})
 
+def search_article(request):
+    query = request.GET.get('query')
+    articles = Article.objects.filter(headline__icontains=query)  # Adjust as necessary for your search logic
+    return render(request, 'search_results.html', {'articles': articles})

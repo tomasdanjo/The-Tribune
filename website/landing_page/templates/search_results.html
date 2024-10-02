@@ -3,16 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>News Landing Page</title>
+    <title>{{ article.headline }}</title>
+    {% load static%}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}"> <!-- Add your CSS file if any -->
 </head>
 <body>
-    <form method="GET" action="{% url 'search' %}">
-        <input type="text" name="query" placeholder="Search articles..." required>
-        <button type="submit">Search</button>
-    </form>
-
-
-    <h1>News Articles</h1>
     {% for article in articles %}
         <div>
             <p><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p>
