@@ -15,7 +15,7 @@
             <p><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p>
             
             {% if article.photo_id %}
-                <img src="{{ article.photo_id.photo.url }}" alt="Photo for {{ article.headline }}">
+                <img src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" alt="Photo for {{ article.headline }}">
                 <p><strong>Photo Caption:</strong> {{ article.photo_id.caption }}</p>
             {% endif %}
             
