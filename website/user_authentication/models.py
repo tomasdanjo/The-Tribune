@@ -9,12 +9,12 @@ class UserProfile(models.Model):
         ('writer', 'Writer'),
         ('editor', 'Editor'),
         ('user', 'User'),
-        ('admid', 'Admin'),
+        ('admin', 'Admin'),
     ]
         
     user_credentials = models.OneToOneField(User,on_delete=models.CASCADE)
     #defaul 2006
-    birthdate = models.DateField()
+    birthdate = models.DateField(null=True, blank=True)
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
     def __str__(self):

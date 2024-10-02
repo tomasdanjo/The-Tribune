@@ -6,6 +6,77 @@
     <title>Log In</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@latest/dist/tailwind.min.css" rel="stylesheet">
 </head>
+<body class="bg-white"></body>
+
+    <div class="flex h-screen" >
+        <div class="w-2/5 bg-white flex justify-center items-center" style="margin-top:12% ;">
+                <form method="POST" class="space-y-4">
+                    {% csrf_token %}
+      
+                    <div class="Sign In" style="align-self: stretch; height: 84.49px; flex-direction: column; justify-content: flex-end; align-items: flex-start; gap: 7px; display: flex">
+                        <div class="Logo" style="width: 520px; height: 50.49px; position: relative">
+                            <div style=" display: flex; align-items: center; justify-content: center; text-align: center; color: #45383F; font-size: 18px; font-family: Poppins; font-weight: 600;; word-wrap: break-word; text-decoration: none;">Logo</div> 
+                        </div>
+
+                        <div class="Login" style="width: 520px; height: 50.49px; position: relative">
+                            <div style=" display: flex; align-items: center; justify-content: center; text-align: center; color: #45383F; font-size: 18px; font-family: Poppins; font-weight: 600; word-wrap: break-word; text-decoration: none;">Log in to your an account</div> 
+                        </div>
+                        <div class="flex justify-center items-center text-red-500">
+                            {% if messages %}
+                                <ul class="text-center">
+                                    {% for message in messages %}
+                                        <li>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                        
+                        
+
+                        <div class="username" style="width: 147.97px; color: #45383F; font-size: 18px; font-family: Poppins; font-weight: 400; word-wrap: break-word">Username</div>
+                        
+                        <div class="Frame12" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 7px; display: inline-flex">
+                            <div>
+                                {{ form.username }}
+                            </div>   
+                        </div>
+
+                        <div class="Password" style="width: 147.97px; color: #45383F; font-size: 18px; font-family: Poppins; font-weight: 400; word-wrap: break-word">Password</div>
+                        <div class="Frame12" style="align-self: stretch; justify-content: flex-start; align-items: flex-start; gap: 7px; display: inline-flex">
+                            <div>
+                                {{ form.password }}
+                            </div>
+                        </div> 
+                    </div> 
+                    <div class="SubmitButtons" style="width: 520px; height: 201.97px; flex-direction: column; justify-content: flex-start; align-items: flex-start; gap: 40px; display: inline-flex">
+                        <div class="LoginButton" style="width: 520px; height: 50px; position: relative">
+                          <button type="submit" style="width: 520px; height: 50px;background: #596E9B; box-shadow: 0px 12.116715431213379px 24.233430862426758px #596E9B; border-radius: 8.08px; position: absolute; text-align: center; color: #F2F2F2; font-size: 18px; font-family: Poppins; font-weight: 600; text-transform: uppercase; word-wrap: break-word">Log in</button>
+                        </div>
+
+                        <div class="Frame6" style="align-self: stretch; justify-content: flex-start; align-items: center; gap: 23px; display: inline-flex">
+                          <div class="Line1" style="flex: 1 1 0; height: 0px; background: #45383F; border: 1.01px #45383F solid"></div>
+                          <div class="AlreadyHaveAnAccount" style="color: #45383F; font-size: 14.14px; font-family: Poppins; font-weight: 400; word-wrap: break-word">Don't have an account yet?</div>
+                          <div class="Line2" style="flex: 1 1 0; height: 0px; background: #45383F; border: 1.01px #45383F solid"></div>
+                        </div>
+
+                        <div class="SignUp" style="width: 520px; height: 50.49px; position: relative">
+                            <div>
+                                <a href="{% url 'signup' %}" style="width: 520px; height: 50px; border-radius: 8.08px; border: 1px #596E9B solid; background: white; display: flex; align-items: center; justify-content: center; text-align: center; color: #596E9B; font-size: 18px; font-family: Poppins; font-weight: 600; text-transform: uppercase; word-wrap: break-word; text-decoration: none;">Sign up</a>
+                          </div>  
+                        </div>
+                      </div>
+                </form>
+        </div>
+
+        <div class="w-3/5  flex justify-center items-center" style=" padding-left: 32px; padding-right: 32px; padding-top: 10px; padding-bottom: 10px;
+        background: linear-gradient(35deg, #46445C 0%, #45383F 100%); justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+            <div name="log"></div>
+                <p class="bg-white">logo here</p>
+            </div>
+        </div>
+    </div>
+</body>
+<!----
 <body class="bg-white">
     <div class="flex h-screen">
         <div class="w-1/3 bg-gray-100 flex justify-center items-center">
@@ -35,4 +106,5 @@
         </div>
     </div>
 </body>
+-->
 </html>
