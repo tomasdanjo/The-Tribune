@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('user_authentication.urls')),
     path('',include('landing_page.urls')),
+    path('',include('search.urls'))
 ]
 
 
