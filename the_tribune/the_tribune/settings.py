@@ -42,7 +42,10 @@ INSTALLED_APPS = [
     'django_browser_reload',
     'user_authentication',
     'content_management',
+    'article',
+    'landing_page',
     
+
 ]
 
 MIDDLEWARE = [

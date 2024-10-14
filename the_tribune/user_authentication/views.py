@@ -28,7 +28,7 @@ def login_view(request):
     else:
         form = Login_Form()
     
-    return render(request,'user_authentication/login.html',{'form':form})
+    return render(request,'login.html',{'form':form})
     
 def signup_view(request):
     if request.method == "POST":
@@ -59,4 +59,4 @@ def signup_view(request):
     else:
         form = Signup_Form()
 
-    return render(request, 'user_authentication/signup.html', {'form': form})
+    return render(request, 'signup.html', {'form': form})
