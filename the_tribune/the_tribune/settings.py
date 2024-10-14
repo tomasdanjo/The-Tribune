@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'content_management',
     'article',
     'landing_page',
-    
+    'search',
+
 
 ]
 
