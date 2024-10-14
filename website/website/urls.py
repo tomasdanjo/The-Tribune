@@ -23,7 +23,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('user_authentication.urls')),
     path('',include('landing_page.urls')),
-    path('',include('search.urls'))
+    path('',include('search.urls')),
+    path("__reload__/", include("django_browser_reload.urls")),
 ]
 
 
