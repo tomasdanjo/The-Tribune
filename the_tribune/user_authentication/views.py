@@ -31,27 +31,32 @@ def login_view(request):
     return render(request,'user_authentication/login.html',{'form':form})
     
 def signup_view(request):
-    if request.method =="POST":
+    if request.method == "POST":
         form = Signup_Form(request.POST)
         if form.is_valid():
-            try:
-                email = form.cleaned_data['email']
-                password = form.cleaned_data['password']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+            first_name = form.cleaned_data['first_name']  # Ensure you get first_name and last_name
+            last_name = form.cleaned_data['last_name']
 
-                # Check if the email already exists
-                if UserProfile.objects.filter(email=email).exists():
-                    messages.error(request, 'This email is already registered. Please log in.')
-                    return redirect('signup')  # Adjust as necessary
+            # Check if the email already exists
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'This email is already registered. Please log in.')
+                return redirect('signup')
 
-                # Create the user and save it
-                user = User.objects.create_user(username=email, email=email, password=password)
-                user_profile = UserProfile.objects.create(user=user, email=email)  # Create the user profile
-                messages.success(request, 'Your account has been created successfully! You can now log in.')
-                return redirect('login')  # Adjust as necessary
-            except Exception as e:
-                messages.error(request, f"An error occurred: {str(e)}") 
+            # Create the user and save it
+            user = User.objects.create_user(username=email, email=email, password=password)
+
+            # Create the user profile
+            UserProfile.objects.create(
+                user_credentials=user,  # Use user_credentials instead of user
+                first_name=first_name,
+                last_name=last_name,
+                email=email
+            )
+            messages.success(request, 'Your account has been created successfully! You can now log in.')
+            return redirect('login')
     else:
         form = Signup_Form()
-    
-    return render(request,'user_authentication/signup.html',{'form':form})
 
+    return render(request, 'user_authentication/signup.html', {'form': form})

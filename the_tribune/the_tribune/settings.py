@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_browser_reload',
     'user_authentication',
+    'content_management',
+    
 ]
 
 MIDDLEWARE = [
