@@ -16,13 +16,13 @@
                             <a href="{% url 'full_article_view' article.id %}" class="hover:underline">{{ article.headline }}</a>
                         </h2>
                         <p class="text-gray-700 mb-2">
-                            By {{ article.writer_id.user_credentials.first_name }} {{ article.writer_id.user_credentials.last_name }}
+                            By {{ article.writer.first_name }} {{ article.writer.last_name }}
                         </p>
                         <p class="text-gray-500 text-sm mb-4">{{ article.date_published }}</p>
                         
-                        {% if article.photo_id %}
+                        {% if article.photo %}
                             <div class="mb-4">
-                                <img src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" alt="Photo for {{ article.headline }}" class="w-full h-40 object-cover rounded-md">
+                                <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}" class="w-full h-40 object-cover rounded-md">
                             </div>
                         {% endif %}
                         

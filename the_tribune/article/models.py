@@ -3,7 +3,25 @@ from user_authentication.models import UserProfile
 # Create your models here.
 
 class Category(models.Model):
-    category_name = models.CharField(max_length=100)
+    CATEGORY_CHOICES = [
+        ('news', 'News'),
+        ('sports', 'Sports'),
+        ('entertainment', 'Entertainment'),
+        ('technology', 'Technology'),
+        ('lifestyle', 'Lifestyle'),
+        ('opinion','Opinion'),
+        ('editorial','editorial'),
+        ('featured_topics','Featured Topics'),
+        ('environment','Environment'),
+        ('sci&tech','Science & Tech.')
+
+    ]
+
+    category_name = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='news')
+
+    def __str__(self):
+        return self.get_category_name_display()  # To display the readable name
+
 
 class Photo(models.Model):
     photo = models.ImageField(upload_to='article_photos/')
@@ -33,4 +51,5 @@ class Article(models.Model):
     editor = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING, related_name="editor")
     photo = models.ForeignKey(Photo, on_delete=models.RESTRICT)
     tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
+    category = models.ForeignKey('Category', on_delete=models.RESTRICT, default=1)
 

@@ -18,7 +18,7 @@
         >
         <button 
             type="submit" 
-            class="ml-2 bg-red-50 rounded-lg px-2 py-3"
+            class="ml-2 bg-red-500 rounded-lg px-2 py-3"
         >
             Search
         </button>
@@ -35,14 +35,14 @@
                 <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
             </h2>
             <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer_id.user_credentials.first_name }} {{ article.writer_id.user_credentials.last_name }} 
+                By {{ article.writer.first_name }} {{ article.writer.last_name }} 
                 | {{ article.date_published }}
             </p>
             
             {% if article.photo_id %}
                 <div class="w-48 h-36 overflow-hidden rounded-lg"> <!-- 200px width with 4:3 aspect ratio -->
                     <img 
-                        src="{{ MEDIA_URL }}{{ article.photo_id.photo.url }}" 
+                        src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
                         alt="Photo for {{ article.headline }}" 
                         class="w-full h-full object-cover"
                     >
