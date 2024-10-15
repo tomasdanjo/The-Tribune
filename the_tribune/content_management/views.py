@@ -4,7 +4,7 @@ from django.shortcuts import render
 def writer_dashboard_view(request):
     user = request.user
 
-    return render(request,'content_management/writer_dashboard.html',{'user':user})
+    return render(request,'writer_dashboard.html',{'user':user})
 
-def editor_dashboard_view(request):
-    pass
+# def editor_dashboard_view(request):
+#     pass
