@@ -1,6 +1,7 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404, redirect
 from article.models import Article
-from .models import Comment
+from .models import Comment, Subscription
+from django.contrib import messages  # For flash messages
 from django.utils import timezone
 # from myapp.models import Article
 
@@ -21,3 +22,21 @@ def full_article(request, id):
 
     return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories})
 
+def subscribe(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        if email:
+            # Check if the email is already subscribed
+            if Subscription.objects.filter(email=email).exists():
+                messages.info(request, 'You are already subscribed with this email.')
+            else:
+                # Create a new subscription
+                Subscription.objects.create(email=email)
+                messages.success(request, 'Successfully subscribed to the newsletter!')
+            return redirect('home')
+        else:
+            messages.error(request, 'Please provide a valid email address.')
+            return redirect('home')
+    else:
+        # Optionally, handle GET requests or redirect
+        return redirect('home')

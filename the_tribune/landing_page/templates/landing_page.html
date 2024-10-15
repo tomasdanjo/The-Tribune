@@ -54,9 +54,8 @@
     {% empty %}
         <p class="text-gray-500">No articles found.</p>
     {% endfor %}
-    <!--- subscribe newsletter -->
-
-    <div class="mt-8 p-6 bg-gray-100 rounded-lg">
+     <!-- Subscribe Newsletter -->
+     <div class="mt-8 p-6 bg-gray-100 rounded-lg">
         <h2 class="text-xl font-bold mb-4">Subscribe to Our Newsletter</h2>
         <form method="POST" action="{% url 'subscribe' %}">
             {% csrf_token %}
@@ -74,6 +73,14 @@
                 Subscribe
             </button>
         </form>
+        <!-- Display Messages -->
+        {% if messages %}
+            <div class="mt-4">
+                {% for message in messages %}
+                    <p class="text-{{ message.tags }}">{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}  
