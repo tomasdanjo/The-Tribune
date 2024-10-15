@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404, redirect
 from article.models import Article
 from .models import Comment, Subscription
-from django.contrib import messages  # For flash messages
+from django.contrib import messages 
 from django.utils import timezone
 # from myapp.models import Article
 
@@ -26,11 +26,11 @@ def subscribe(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         if email:
-            # Check if the email is already subscribed
+            # Check if the email naa ni exist na ang email
             if Subscription.objects.filter(email=email).exists():
                 messages.info(request, 'You are already subscribed with this email.')
             else:
-                # Create a new subscription
+                # Create new
                 Subscription.objects.create(email=email)
                 messages.success(request, 'Successfully subscribed to the newsletter!')
             return redirect('home')
