@@ -23,22 +23,18 @@
                     </ul>
                     {% endif %}
 
+                    <label class="text-gray-800 text-lg">Username</label>
+                    <div class="w-full">
+                        {{ form.username }}
+                    </div>
+
                     <label class="text-gray-800 text-lg">Name</label>
                     <div class="flex gap-4">
                         <div class="w-full">{{ form.first_name }}</div>
                         <div class="w-full">{{ form.last_name }}</div>
                     </div>
 
-                    <label class="text-gray-800 text-lg">Birthdate</label>
-                    <div class="w-full">{{ form.birthdate }}</div>
-
-                    <label class="text-gray-800 text-lg">Username</label>
-                    <div class="w-full">
-                        {{ form.username }}
-                        {% if form.username.errors %}
-                        <div class="text-red-500">{{ form.username.errors }}</div>
-                        {% endif %}
-                    </div>
+    
 
                     <label class="text-gray-800 text-lg">Email address</label>
                     <div class="w-full">
