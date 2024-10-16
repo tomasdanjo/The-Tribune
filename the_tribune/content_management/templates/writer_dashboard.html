@@ -7,27 +7,28 @@
 {% block content %}
 
     <div class="WriterHomePage" style="width: 1920px; height: 2189px; background: #F2F2F2; flex-direction: column; justify-content: flex-start; align-items: center; display: inline-flex">
-        <div class="Header" style="align-self: stretch; height: 150px; padding-left: 40px; padding-right: 40px; background: #596E9B; justify-content: flex-start; align-items: center; gap: 100px; display: inline-flex">
+        <div class="Header" style="align-self: stretch; height: 75px; padding-left: 40px; padding-right: 40px; background: #596E9B; justify-content: flex-start; align-items: center; gap: 100px; display: inline-flex">
           
-          <div class="SideBarAndLogo" style="height: 100px; justify-content: center; align-items: center; gap: 40px; display: flex">
-            <div class="Frame14" style="width: 100px; align-self: stretch; background: #45383F; border-radius: 15px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
+          <div class="SideBarAndLogo" style="height: 50px; justify-content: center; align-items: center; gap: 40px; display: flex">
+            <div class="Frame14" style="width: 50px; align-self: stretch; background: #45383F; border-radius: 15px; overflow: hidden; justify-content: center; align-items: center; gap: 10px; display: inline-flex">
               logo
+              
             </div>
+            <form method="POST" action="{% url 'logout' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger">Logout</button>
+          </form>
           
-            <div class="Group" style="width: 361.31px; height: 70px; position: relative">
-              The Tribune
-            </div>
+            The Tribune
           </div>
 
-          <div class="Search" style="flex: 1 1 0; height: 60px; padding-left: 40px; padding-right: 40px; background: #F2F2F2; border-radius: 15px; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+          <div class="Search" style="flex: 1 1 0; height: 40px; padding-left: 40px; padding-right: 40px; background: #F2F2F2; border-radius: 15px; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
             <div class="SearchHeadlines" style="width: 287px; height: 24px; color: #45383F; font-size: 18px; font-family: Istok Web; font-weight: 400; word-wrap: break-word">Search headlines</div>
           </div>
           <!-- dont mind the read lines -->
-          <button class="WriteArticle" onclick="window.location.href='{% url 'create' %}'" style="height: 100px; padding-left: 40px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #45383F; border-radius: 15px; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
-            <div class="SystemUiconsCreate" style="width: 60px; height: 60px; padding-top: 8.68px; padding-bottom: 10px; padding-left: 10px; padding-right: 8.82px; background: #45383F; justify-content: center; align-items: center; display: flex">
-              <div class="Group" style="width: 41.18px; height: 41.32px; position: relative">
+          <button class="WriteArticle" onclick="window.location.href='{% url 'create' %}'" style="height: 50px; padding-left: 40px; padding-right: 40px; padding-top: 20px; padding-bottom: 20px; background: #45383F; border-radius: 15px; justify-content: flex-start; align-items: center; gap: 10px; display: flex">
+            <div class="SystemUiconsCreate" style="width: 50px; height: 50px; padding-top: 8.68px; padding-bottom: 10px; padding-left: 10px; padding-right: 8.82px; background: #45383F; justify-content: center; align-items: center; display: flex">
                 [icon]
-              </div>
             </div>
             <div class="Create" style="text-align: center; color: #F2F2F2; font-size: 30px; font-family: Oswald; font-weight: 400; word-wrap: break-word">Create</div>
           </button>
@@ -54,10 +55,14 @@
               
               <div class="Headline" style="width: 440px; text-align: justify; color: #596E9B; font-size: 30px; font-family: Oswald; font-weight: 400; word-wrap: break-word;">
                 {{ article.headline }}
+                <a href="{% url 'full_article_view' article.id %}">
+                  {{ article.headline }}
+                </a>
               </div>
             
               <div class="Sep62024" style="width: 440px; color: #857472; font-size: 30px; font-family: Oswald; font-weight: 400; text-transform: uppercase; word-wrap: break-word;">
                 {{ article.date_published }}
+                
               </div>
           </div>
           {% endfor %}
