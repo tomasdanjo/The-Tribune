@@ -10,6 +10,13 @@ def writer_dashboard_view(request):
 
     return render(request,'writer_dashboard.html',{'user':user})
 
+def editor_dashboard_view(request):
+    user = request.user
+
+    return render(request,'editor_dashboard.html',{'user':user})
+
+
+
 def create_article(request):
     editors = UserProfile.objects.filter(is_editor=True)
     writer = UserProfile.objects.get(user_credentials=request.user)
@@ -44,9 +51,12 @@ def create_article(request):
 
             # Get the selected editor from the form
             editor_id = request.POST.get('editor')
+            print(editor_id)
             if editor_id:
                 editor = UserProfile.objects.get(pk=editor_id)
                 article.editor = editor
+            else:
+                article.editor = writer
 
             # Set the article status based on the action
             action = request.POST.get('action')
@@ -54,6 +64,8 @@ def create_article(request):
                 article.status = "draft"
             elif action == "submit_review":
                 article.status = "submitted"
+            elif action == "publish":
+                article.status = "published"
 
             article.save()  # Save the article
 

@@ -30,7 +30,7 @@ Create Article
             {% endif %}
         </div>
 
-        <!-- Editor Field -->
+        {% if writer.is_writer %}
         <div class="mb-4">
             <label for="editor" class="block text-gray-700 text-sm font-bold mb-2">Editor</label>
             <select name="editor" id="editor" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
@@ -43,6 +43,7 @@ Create Article
             <div class="text-red-500 text-xs italic mt-1">{{ article_form.editor.errors }}</div>
             {% endif %}
         </div>
+        {% endif %}
 
         <!-- Tag Field -->
         <div class="mb-4">
@@ -91,7 +92,11 @@ Create Article
 
         <div class="flex justify-between">
             <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" name="action" value="save_draft">Save as Draft</button>
+            {% if writer.is_writer %}
             <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="submit_review">Submit to Editor</button>
+            {% elif writer.is_editor %}
+            <button type="submit" class="bg-red-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="publish">publish</button>
+            {% endif %}
         </div>
     </form>
 </div>

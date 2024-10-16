@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Writer Dashboard
+{% endblock %}
+
+{% block content %}
+
+<div>Hello, {{ user.username }}!</div>  <!-- Display the logged-in user's name -->
+<a href="{% url 'create_article' %}" class="btn btn-primary">Write Article</a>  <!-- Button as a link -->
+{% endblock %}
