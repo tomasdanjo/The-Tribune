@@ -2,7 +2,14 @@ from django import forms
 from django.contrib.auth.models import User
 
 class Login_Form(forms.Form):
-    email = forms.EmailField(label='Email',max_length=254,required=True)
+    username = forms.CharField(       
+        widget=forms.TextInput(attrs={
+            'class': 'Username',
+            'style': 'flex: 1 1 0; width: 500px; height: 45px; padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
+            'placeholder': 'username'
+        }),
+        required=True
+    )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'Password',

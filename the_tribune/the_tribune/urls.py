@@ -24,6 +24,7 @@ urlpatterns = [
     path('',include('user_authentication.urls')),
     path('',include('search.urls')),
     path('',include('landing_page.urls')),
+    path('',include('content_management.urls')),
     path('__reload__/', include('django_browser_reload.urls')),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

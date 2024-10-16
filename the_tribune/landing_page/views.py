@@ -6,7 +6,7 @@ from django.utils import timezone
 # from myapp.models import Article
 
 def landing_page(request):
-    articles = Article.objects.all()
+    articles = Article.objects.filter(status    ='published')
     for article in articles:
         if timezone.is_naive(article.date_published):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
