@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Article
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+    <h1>Create Article</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <h2>Create Article</h2>
+        {{ article_form.as_p }}
+        
+        <h2>Upload Photo</h2>
+        {{ photo_form.as_p }}
+        
+        <button type="submit" class="btn btn-primary" name="save_draft">Save as Draft</button>
+        <button type="submit" class="btn btn-success" name="submit_review">Submit to Editor</button>
+    </form>
+</div>
+
+{% endblock %}

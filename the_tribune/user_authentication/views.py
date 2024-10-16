@@ -25,12 +25,12 @@ def login_view(request):
                         if user_profile.user_credentials == user:
                             if user_profile.is_writer:
                                 messages.success(request, 'Login successful! but  writer')
-                                return redirect('writer-dashboard')
+                                return redirect('writer_dashboard')
                                 #return to reader writer
                             elif user_profile.is_editor:
                                 #return to reader editor
                                 messages.success(request, 'Login successful! but  editor')
-                                redirect('editor-dashboard')  
+                                return redirect('editor_dashboard')  
                             else:
                                 #return to reader dashboard
                                 messages.success(request, 'Login successful! but reader')
