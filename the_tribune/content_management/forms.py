@@ -8,17 +8,37 @@ class Article_Form(forms.ModelForm):
             'headline',
             'content',
             'editor',
-            'photo',
-            'tag',
             'category'
         ]
-        widgets  = {
-            'headline': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter headline'}),
-            'content': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Enter article content'}),
-            'editor': forms.Select(attrs={'class': 'form-select'}),
-            'photo': forms.Select(attrs={'class': 'form-select'}),
-            'tag': forms.Select(attrs={'class': 'form-select'}),
-            'category': forms.Select(attrs={'class': 'form-select'}),
+        widgets = {
+            'headline': forms.TextInput(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'placeholder': 'Enter headline'
+            }),
+            'content': forms.Textarea(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'placeholder': 'Enter article content',
+                'rows': 10  # Optional: adjust the number of rows for the textarea
+            }),
+            'editor': forms.Select(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }),
+            'category': forms.Select(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }),
+        }
+
+class Tag_Form(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = [
+            'tag_name'
+        ]
+        widgets = {
+            'tag_name': forms.TextInput(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'placeholder': 'Enter Tag'
+            }),
         }
 
 class Photo_Form(forms.ModelForm):
@@ -31,15 +51,15 @@ class Photo_Form(forms.ModelForm):
         ]
         widgets = {
             'photo': forms.ClearableFileInput(attrs={
-                'class': 'form-control',
-                'accept': 'image/*',
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'accept': 'image/*'
             }),
             'caption': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter a caption for the photo',
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'placeholder': 'Enter a caption for the photo'
             }),
             'date_taken': forms.DateInput(attrs={
-                'class': 'form-control',
-                'type': 'date',  # This uses HTML5 date picker input
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'type': 'date'  # HTML5 date picker
             }),
         }
