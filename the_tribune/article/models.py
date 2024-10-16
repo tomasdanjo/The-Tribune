@@ -10,10 +10,10 @@ class Category(models.Model):
         ('technology', 'Technology'),
         ('lifestyle', 'Lifestyle'),
         ('opinion','Opinion'),
-        ('editorial','editorial'),
+        ('editorial','Editorial'),
         ('featured_topics','Featured Topics'),
         ('environment','Environment'),
-        ('sci&tech','Science & Tech.')
+        ('sci_tech','Science & Tech.')
 
     ]
 
@@ -51,5 +51,5 @@ class Article(models.Model):
     editor = models.ForeignKey(UserProfile, on_delete=models.DO_NOTHING, related_name="editor")
     photo = models.ForeignKey(Photo, on_delete=models.RESTRICT)
     tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
-    category = models.ForeignKey('Category', on_delete=models.RESTRICT, default=1)
+    category = models.ForeignKey(Category,on_delete=models.RESTRICT)
 

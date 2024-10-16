@@ -1,7 +1,10 @@
 from django.urls import path
-from .views import writer_dashboard_view
+from .views import writer_dashboard_view,writer_create_article,writer_dashboard_view_pending,writer_dashboard_view_rejected
 
 urlpatterns = [
     path('writer-dashboard/',writer_dashboard_view,name='writer-dashboard'),
+    path('writer-create-article/',writer_create_article,name='create'),
+    path('writer_dashboard_view_pending/',writer_dashboard_view_pending,name='pending'),
+    path('writer_dashboard_view_rejected/',writer_dashboard_view_rejected,name='rejected'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard')
 ]
