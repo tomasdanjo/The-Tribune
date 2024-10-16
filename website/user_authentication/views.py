@@ -47,9 +47,9 @@ def login(request):
                 user = authenticate(request, username=username, password=password)
             
                 if user is not None:
-                    userprofile = UserProfile.objects.get(user_credentials=user)
+                    user_credentials = UserProfile.objects.get(user_credentials=user)
                     auth_login(request, user) 
-                    messages.success(request, f"User: {user.username} with role: {userprofile.role} Login successful!")
+                    messages.success(request, f"User: {user.username} with role: {user_credentials.role} Login successful!")
                 else:
                     messages.error(request, "Failed to log in. Please check your email and password.") 
             except Exception as e:
