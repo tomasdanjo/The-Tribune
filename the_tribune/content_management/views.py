@@ -1,19 +1,54 @@
 from django.shortcuts import render, redirect
 from .forms import Article_Form, Photo_Form, Tag_Form
 from user_authentication.models import UserProfile
-from article.models import Tag
+from article.models import Tag, Article
+
 # from django import form
 
 # Create your views here.
 def writer_dashboard_view(request):
-    user = request.user
+    user = UserProfile.objects.get(user_credentials=request.user)
 
-    return render(request,'writer_dashboard.html',{'user':user})
+    articles = Article.objects.filter(writer = user)
+    published = articles.filter(status='published')
+    drafts = articles.filter(status='draft')
+    submitted = articles.filter(status='submitted')
+    archived = articles.filter(status='archived')
+
+    context = {
+        'user':user, 
+        'articles':articles,
+        'published':published,
+        'drafts':drafts,
+        'submitted':submitted,
+        'archived':archived
+
+    }
+
+
+    return render(request,'writer_dashboard.html',context)
 
 def editor_dashboard_view(request):
-    user = request.user
+    user = UserProfile.objects.get(user_credentials=request.user)
 
-    return render(request,'editor_dashboard.html',{'user':user})
+    articles = Article.objects.filter(writer = user)
+    published = articles.filter(status='published')
+    drafts = articles.filter(status='draft')
+    submitted = articles.filter(status='submitted')
+    archived = articles.filter(status='archived')
+    to_approve = Article.objects.filter(editor=user)
+
+    context = {
+        'user':user, 
+        'articles':articles,
+        'published':published,
+        'drafts':drafts,
+        'archived':archived,
+        'to_approve':to_approve
+
+    }
+
+    return render(request,'editor_dashboard.html',context)
 
 
 

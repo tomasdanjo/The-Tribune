@@ -13,7 +13,7 @@ class Category(models.Model):
         ('editorial','editorial'),
         ('featured_topics','Featured Topics'),
         ('environment','Environment'),
-        ('sci&tech','Science & Tech.')
+        ('sci_and_tech','Science & Tech.')
 
     ]
 
