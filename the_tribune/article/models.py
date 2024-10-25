@@ -28,8 +28,12 @@ class Photo(models.Model):
     caption = models.CharField(max_length=200)
     date_taken = models.DateField()
 
+
 class Tag(models.Model):
-    tag_name = models.CharField(max_length=100) 
+    tag_name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.tag_name  # To display the readable name
+
 
 class Article(models.Model):
     STATUS_CHOICES = [
