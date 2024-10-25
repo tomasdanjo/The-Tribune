@@ -7,6 +7,15 @@
 {% block content %}
 <div class="container mx-auto p-6">
     <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div>  <!-- Display the logged-in user's name -->
+
+    <div class="mb-4">
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+                Log out
+            </button>
+        </form>
+    </div>
   
     <!-- Status Filter Buttons -->
     <div class="mb-4">
