@@ -54,7 +54,6 @@
               <img class="Image2" style="width: 400px; height: 400px; border-radius: 15px;" src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}"/>
               
               <div class="Headline" style="width: 440px; text-align: justify; color: #596E9B; font-size: 30px; font-family: Oswald; font-weight: 400; word-wrap: break-word;">
-                {{ article.headline }}
                 <a href="{% url 'full_article_view' article.id %}">
                   {{ article.headline }}
                 </a>
