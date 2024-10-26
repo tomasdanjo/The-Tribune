@@ -1,0 +1,134 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Editor Dashboard
+{% endblock %}
+
+{% block content %}
+<div class="container mx-auto p-6">
+    <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div>  <!-- Display the logged-in user's name -->
+  
+    <!-- Status Filter Buttons -->
+    <div class="mb-4">
+        <button onclick="showSection('published-section')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Published</button>
+        <button onclick="showSection('draft-section')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Draft</button>
+        <button onclick="showSection('archived-section')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Archived</button>
+        
+        <button onclick="showSection('review-section')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">For review</button>
+    </div>
+
+    <!-- Articles based on status -->
+    <div id="published-section" class="article-section">
+        <h2>Published Articles</h2>
+        {% for article in published %}
+        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
+            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
+            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
+                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-2">
+                By {{ article.writer.first_name }} {{ article.writer.last_name }} 
+                | {{ article.date_published }}
+            </p>
+            {% if article.photo_id %}
+                <div class="w-48 h-36 overflow-hidden rounded-lg">
+                    <img 
+                        src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                        alt="Photo for {{ article.headline }}" 
+                        class="w-full h-full object-cover"
+                    >
+                </div>
+            {% endif %}
+            <hr class="border-t border-gray-200 my-4">
+        </div>
+        {% empty %}
+        <p class="text-gray-500">No published articles found.</p>
+        {% endfor %}
+    </div>
+
+    <div id="draft-section" class="article-section hidden">
+        <h2>Draft Articles</h2>
+        {% for article in drafts %}
+        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
+            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
+            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
+                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-2">
+                By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                | {{ article.date_created }}
+            </p>
+            <hr class="border-t border-gray-200 my-4">
+        </div>
+        {% empty %}
+        <p class="text-gray-500">No drafts found.</p>
+        {% endfor %}
+    </div>
+
+
+    <div id="archived-section" class="article-section hidden">
+        <h2>Archived Articles</h2>
+        {% for article in archived %}
+        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
+            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
+            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
+                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-2">
+                By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                | {{ article.date_archived }}
+            </p>
+            <hr class="border-t border-gray-200 my-4">
+        </div>
+        {% empty %}
+        <p class="text-gray-500">No archived articles found.</p>
+        {% endfor %}
+    </div>
+
+    <div id="review-section" class="article-section hidden">
+        <h2>For review Articles</h2>
+        {% for article in to_approve %}
+        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
+            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
+            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
+                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+            </h2>
+            <p class="text-gray-500 text-sm mb-2">
+                By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                | {{ article.date_archived }}
+            </p>
+            <hr class="border-t border-gray-200 my-4">
+        </div>
+        {% empty %}
+        <p class="text-gray-500">No archived articles found.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Button to write a new article -->
+    <a href="{% url 'create_article' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Write Article</a>  
+</div>
+
+<script>
+    // Function to show the selected section and hide the others
+    function showSection(sectionId) {
+        // Hide all sections
+        document.querySelectorAll('.article-section').forEach(section => {
+            section.classList.add('hidden');
+        });
+
+        // Show the selected section
+        document.getElementById(sectionId).classList.remove('hidden');
+    }
+
+    // Initially, show the 'published' section
+    document.addEventListener('DOMContentLoaded', function() {
+        showSection('published-section');
+    });
+</script>
+
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+{% endblock %}

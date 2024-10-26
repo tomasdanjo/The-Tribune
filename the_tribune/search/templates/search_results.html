@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Search with The Tribune
+{% endblock %}
+
+
+
+{% block content %}
+
+
+
+
+<div class="container mx-auto mt-10">
+    <div class="m-20 mb-10 px-10">
+        <form method="GET" action="{% url 'search' %}" class="mb-6 flex flex-wrap space-y-2">
+            {% csrf_token %}
+
+            <input type="text" name="query" placeholder="Search articles..." value="{{query}}"
+                class="flex-grow border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+
+            <div id="toFromYear">
+                <label for="start_year" class="mr-2">From Year:</label>
+                <!-- <input type="text"> -->
+                <select id="start_year" name="start_year"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none"
+                    onchange="updateToYearOptions()">
+                    <option value="">Select Year</option>
+                    {% for year in years %}
+                    <option value="{{ year }}" 
+                    {% if year == start_year|add:"0" %}
+                        selected
+                    {% endif %}
+                    >{{ year }}
+                    </option>
+                    
+                    {% endfor %}
+                </select>
+                <!-- <p>{% if start_yr == '2000' %}{{start_yr}}{% endif %}</p> -->
+                <label for="end_year" class="ml-4 mr-2">To Year:</label>
+                <select id="end_year" name="end_year"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none"
+                    onchange="updateFromYearOptions()">
+                    <option value="">Select Year</option>
+                    {% for year in years %}
+                    <option value="{{ year }}"
+                    {% if year == end_year|add:"0" %}
+                        selected
+                    {% endif %}
+                    >{{ year }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+            </div>
+
+
+            <div id="toFromMonth" class="{% if start_year and end_year %}block{% else %}hidden{% endif %}"> 
+                <label for="start_month" class="ml-4 mr-2">From Month:</label>
+                <select name="start_month" id="start_month"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none"
+                    onchange="updateToMonthOptions()">
+                    <option value="">Any Month</option>
+                    
+                    {% for month in months %}
+                    <option value="{{ month }}"
+                    {% if month == start_month %}
+                        selected
+                    {% endif %}
+                    >{{ month }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="end_month" class="ml-4 mr-2">To Month:</label>
+                <select name="end_month" id="end_month"
+                    class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none"
+                    onchange="updateFromMonthOptions()">
+                    <option value="">Any Month</option>
+                    {% for month in months %}
+                    <option value="{{ month }}" 
+                    {% if month == end_month %}
+                        selected
+                    {% endif %}
+                    >{{ month }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+
+
+
+
+            <!-- Other filters -->
+            <div class="ml-4">
+                <label for="has_tag">Has Tag:</label>
+                <input type="checkbox" name="has_tag" value="1" class="ml-2" {% if has_tag %}checked{% endif %}>
+            </div>
+
+            <select name="category"
+                class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none ml-4">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == category_id|add:"0" %}selected{% endif %}>
+                    {{ category.category_name }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="ml-4 bg-red-500 rounded-lg px-4 py-2">
+                Search
+            </button>
+        </form>
+
+
+    </div>
+
+    <div class="mx-auto">
+        {% if articles %}
+        <h1 class="text-2xl font-bold text-gray-800 mb-6">Search Results</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for article in articles %}
+            <div class="border border-gray-300 p-4 rounded-lg shadow-lg bg-white">
+                <p class="text-sm text-gray-500 mb-2"><strong>Tag:</strong> {{ article.tag_id.tag_name }}</p>
+                <h2 class="text-xl font-semibold text-blue-600 mb-2">
+                    <a href="{% url 'full_article_view' article.id %}" class="hover:underline">{{ article.headline }}</a>
+                </h2>
+                <p class="text-gray-700 mb-2">
+                    By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                </p>
+                <p class="text-gray-500 text-sm mb-4">{{ article.date_published }}</p>
+
+                {% if article.photo %}
+                <div class="mb-4">
+                    <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}"
+                        class="w-full h-40 object-cover rounded-md">
+                </div>
+                {% endif %}
+
+                <hr class="border-gray-200 my-4">
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-gray-500 text-lg text-center">No articles found.</p>
+        {% endif %}
+
+    </div>
+
+</div>
+{%load static%}
+<script src="{%static 'js/search_results.js'%}"></script>
+{% endblock %}
