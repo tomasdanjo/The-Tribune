@@ -4,15 +4,25 @@
     Log In
 {% endblock %}
 
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/authentication.css' %}">
+
+{% endblock %}
+
 {% block content %}
-    <div class="flex h-screen">
-        <div class="w-2/5 bg-white flex justify-center items-center mt-12">
+    <div id="main_container">
+        <div id="form_container">
+            
+            <img src="{% static '\icons\full logo dark.svg'%}" alt="Description of SVG" width="100" height="100">
+            
+            <div class="font-semibold mt-2 mb-2">Log in to your account</div>
+
             <form method="POST" class="space-y-4">
                 {% csrf_token %}
 
                 <div class="flex flex-col items-start">
-                    <div class="text-center text-gray-800 font-semibold text-lg mb-2">Logo</div>
-                    <div class="text-center text-gray-800 font-semibold text-lg mb-4">Log in to your account</div>
+                    
                     
                     <div class="flex justify-center items-center text-red-500">
                         {% if messages %}
@@ -26,35 +36,48 @@
 
                     
 
-                    <label class="text-gray-800 text-lg">Username</label>
-                    <div class="w-full">
+                    <div class="email_field">
+                        <label class="">Email Address</label>
+                    <div class="field">
                         {{ form.username }}
+                        <div class="icon_container">
+                            <img src="{% static '\icons\email icon.svg'%}" alt="Description of SVG" >
+                        </div>
                     </div>
+                    </div>
+                    
 
-                    <label class="text-gray-800 text-lg">Password</label>
-                    <div class="w-full">
-                        {{ form.password }}
+                    <div class="password_field">
+                        <label class="">Password</label>
+                        <div class="field">
+                            {{ form.password }}
+                            <div class="icon_container">
+                                <img src="{% static '\icons\password icon.svg'%}" alt="Description of SVG" class="icon-size" >
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
 
                 <div class="flex flex-col gap-10 mt-4">
-                    <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-lg shadow hover:bg-blue-700 transition duration-200">Log in</button>
+                    <button type="submit" class="login-btn w-full text-white py-2 rounded-lg font-semibold uppercase transition duration-200 ">Log in</button>
 
-                    <div class="flex items-center justify-between">
+                    <div class="flex items-center justify-between gap-4">
                         <div class="flex-1 h-px bg-gray-400"></div>
-                        <div class="mx-4 text-gray-800 font-normal text-sm">Don't have an account yet?</div>
+                        <div class="font-normal text-xs">Don't have an account yet?</div>
                         <div class="flex-1 h-px bg-gray-400"></div>
                     </div>
 
-                    <a href="{% url 'signup' %}" class="w-full border border-blue-600 bg-white text-blue-600 py-2 rounded-lg text-center font-semibold hover:bg-blue-600 hover:text-white transition duration-200">Sign up</a>
+                    <a href="{% url 'signup' %}" class="signup-btn w-full py-2 rounded-lg text-center font-semibold transition duration-200 uppercase">Sign up</a>
                 </div>
             </form>
         </div>
 
-        <div class="w-3/5 flex justify-center items-center p-10 bg-gradient-to-r from-gray-800 to-gray-700">
-            <div>
-                <p class="text-white text-xl">Logo Here</p>
-            </div>
+        <div id="logo_container">
+            
+            <img src="{% static '\icons\icon white.svg'%}" alt="Description of SVG" width="100" height="100">
+            
+            
         </div>
     </div>
 {% endblock %}

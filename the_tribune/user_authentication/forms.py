@@ -5,15 +5,13 @@ class Login_Form(forms.Form):
     username = forms.CharField(       
         widget=forms.TextInput(attrs={
             'class': 'Username',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px; padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
-            'placeholder': 'username'
+            'placeholder': 'i.e thomasdanjo.manulat@cit.edu'
         }),
         required=True
     )
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'Password',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px;padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'enter your password'
         }),
         required=True
@@ -22,7 +20,6 @@ class Signup_Form(forms.Form):
     first_name = forms.CharField(       
         widget=forms.TextInput(attrs={
             'class': 'FirstName',
-            'style': 'flex: 1 1 0; width: 300px; height: 45px; padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'first name'
         }),
         required=True
@@ -30,7 +27,6 @@ class Signup_Form(forms.Form):
     last_name = forms.CharField(
         widget=forms.TextInput(attrs={
             'class': 'LastName',
-            'style': 'flex: 1 1 0; width: 200px; height: 45px;padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'last name'
         }),
         required=True
@@ -38,7 +34,6 @@ class Signup_Form(forms.Form):
     username = forms.CharField(       
         widget=forms.TextInput(attrs={
             'class': 'Username',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px; padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'username'
         }),
         required=True
@@ -46,7 +41,6 @@ class Signup_Form(forms.Form):
     email = forms.EmailField(
         widget=forms.EmailInput(attrs={
             'class': 'Email',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px;padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'email'
         }),
         required=True,
@@ -56,7 +50,6 @@ class Signup_Form(forms.Form):
     password = forms.CharField(
         widget=forms.PasswordInput(attrs={
             'class': 'Password',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px;padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'password'
         }),
         required=True
@@ -66,7 +59,6 @@ class Signup_Form(forms.Form):
         label='Confirm Password',
         widget=forms.PasswordInput(attrs={
             'class': 'ConfirmPassword',
-            'style': 'flex: 1 1 0; width: 500px; height: 45px;padding-left: 20px; padding-right: 20px; justify-content: flex-start; align-items: center; background: #F2F2F2; border-radius: 15px; border: 1px #596E9B solid; display: flex',
             'placeholder': 'confirm password'
         }),
         required=True
