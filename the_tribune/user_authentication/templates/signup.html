@@ -58,13 +58,13 @@
                         <label class="">Email Address</label>
                         <div class="field">
                             {{ form.email }}
-                            {% if form.email.errors %}
-                            <div class="text-red-500">{{ form.email.errors }}</div>
-                            {% endif %}
                             <div class="icon_container">
                                 <img src="{% static '\icons\email icon.svg'%}" alt="Description of SVG" >
                             </div>
                         </div>
+                        {% if form.email.errors %}
+                            <div class="text-red-500">{{ form.email.errors }}</div>
+                            {% endif %}
                     </div>
 
                     <div class="password_field">
@@ -85,10 +85,11 @@
                             <div class="icon_container">
                                 <img src="{% static '\icons\password icon.svg'%}" alt="Description of SVG" class="icon-size" >
                             </div>
-                            {% if form.confirm_password.errors %}
-                            <div class="text-red-500">{{ form.confirm_password.errors }}</div>
-                            {% endif %}
+                            
                         </div>
+                        {% if form.confirm_password.errors %}
+                        <div class="text-red-500">{{ form.confirm_password.errors }}</div>
+                        {% endif %}
                     </div>
 
                 </div>

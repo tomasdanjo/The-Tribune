@@ -112,4 +112,17 @@
 }
 
 
+.buttons{
+  display: flex;
+  flex-direction: column;
+}
 
+
+.buttons a, .buttons button{
+  width: 100%;
+  margin: 20px 0px;
+}
+
+.text-center{
+  width: 100%;
+}

@@ -23,18 +23,7 @@
 
                 <div class="flex flex-col items-start">
                     
-                    
-                    <div class="flex justify-center items-center text-red-500">
-                        {% if messages %}
-                            <ul class="text-center">
-                                {% for message in messages %}
-                                    <li>{{ message }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                    </div>
-
-                    
+                        
 
                     <div class="email_field">
                         <label class="">Email Address</label>
@@ -59,8 +48,18 @@
                     
                 </div>
 
-                <div class="flex flex-col gap-10 mt-4">
+                <div class="buttons">
                     <button type="submit" class="login-btn w-full text-white py-2 rounded-lg font-semibold uppercase transition duration-200 ">Log in</button>
+
+                    <!-- <div class="message-container">
+                        {% if messages %}
+                            <ul class="text-center">
+                                {% for message in messages %}
+                                    <li>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div> -->
 
                     <div class="flex items-center justify-between gap-4">
                         <div class="flex-1 h-px bg-gray-400"></div>
