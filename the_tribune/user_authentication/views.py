@@ -4,6 +4,7 @@ from django.contrib import messages
 from .forms import Login_Form, Signup_Form
 from django.contrib.auth.models import User
 from .models import UserProfile
+from landing_page.views import full_article
 
 # Create your views here.
 
@@ -31,9 +32,11 @@ def login_view(request):
                                 #return to reader editor
                                 #messages.success(request, 'Login successful! but  editor')
                                 return redirect('editor_dashboard')  
-                            else:
-                                #return to reader dashboard
-                                messages.success(request, 'Login successful! but reader')
+                            elif user_profile.is_reader:
+                                article_id = request.session['article_id']
+                                print(article_id)
+                                messages.success(request, 'Login successful! Redirecting to article.')
+                                return redirect('full_article_view',article_id)
                                  
                     else:
                         messages.error(request, 'Login failed, please try again.')
@@ -85,3 +88,4 @@ def signup_view(request):
         form = Signup_Form()
 
     return render(request, 'signup.html', {'form': form})
+
