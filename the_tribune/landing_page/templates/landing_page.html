@@ -7,6 +7,9 @@
 {% block content %}
 <div class="max-w-4xl mx-auto p-4">
     <!-- Search Form -->
+
+  
+
     <form method="GET" action="{% url 'search' %}" class="mb-6 flex">
         {% csrf_token %}
         <input 
@@ -83,5 +86,14 @@
             </div>
         {% endif %}
     </div>
+</div>
+
+<div class="mb-4">
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+            Log out
+        </button>
+    </form>
 </div>
 {% endblock %}  
