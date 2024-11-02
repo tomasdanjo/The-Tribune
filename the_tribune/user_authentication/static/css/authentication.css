@@ -1,64 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Agbalumo&family=IBM+Plex+Sans:wght@300&family=Montserrat&family=Oswald:wght@500&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Agbalumo&family=IBM+Plex+Sans:wght@300&family=Montserrat&family=Oswald:wght@500&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto&display=swap");
 
-
-
-#main_container{
+#main_container {
   display: flex;
   min-height: 100vh;
   height: fit-content;
 }
 
-#form_container{
-  padding: 50px;
+#form_container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   font-size: 18px;
-  color: #45383F;
-  background-color: #F2F2F2;
+  color: #45383f;
+  background-color: #f2f2f2;
+  width: 40vw;
 }
 
-#logo_container{
-  background: linear-gradient(45deg,#46445C,#45383F);
+#form_container form{
+  width: calc(100% - 50px);
+}
+
+
+#logo_container {
+  background: linear-gradient(45deg, #46445c, #45383f);
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-
 #form_container img {
   width: 200px; /* or any size you prefer */
   height: auto; /* keeps the aspect ratio */
 }
 
-.icon_container{
-  background-color: #45383F;
+.icon_container {
+  background-color: #45383f;
   padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.icon_container img{
+.field-group{
+  width: 100%;
+}
+
+.icon_container img {
   max-width: 30px;
   height: auto;
 }
 
-.field, .name_field{
+.field,
+.name_field {
   margin: 10px 0px;
   display: flex;
   gap: 5px;
-  border: 2px solid #596E9B;
-  width: 60vh;
+  border: 2px solid #596e9b;
+  width: 100%;
   border-radius: 10px 0px 0px 10px;
 }
 
-.Username, .Password, .ConfirmPassword, .LastName, .FirstName, .Email{
-  color: #596E9B; /* Font color */
-  background: #F2F2F2; /* Background color */
+.Username,
+.Password,
+.ConfirmPassword,
+.LastName,
+.FirstName,
+.Email {
+  color: #596e9b; /* Font color */
+  background: #f2f2f2; /* Background color */
   flex-grow: 1;
   height: 45px;
   padding-left: 20px;
@@ -69,60 +81,83 @@
   border-radius: 10px;
 }
 
-.name_field{
+.name_field {
   border: none;
   display: grid;
-  grid-template-columns: repeat(2,1fr);
+  grid-template-columns: repeat(2, 1fr);
 }
-.LastName, .FirstName{
+.LastName,
+.FirstName {
   /* flex-grow: 1; */
-  border: 2px solid #596E9B;
+  border: 2px solid #596e9b;
   width: 100%;
 }
 
-
-.Username::placeholder, .Password::placeholder, .ConfirmPassword::placeholder, .LastName::placeholder, .FirstName::placeholder, .Email::placeholder{
-  color: #596E9B;
+.Username::placeholder,
+.Password::placeholder,
+.ConfirmPassword::placeholder,
+.LastName::placeholder,
+.FirstName::placeholder,
+.Email::placeholder {
+  color: #596e9b;
   opacity: 50%;
 }
 
-.Username:focus, .Password:focus, .ConfirmPassword:focus, .FirstName:focus, .LastName:focus, .Email:focus{
-  outline: none; 
+.Username:focus,
+.Password:focus,
+.ConfirmPassword:focus,
+.FirstName:focus,
+.LastName:focus,
+.Email:focus {
+  outline: none;
 }
 
-.login-btn{
-  background-color: #596E9B;
-  box-shadow: 0px 0px 5px #596E9B;
-  border: 2px solid #596E9B;
-  color: #F2F2F2;
+.login-btn {
+  background-color: #596e9b;
+  box-shadow: 0px 0px 5px #596e9b;
+  border: 2px solid #596e9b;
+  color: #f2f2f2;
 }
 
-.signup-btn{
-  background-color: #F2F2F2;
-  border: 2px solid #596E9B;
-  box-shadow: 0px 0px 5px #596E9B;
-  color: #596E9B;
+.signup-btn {
+  background-color: #f2f2f2;
+  border: 2px solid #596e9b;
+  box-shadow: 0px 0px 5px #596e9b;
+  color: #596e9b;
 }
 
-.signup-btn:hover,.login-btn:hover{
-  border: 2px solid #45383F;
-  background-color: #45383F;
-  box-shadow: 0px 0px 5px #45383F;
-  color: #F2F2F2
+.signup-btn:hover,
+.login-btn:hover {
+  border: 2px solid #45383f;
+  background-color: #45383f;
+  box-shadow: 0px 0px 5px #45383f;
+  color: #f2f2f2;
 }
 
-
-.buttons{
+.buttons {
   display: flex;
   flex-direction: column;
 }
 
-
-.buttons a, .buttons button{
+.buttons a,
+.buttons button {
   width: 100%;
   margin: 20px 0px;
 }
 
-.text-center{
+.text-center {
   width: 100%;
+}
+
+.message-container {
+  width: 100%; 
+  max-width: 100%; 
+  word-wrap: break-word; 
+  overflow-wrap: break-word; 
+  white-space: normal; 
+}
+
+.message {
+  text-align: center;
+  padding: 5px;
 }

@@ -13,10 +13,20 @@ def login_view(request):
         form = Login_Form(request.POST)
         if form.is_valid():
             try:
-                username = form.cleaned_data['username']
+                username_or_email = form.cleaned_data['username']
                 password = form.cleaned_data['password']
-                
-                user = authenticate(request, username=username, password=password)
+
+                if "@" in username_or_email:
+                # Try to get user by email
+                    try:
+                        user_by_email = User.objects.get(email=username_or_email)
+                        
+                        user = authenticate(request, username=user_by_email.username, password=password)
+                    except User.DoesNotExist:
+                        user = None
+                else:
+                    # Authenticate using the username directly
+                    user = authenticate(request, username=username_or_email, password=password)
 
                 if user is not None:
                     login(request, user)
@@ -33,10 +43,14 @@ def login_view(request):
                                 #messages.success(request, 'Login successful! but  editor')
                                 return redirect('editor_dashboard')  
                             elif user_profile.is_reader:
-                                article_id = request.session['article_id']
-                                print(article_id)
-                                messages.success(request, 'Login successful! Redirecting to article.')
-                                return redirect('full_article_view',article_id)
+                                article_id = request.session.get('article_id')
+                                if article_id:
+                                    print(article_id)
+                                    del request.session['article_id']  # Clear session after redirect
+                                    return redirect('full_article_view', id=article_id)
+                                else:
+                                    messages.info(request, 'Login successful! Redirecting to home.')
+                                    return redirect('home')
                                  
                     else:
                         messages.error(request, 'Login failed, please try again.')
@@ -48,7 +62,8 @@ def login_view(request):
         form = Login_Form()
     
     return render(request, 'login.html', {'form': form})
-    
+
+
 def signup_view(request):
     if request.method == "POST":
         form = Signup_Form(request.POST)
@@ -68,6 +83,14 @@ def signup_view(request):
                 )
 
                 # Create the user profile
+
+                article_id = request.session.get('article_id')
+
+                if article_id:
+                    is_reader = True
+                else:
+                    is_reader = False
+
                 UserProfile.objects.create(
                     user_credentials=user,  # Use user_credentials instead of user
 
@@ -75,9 +98,9 @@ def signup_view(request):
                     last_name=user.last_name,
                     email=email,
 
-                    is_writer =True,
+                    is_writer = not is_reader,
                     is_editor = False,
-                    is_reader = False
+                    is_reader = is_reader
                 )
                 messages.success(request, 'Your account has been created successfully! You can now log in.')
                 return redirect('login')

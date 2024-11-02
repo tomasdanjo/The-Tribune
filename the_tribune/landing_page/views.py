@@ -6,6 +6,10 @@ from django.utils import timezone
 # from myapp.models import Article
 
 def landing_page(request):
+    article_id = request.session.get('article_id')
+    if article_id:
+        del request.session['article_id']  # Clear session after redirect
+
     articles = Article.objects.filter(status    ='published')
     for article in articles:
         if timezone.is_naive(article.date_published):
@@ -20,6 +24,7 @@ def full_article(request, id):
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)
 
     request.session['article_id'] = id
+    print(id)
 
     return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories})
 
