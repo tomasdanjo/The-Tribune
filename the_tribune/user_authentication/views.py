@@ -8,6 +8,7 @@ from landing_page.views import full_article
 
 # Create your views here.
 
+
 def login_view(request):
     if request.method == "POST":
         form = Login_Form(request.POST)
@@ -16,17 +17,15 @@ def login_view(request):
                 username_or_email = form.cleaned_data['username']
                 password = form.cleaned_data['password']
 
-                if "@" in username_or_email:
-                # Try to get user by email
-                    try:
-                        user_by_email = User.objects.get(email=username_or_email)
-                        
-                        user = authenticate(request, username=user_by_email.username, password=password)
-                    except User.DoesNotExist:
-                        user = None
+                # Check if the input is an email
+                if '@' in username_or_email and User.objects.filter(email=username_or_email).exists():
+                    # Get the associated username for email login
+                    username = User.objects.get(email=username_or_email).username
                 else:
-                    # Authenticate using the username directly
-                    user = authenticate(request, username=username_or_email, password=password)
+                    # Use the input as the username
+                    username = username_or_email
+                
+                user = authenticate(request, username=username, password=password)
 
                 if user is not None:
                     login(request, user)
@@ -112,3 +111,45 @@ def signup_view(request):
 
     return render(request, 'signup.html', {'form': form})
 
+def signup_user_view(request):
+    if request.method == "POST":
+        form = Signup_Form(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']  
+            if User.objects.filter(email=email).exists():
+                messages.error(request, 'This email is already registered. Please log in.')
+                return redirect('signup')
+
+            try:
+                user = User.objects.create_user(
+                    username=form.cleaned_data['username'],
+                    first_name=form.cleaned_data['first_name'],
+                    last_name=form.cleaned_data['last_name'],
+                    email=email,
+                    password=form.cleaned_data['password'],
+                )
+
+                # Create the user profile
+                UserProfile.objects.create(
+                    user_credentials=user,  # Use user_credentials instead of user
+
+                    first_name=user.first_name,
+                    last_name=user.last_name,
+                    email=email,
+
+                    is_writer = False,
+                    is_editor = False,
+                    is_reader = True
+                )
+                messages.success(request, 'Your account has been created successfully! You can now log in.')
+                article_id = request.session['article_id']
+                print(article_id)
+                messages.success(request, 'Login successful! Redirecting to article.')
+                return redirect('full_article_view',article_id)
+
+            except Exception as e:
+                form.add_error(None, f"An error occurred: {str(e)}") 
+    else:
+        form = Signup_Form()
+
+    return render(request, 'signup.html', {'form': form})
