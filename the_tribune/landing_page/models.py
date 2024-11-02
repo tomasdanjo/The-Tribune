@@ -9,6 +9,7 @@ class Comment(models.Model):
   date_published = models.DateTimeField(auto_now_add=True)
   content = models.TextField()
   liked_by = models.ManyToManyField(UserProfile, related_name="liked_comments", blank=True)
+  disliked_by = models.ManyToManyField(UserProfile, related_name="disliked_comments", blank=True)
 
 
   def __str__(self):

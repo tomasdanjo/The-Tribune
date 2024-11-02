@@ -4,94 +4,342 @@
     {{ article.headline }}
 {% endblock %}
 
-{% block content %}
-<article class="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-lg">
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+{% endblock %}
 
-    <header class="mb-6">
-        <p class="text-sm text-gray-500 mb-1">{{ article.tag.tag_name }}</p>
-        <h1 class="text-3xl font-bold text-gray-800 mb-4">{{ article.headline }}</h1>
-        <p class="text-sm text-gray-600">By {{ article.writer.first_name }} {{ article.writer.last_name }}</p>
-        <p class="text-sm text-gray-500">{{ article.date_published }}</p>
+{% block content %}
+<div id="search-heading">
+
+</div>
+
+
+<article >
+    <header>
+        <p id="tag-name">{{ article.tag.tag_name }}</p>
+        <hr>
+        <h1 id="headline">{{ article.headline }}</h1>
+        <p id="writer-name">{{ article.writer.first_name }} {{ article.writer.last_name }}</p>
+        <p id="date-published">{{ article.date_published }}</p>
     </header>
 
-    {% if article.photo %}
-    <div class="mb-6">
-        <img class="w-full h-auto rounded-lg" src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Image for {{ article.headline }}">
-        <p class="text-sm text-gray-500 mt-2">{{ article.photo.caption }}</p>
-    </div>
-    {% endif %}
-
-    <section class="mb-10">
-        <article>
-            <p class="text-lg text-gray-700 leading-relaxed">{{ article.content|linebreaks }}</p>
-        </article>
-    </section>
-
-    <section class="mb-10">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Comments:</h2>
-        {% if comments %}
-        <ul class="space-y-4">
-            {% for comment in comments %}
-            <li class="border-b border-gray-200 pb-2">
-                <p class="font-semibold text-gray-800">{{ comment.commenter.user_credentials.first_name }}</strong> said:</p>
-                <p class="text-gray-600">{{ comment.content }}</p>
-                <p class="text-sm text-gray-500">{{ comment.date_published }}</p>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-        <p class="text-gray-600">No comments yet.</p>
-        {% endif %}
-    </section>
-
-    
-    
-    {% if not request.user.is_authenticated %}
-        <section class="mb-10">
-            <div class="border-t border-gray-200 pt-6">
-                <p class="text-lg text-gray-600">Want to join the discussion?</p>
-                <div class="mt-4 bg-gray-100 p-6 rounded-lg shadow-md">
-                    <a href="{% url 'login' %}" class="inline-block px-6 py-2 text-white bg-blue-600 hover:bg-blue-700 font-semibold rounded-lg">Log in</a>
-                </div>
+    <div id="content-container">
+        <div id="share-links">
+            <div class="link-group">
+                <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
             </div>
-        </section>
-
-    {% else %}
-
-        <div>Add a comment</div>
-
-    {% endif %}
-
-        
-   
-
-
-    <section class="mb-10">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-4">Related Stories</h2>
-        {% if related_stories %}
-        <div class="space-y-6">
-            {% for article in related_stories %}
-            <div class="border-b border-gray-200 pb-4">
-                <h2 class="text-xl font-semibold text-indigo-600 hover:underline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="text-sm text-gray-600">By {{ article.writer.user_credentials.first_name }} {{ article.writer.user_credentials.last_name }}</p>
-                <p class="text-sm text-gray-500">{{ article.date_published }}</p>
-
-                {% if article.photo %}
-                <img class="w-full h-auto mt-4 rounded-lg" src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}">
-                {% endif %}
+            <div class="link-group">
+                <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
             </div>
-            {% endfor %}
+            <div class="link-group">
+                <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
+            </div>
+            <div class="link-group">
+                <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
+            </div>
         </div>
-        {% else %}
-        <p class="text-gray-600">No related stories yet.</p>
-        {% endif %}
-    </section>
+        <div id="article-content-container">
+            {% if article.photo %}
+            <div id="photo-container">
+                <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Image for {{ article.headline }}">
+                <p>{{ article.photo.caption }}</p>
+            </div>
+            {% endif %}
 
-    <footer class="mt-10">
-        <a href="{% url 'home' %}" class="text-indigo-600 hover:underline">Back to Articles</a>
-    </footer>
-
+            <section>
+                    <p class="">{{ article.content|linebreaks }}</p>
+            </section>
+        </div>
+    </div>
+    
 </article>
+
+<div id="story-comment-wrapper">
+    <div id="related-stories-wrapper">
+        <h2>Read Next</h2>
+        <div id="related-stories-container">
+            {% if related_stories %}
+                {% for article in related_stories %}
+                    <div class="related-story-group">
+                        <div class="left-related-story">
+                            <p class="related-story-tag">{{ article.tag.tag_name }}</p>
+                            <hr>
+                            <a href="{% url 'full_article_view' article.id %}"
+                            class="related-story-headline">{{ article.headline }}</a>
+                            
+                            <p class="related-story-writer"> {{ article.writer.first_name }} {{ article.writer.last_name }}</p>
+                            <p class="related-story-date">{{ article.date_published }}</p>
+                           
+                            
+                        </div>
+                        <div>
+                            {% if article.photo %}
+                            <div class="image-container">
+                                <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}">
+                            </div>
+                            {% endif %}
+                            <div class="share-links-related-story">
+                                <div class="link-group  link-group-related-story">
+                                    <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
+                                </div>
+                                <div class="link-group  link-group-related-story">
+                                    <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
+                                </div>
+                                <div class="link-group link-group-related-story ">
+                                    <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
+                                </div>
+                                <div class="link-group link-group-related-story">
+                                    <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        
+
+                        
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-gray-600">No related stories yet.</p>
+            {% endif %}
+        </div>
+    </div>
+    <div id="comment-wrapper">
+        <div id="comment-section-heading">
+            <h2>Conversation</h2>
+            {% if comments %}
+                <p>{{ comments|length }}
+                    comment{{ comments|length|pluralize:"s" }}
+                </p>
+            {% else %}
+                <p>No comments yet</p>
+            {% endif %}
+            
+        </div>
+        
+        <hr>
+        {% if not request.user.is_authenticated %}
+            <div id="login-reader-container">
+                <h4>Start the Conversation!</h4>
+                <p>Be a part of our global community of The Tribune members and discuss stories while getting access to exclusive content and events. Your subscription helps support press freedom.</p>
+                
+                <a href="{% url 'login' %}">Join The Tribune to Comment</a>
+            </div>
+        {% else %}
+            <!-- form to add comments here -->
+             <div id="add-comment-wrapper">
+                <div class="reader-profile">
+                    <span class="profile-initials">{{ request.user.first_name|slice:":1" }}.{{ request.user.last_name|slice:":1" }}.</span>
+                </div>
+
+                <div id="add-comment-form">
+                    <textarea name="content" id="comment-content" class="content-field" placeholder="What do you think?"></textarea>
+                    <button type="submit"><img src="{% static 'icons/send.svg'%}" alt="" onclick="addComment()"></button>
+                </div>
+
+               <!-- <form method="post" action="{% url 'add_comment' article.id %}" >
+                   {% csrf_token %}
+                   {{ comment_form.content }}
+                   <button type="submit"><img src="{% static 'icons/send.svg'%}" alt=""></button>
+               </form> -->
+             </div>
+
+        {% endif %}
+
+        <div id="sort-by-container">
+            <p>Sort by</p>
+            <select id="sort-comments" name="sort-by" onchange="sortComments(this.value)">
+                <option value="newest">Newest Comments</option>
+                <option value="oldest">Oldest Comments</option>
+                <option value="relevant">Most Relevant</option>
+            </select>
+        </div>
+
+        <div id="comments-container">
+            {% include 'comments.html' %}
+        </div>
+
+    </div>
+</div>
+
+
+
+    
+
+
+
+
+
+<footer class="mt-10">
+    <a href="{% url 'home' %}" class="text-indigo-600 hover:underline">Back to Articles</a>
+</footer>
+
+
+
+
+
+{% block scripts %}
+    {% load static %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+
+
+        function likeComment(commentId) {
+            $.ajax({
+                url: "{% url 'like_comment' %}", // Replace with the URL of your like view
+                type: "POST",
+                data: {
+                comment_id: commentId,
+                csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
+                },
+                success: function (data) {
+                // Update the like count in the UI
+                    refreshInteractionCount(commentId,data.likes,data.dislikes);
+                    // Get the like icon and data attributes for the URLs
+                    refreshIconStates(commentId,data.user_liked,data.user_disliked);
+                    
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                console.error("Error liking comment:", errorThrown);
+                },
+            });
+        }
+
+        function dislikeComment(commentId) {
+            $.ajax({
+                url: "{% url 'dislike_comment' %}", // Replace with the URL of your dislike view
+                type: "POST",
+                data: {
+                comment_id: commentId,
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+                },
+                success: function (data) {
+                // Update the dislike count in the UI
+                    refreshInteractionCount(commentId,data.likes,data.dislikes);
+                    refreshIconStates(commentId,data.user_liked,data.user_disliked);
+                },
+                error: function (xhr, textStatus, errorThrown) {
+                console.error("Error disliking comment:", errorThrown);
+                },
+            });
+        }
+
+
+        function refreshInteractionCount(commentId,likes,dislikes){
+            const likeCountElement = document.getElementById(`like-count-${commentId}`);
+            const dislikeCountElement = document.getElementById(`dislike-count-${commentId}`);
+                    
+                    // Update the like and dislike counts based on the response
+            if (likeCountElement) likeCountElement.textContent = likes;
+            if (dislikeCountElement) dislikeCountElement.textContent = dislikes;
+        }
+
+        function refreshIconStates(commentId,user_liked,user_disliked){
+            // like
+            const likeIcon = document.querySelector(`#like-icon-${commentId}`);
+            const likeUrl = likeIcon.getAttribute('data-like-url');
+            const likeBoldUrl = likeIcon.getAttribute('data-like-bold-url');
+            console.log(likeUrl,likeBoldUrl);
+
+            // Update the icon src based on whether the user liked it
+            likeIcon.src = (user_liked ? likeBoldUrl : likeUrl);
+            console.log( likeIcon.src);
+
+            // dislike
+            const dislikeIcon = document.querySelector(`#dislike-icon-${commentId}`);
+            const dislikeUrl = dislikeIcon.getAttribute('data-dislike-url');
+            const dislikeBoldUrl = dislikeIcon.getAttribute('data-dislike-bold-url');
+            console.log(dislikeUrl,dislikeBoldUrl);
+
+            // Update the icon src based on whether the user liked it
+            dislikeIcon.src = (user_disliked ? dislikeBoldUrl : dislikeUrl);
+            console.log( dislikeIcon.src);
+
+        }
+
+
+        function addComment() {
+            // Collect data from the comment form
+            const commentContent = $('#comment-content').val();  // Get the value from the textarea
+            const articleId = '{{ article.id }}'; // Replace with the correct method to get the article ID
+            console.log(commentContent,articleId);
+
+            // Send AJAX request to add the comment
+            $.ajax({
+                url: "{% url 'add_comment' article.id %}",  // Update this with your actual URL for adding comments
+                type: "POST",  // Assuming you're using POST to add comments
+                data: {
+                    'content': commentContent,
+                    'article_id': articleId,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token for security
+                },
+                success: function(data) {
+                    // Clear the comment input field
+                    $('#comment-content').val('');
+                    $('#sort-comments').val('newest').change()
+
+                    // Update the comments section with the new comment
+                    $('#comments-container').html(data.comments_html);  // Update the comments section with the new HTML
+
+                    const commentCount = data.comment_count || 0; // Get new comment count from the response
+                    $('#comment-section-heading p').text(`${commentCount} comment${commentCount !== 1 ? 's' : ''}`);
+        
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error("Error adding comment:", errorThrown);
+                }
+            });
+        }
+
+
+
+        function sortComments(sortBy) {
+            console.log(sortBy);
+            $.ajax({
+                url: "{% url 'sort_comments' article.id %}",  // Update this with your actual URL
+                data: {
+                    'sort_by': sortBy
+                },
+                success: function(data) {
+                    $('#comments-container').html(data.comments_html);  // Update the comments section
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error("Error fetching sorted comments:", errorThrown);
+                }
+            });
+        }
+
+        function deleteComment(comment_id) {
+            $.ajax({
+                url: "{% url 'delete_comment' '0' %}".replace('0', comment_id),  // Use a placeholder and replace it with comment_id
+                type: "DELETE",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token in the header
+                },
+                data: {
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                },
+                success: function(data) {
+                    $('#comments-container').html(data.comments_html);
+                    $('#comment-section-heading p').text(data.comment_count + ' comment' + (data.comment_count === 1 ? '' : 's'));
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    console.error("Error deleting comment:", errorThrown);
+                }
+            });
+        }
+
+
+
+        // $('#sort-comments').on('change', function() {
+        //     sortComments(this.value);
+        // });
+
+    </script>
+
+    
+{% endblock %}
+
 {% endblock %}

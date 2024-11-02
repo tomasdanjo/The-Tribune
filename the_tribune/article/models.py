@@ -53,3 +53,4 @@ class Article(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
     category = models.ForeignKey('Category', on_delete=models.RESTRICT, default=1)
 
+

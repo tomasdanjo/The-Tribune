@@ -1,0 +1,53 @@
+{% load static %}
+
+{% if comments %}
+  {% for comment in comments %}
+  <div class="comment-group">
+      <div class="reader-profile">
+          <span class="profile-initials">{{ comment.commenter.user_credentials.first_name|slice:":1" }}.{{ comment.commenter.user_credentials.last_name|slice:":1" }}.</span>
+      </div>
+      <div class="comment-container-wrapper">
+          <div class="name-date-container">
+              <h3 class="commenter-name">{{ comment.commenter.user_credentials.first_name}} {{ comment.commenter.user_credentials.last_name}}</h3>
+              <p>{{ comment.date_published }}</p>
+          </div>
+          <p class="comment-content">{{ comment.content }}</p>
+
+          
+          <div class="interaction-buttons">
+              <div>
+                  <button onclick="likeComment({{ comment.id }})">
+                      <img id="like-icon-{{ comment.id }}" src="{% if request.user.userprofile in comment.liked_by.all %}{% static 'icons/like-bold.svg' %}{% else %}{% static 'icons/like.svg' %}{% endif %}" 
+                      alt=""
+                      data-like-url="{% static 'icons/like.svg' %}"
+                      data-like-bold-url="{% static 'icons/like-bold.svg' %}">
+                  </button>
+                  <p id="like-count-{{ comment.id }}">{{ comment.liked_by.count }}</p>
+              </div>
+              <div>
+                  <button onclick="dislikeComment({{ comment.id }})">
+                      <img id="dislike-icon-{{ comment.id }}" src="{% if request.user.userprofile in comment.disliked_by.all %}{% static 'icons/dislike-bold.svg' %}{% else %}{% static 'icons/dislike.svg' %}{% endif %}" alt=""
+                      data-dislike-url="{% static 'icons/dislike.svg' %}"
+                      data-dislike-bold-url="{% static 'icons/dislike-bold.svg' %}">
+                  </button>
+                  <p id="dislike-count-{{ comment.id }}">{{ comment.disliked_by.count }}</p>
+              </div>
+          </div>
+          
+      </div>
+
+      {% if comment.commenter == request.user.userprofile %}
+        <div class="comment-delete">
+            <button onclick="deleteComment({{ comment.id }})"
+              onmouseover="this.querySelector('img').src='{% static 'icons/delete-bold.svg' %}'"
+              onmouseout="this.querySelector('img').src='{% static 'icons/delete.svg' %}'"
+            >
+              <img src="{% static 'icons/delete.svg'%}" alt="">
+            </button>
+        </div>
+      {% endif %}
+  </div>
+      
+  
+  {% endfor %}
+{% endif %}
