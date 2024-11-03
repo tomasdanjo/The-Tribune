@@ -15,6 +15,7 @@ urlpatterns = [
     path('articles/<int:article_id>/archive/', archive_article, name='archive_article'),
     path('archive/<int:id>', archive_view, name='archive'),
     path('publish_article/<int:id>', publish_article, name='publish_article'),
+    path('submit-feedback/', submit_feedback, name='submit_feedback'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
     
 ]

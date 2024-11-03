@@ -4,6 +4,8 @@ from user_authentication.models import UserProfile
 from article.models import Tag, Article
 from django.contrib import messages
 from .models import *
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 # from django import form
 
@@ -252,3 +254,22 @@ def publish_article(request, id):
     article.status = 'published'
     article.save()
     return redirect('editor_dashboard') 
+
+
+@csrf_exempt  # Use this decorator if needed, or include CSRF middleware for this view
+def submit_feedback(request):
+    if request.method == 'POST':
+        article_id = request.POST.get('article_id')
+        feedback_text = request.POST.get('feedback')
+
+        if article_id and feedback_text:
+            article = Article.objects.get(id=article_id)
+            feedback = Feedback.objects.create(article=article, editor=request.user.userprofile, comment=feedback_text)
+        
+            # Render the feedback template as a string
+            feedback_html = render(request, 'feedback-template.html', {'article': article}).content.decode('utf-8')
+            return JsonResponse({'status': 'success','feedback_html':feedback_html})
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid data'})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})

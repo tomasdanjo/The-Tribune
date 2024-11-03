@@ -2,6 +2,6 @@
     <div class="border rounded-lg p-4 mb-4 shadow-md bg-white">
         <p class="font-semibold text-gray-800">Feedback by {{ feedback.editor.first_name }} {{ feedback.editor.last_name }}:</p>
         <p class="text-gray-700 mt-1">{{ feedback.comment }}</p>
-        <p class="text-sm text-gray-500 mt-2">Status: <span class="font-medium text-gray-900">{{ feedback.get_status_display }}</span></p>
+        <p class="text-sm text-gray-500 mt-2">Status: <span class="font-medium text-gray-900">{{ feedback.status }}</span></p>
     </div>
 {% endfor %}
