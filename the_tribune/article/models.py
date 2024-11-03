@@ -28,6 +28,8 @@ class Photo(models.Model):
     caption = models.CharField(max_length=200)
     date_taken = models.DateField()
 
+    
+
 class Tag(models.Model):
     tag_name = models.CharField(max_length=100) 
 

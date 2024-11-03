@@ -1,0 +1,109 @@
+{% load static %}
+
+<div id="story-comment-wrapper">
+  <div id="related-stories-wrapper">
+      <h2>Read Next</h2>
+      <div id="related-stories-container">
+          {% if related_stories %}
+              {% for article in related_stories %}
+                  <div class="related-story-group">
+                      <div class="left-related-story">
+                          <p class="related-story-tag">{{ article.tag.tag_name }}</p>
+                          <hr>
+                          <a href="{% url 'full_article_view' article.id %}"
+                          class="related-story-headline">{{ article.headline }}</a>
+                          
+                          <p class="related-story-writer"> {{ article.writer.first_name }} {{ article.writer.last_name }}</p>
+                          <p class="related-story-date">{{ article.date_published }}</p>
+                         
+                          
+                      </div>
+                      <div>
+                          {% if article.photo %}
+                          <div class="image-container">
+                              <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}">
+                          </div>
+                          {% endif %}
+                          <div class="share-links-related-story">
+                              <div class="link-group  link-group-related-story">
+                                  <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
+                              </div>
+                              <div class="link-group  link-group-related-story">
+                                  <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
+                              </div>
+                              <div class="link-group link-group-related-story ">
+                                  <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
+                              </div>
+                              <div class="link-group link-group-related-story">
+                                  <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
+                              </div>
+                          </div>
+                      </div>
+
+                      
+
+                      
+                  </div>
+              {% endfor %}
+          {% else %}
+              <p>No related stories yet.</p>
+          {% endif %}
+      </div>
+  </div>
+  <div id="comment-wrapper">
+      <div id="comment-section-heading">
+          <h2>Conversation</h2>
+          {% if comments %}
+              <p>{{ comments|length }}
+                  comment{{ comments|length|pluralize:"s" }}
+              </p>
+          {% else %}
+              <p>No comments yet</p>
+          {% endif %}
+          
+      </div>
+      
+      <hr>
+      {% if not request.user.is_authenticated %}
+          <div id="login-reader-container">
+              <h4>Start the Conversation!</h4>
+              <p>Be a part of our global community of The Tribune members and discuss stories while getting access to exclusive content and events. Your subscription helps support press freedom.</p>
+              
+              <a href="{% url 'login' %}">Join The Tribune to Comment</a>
+          </div>
+      {% else %}
+          <!-- form to add comments here -->
+           <div id="add-comment-wrapper">
+              <div class="reader-profile">
+                  <span class="profile-initials">{{ request.user.first_name|slice:":1" }}.{{ request.user.last_name|slice:":1" }}.</span>
+              </div>
+
+              <div id="add-comment-form">
+                  <textarea name="content" id="comment-content" class="content-field" placeholder="What do you think?"></textarea>
+                  <button type="submit"><img src="{% static 'icons/send.svg'%}" alt="" onclick="addComment()"></button>
+              </div>
+
+             <!-- <form method="post" action="{% url 'add_comment' article.id %}" >
+                 {% csrf_token %}
+                 {{ comment_form.content }}
+                 <button type="submit"><img src="{% static 'icons/send.svg'%}" alt=""></button>
+             </form> -->
+           </div>
+
+      {% endif %}
+
+      <div id="sort-by-container">
+          <p>Sort by</p>
+          <select id="sort-comments" name="sort-by" onchange="sortComments(this.value)">
+              <option value="newest">Newest Comments</option>
+              <option value="oldest">Oldest Comments</option>
+              <option value="relevant">Most Relevant</option>
+          </select>
+      </div>
+
+      <div id="comments-container">
+          {% include 'comments.html' %}
+      </div>
+
+  </div>
+</div>

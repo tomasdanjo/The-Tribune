@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Edit article
+{% endblock %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+
+{% endblock %}
+
+{% block content %}
+
+  {% include 'article-template.html' %}
+
+  {% if request.user.userprofile ==  article.writer or request.user.userprofile ==  article.editor%}
+      <button id="edit-btn" onclick="editArticle({{ article.id }})"
+      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200">
+        Edit
+    </button>
+  {% endif %}
+
+{% endblock %}
+
+
+{% block scripts %}
+
+  <script>
+    function editArticle(id) {
+      window.location.href = "{% url 'edit_article' id=0 %}".replace("0", id);
+    }
+    
+  </script>
+
+{% endblock %}

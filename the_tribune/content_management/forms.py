@@ -82,3 +82,12 @@ class Photo_Form(forms.ModelForm):
                 'type': 'date'  # HTML5 date picker
             }),
         }
+
+    def clean_photo(self):
+        photo = self.cleaned_data.get('photo')
+        
+        # If there's an existing photo, don't require a new one
+        if not photo and self.instance.pk:  # Check if the instance exists (is being edited)
+            return self.instance.photo  # Return the existing photo
+        
+        return photo  # Return the new photo if uploaded

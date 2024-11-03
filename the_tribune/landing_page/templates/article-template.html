@@ -1,0 +1,41 @@
+{% load static %}
+
+<article >
+  <header>
+      <p id="tag-name">{{ article.tag.tag_name }}</p>
+      <hr>
+      <h1 id="headline">{{ article.headline }}</h1>
+      <p id="writer-name">{{ article.writer.first_name }} {{ article.writer.last_name }}</p>
+      <p id="date-published">{{ article.date_published }}</p>
+  </header>
+
+  <div id="content-container">
+      <div id="share-links">
+          <div class="link-group">
+              <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
+          </div>
+          <div class="link-group">
+              <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
+          </div>
+          <div class="link-group">
+              <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
+          </div>
+          <div class="link-group">
+              <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
+          </div>
+      </div>
+      <div id="article-content-container">
+          {% if article.photo %}
+          <div id="photo-container">
+              <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Image for {{ article.headline }}">
+              <p>{{ article.photo.caption }}</p>
+          </div>
+          {% endif %}
+
+          <section>
+                  <p class="">{{ article.content|linebreaks }}</p>
+          </section>
+      </div>
+  </div>
+  
+</article>

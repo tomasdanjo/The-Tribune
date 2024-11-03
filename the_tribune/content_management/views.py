@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import Article_Form, Photo_Form, Tag_Form
 from user_authentication.models import UserProfile
 from article.models import Tag, Article
@@ -126,4 +126,79 @@ def create_article(request):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
+    })
+
+def draft_article(request,id):
+    article = get_object_or_404(Article,id=id)
+    return render(request,'draft-article.html',{'article':article})
+
+
+# def edit_article(request, id):
+#     # Get the article by ID
+#     article = get_object_or_404(Article, id=id)
+
+#     # Pre-fill the forms with the article's existing data
+#     article_form = Article_Form(instance=article)
+#     photo_form = Photo_Form(instance=article.photo)
+#     tag_form = Tag_Form(instance=article.tag)
+
+#     # Get the writer's profile
+#     writer = UserProfile.objects.get(user_credentials=request.user)
+
+#     # Get the list of editors (assuming you have a method to retrieve this)
+#     editors = UserProfile.objects.filter(is_editor=True)
+
+#     return render(request, 'create_article.html', {
+#         'article_form': article_form,
+#         'photo_form': photo_form,
+#         'tag_form': tag_form,
+#         'writer': writer,  # Pass the writer profile
+#         'editors': editors,  # Pass the list of editors
+#         'is_editing': True  # Optional: can be used in the template to distinguish between create and edit
+#     })
+
+
+
+def edit_article(request, id):
+    article = get_object_or_404(Article, id=id)
+    editors = UserProfile.objects.filter(is_editor=True)
+    writer = UserProfile.objects.get(user_credentials=request.user)
+
+    if request.method == 'POST':
+        article_form = Article_Form(request.POST, instance=article)
+        photo_form = Photo_Form(request.POST, request.FILES, instance=article.photo)
+        tag_form = Tag_Form(request.POST, instance=article.tag)
+
+        if article_form.is_valid() and photo_form.is_valid() and tag_form.is_valid():
+            photo = photo_form.save()
+            article = article_form.save(commit=False)
+            article.writer = writer
+            article.photo = photo
+            article.tag = tag_form.save()
+
+            editor_id = request.POST.get('editor')
+            
+            if editor_id:
+                article.editor = UserProfile.objects.get(pk=editor_id)
+            else:
+                article.editor = writer
+
+            action = request.POST.get('action')
+            article.status = "draft" if action == "save_draft" else "submitted" if action == "submit_review" else "published"
+            article.save()
+
+            return redirect('writer_dashboard' if writer.is_writer else 'editor_dashboard')
+
+    else:
+        article_form = Article_Form(instance=article)
+        photo_form = Photo_Form(instance=article.photo)
+        tag_form = Tag_Form(instance=article.tag)
+
+    return render(request, 'create_article.html', {
+        'article_form': article_form,
+        'photo_form': photo_form,
+        'tag_form': tag_form,
+        'editors': editors,
+        'writer': writer,
+        'selected_editor': article.editor.id if article.editor else None,  
     })

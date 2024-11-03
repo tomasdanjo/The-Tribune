@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Create Article
+Edit Article
 {% endblock %}
 
 {% block content %}
 
 <div class="container mx-auto mt-10 px-4">
-    <h1 class="text-3xl font-bold mb-5">Create Article</h1>
-    <form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <h1 class="text-3xl font-bold mb-5">Edit Article</h1>
+    <form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" id="articleForm">
         {% csrf_token %}
-        <!-- <h2 class="text-xl font-semibold mb-4">{{ writer }}</h2> -->
-
+        
         <!-- Headline Field -->
         <div class="mb-4">
             <label for="{{ article_form.headline.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Headline</label>
@@ -34,9 +33,9 @@ Create Article
         <div class="mb-4">
             <label for="editor" class="block text-gray-700 text-sm font-bold mb-2">Editor</label>
             <select name="editor" id="editor" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <option value="" disabled selected>Select Editor</option>
+                <option value="" disabled {% if not article.editor %}selected{% endif %}>Select Editor</option>
                 {% for editor in editors %}
-                <option value="{{ editor.id }}">{{ editor }}</option>
+                <option value="{{ editor.id }}" {% if editor.id == selected_editor %}selected{% endif %}>{{ editor }}</option>
                 {% endfor %}
             </select>
             {% if article_form.editor.errors %}
@@ -72,6 +71,11 @@ Create Article
             {% endif %}
         </div>
 
+
+
+
+
+
         <!-- Caption Field -->
         <div class="mb-4">
             <label for="{{ photo_form.caption.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Caption</label>
@@ -91,14 +95,60 @@ Create Article
         </div>
 
         <div class="flex justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" name="action" value="save_draft">Save as Draft</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" name="action" value="save_draft" onclick="return validateForm();">Save as Draft</button>
+            
             {% if writer.is_writer %}
-            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="submit_review">Submit to Editor</button>
+            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="submit_review" onclick="return validateForm();">Submit to Editor</button>
             {% elif writer.is_editor %}
-            <button type="submit" class="bg-red-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="publish">publish</button>
+            <button type="submit" class="bg-red-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="publish" onclick="return validateForm();">Publish</button>
             {% endif %}
+            
+            <!-- Cancel Button -->
+            <a href="javascript:history.back()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</a>
+
         </div>
     </form>
 </div>
+
+<script>
+    function validateForm() {
+        const headline = document.getElementById('{{ article_form.headline.id_for_label }}');
+        const content = document.getElementById('{{ article_form.content.id_for_label }}');
+        const editor = document.getElementById('editor');
+        const tag = document.getElementById('{{ tag_form.tag_name.id_for_label }}');
+        const category = document.getElementById('{{ article_form.category.id_for_label }}');
+        const photo = document.getElementById('{{ photo_form.photo.id_for_label }}');
+
+        // Check if fields are empty
+        if (!headline.value.trim()) {
+            alert("Please fill in the headline.");
+            headline.focus();
+            return false; // Prevent form submission
+        }
+        if (!content.value.trim()) {
+            alert("Please fill in the content.");
+            content.focus();
+            return false; // Prevent form submission
+        }
+        if (editor.value === "") {
+            alert("Please select an editor.");
+            editor.focus();
+            return false; // Prevent form submission
+        }
+        if (!tag.value.trim()) {
+            alert("Please fill in the tag.");
+            tag.focus();
+            return false; // Prevent form submission
+        }
+        if (!category.value.trim()) {
+            alert("Please select a category.");
+            category.focus();
+            return false; // Prevent form submission
+        }
+
+        // All checks passed, allow form submission
+        return true;
+    }
+</script>
 
 {% endblock %}
