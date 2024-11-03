@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import Article_Form, Photo_Form, Tag_Form
 from user_authentication.models import UserProfile
 from article.models import Tag, Article
+from django.contrib import messages
+from .models import *
 
 # from django import form
 
@@ -34,9 +36,9 @@ def editor_dashboard_view(request):
     articles = Article.objects.filter(writer = user)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
-    submitted = articles.filter(status='submitted')
+    # submitted = articles.filter(status='submitted')
     archived = articles.filter(status='archived')
-    to_approve = Article.objects.filter(editor=user)
+    to_approve = Article.objects.filter(editor=user,status='submitted')
 
     context = {
         'user':user, 
@@ -177,7 +179,7 @@ def edit_article(request, id):
             article.tag = tag_form.save()
 
             editor_id = request.POST.get('editor')
-            
+
             if editor_id:
                 article.editor = UserProfile.objects.get(pk=editor_id)
             else:
@@ -202,3 +204,51 @@ def edit_article(request, id):
         'writer': writer,
         'selected_editor': article.editor.id if article.editor else None,  
     })
+
+
+def approve_article(request,id):
+    article = get_object_or_404(Article,id=id)
+    return render(request,'approve-article.html',{'article':article})
+
+def archive_view(request,id):
+    article = get_object_or_404(Article,id=id)
+    feedback = Feedback.objects.filter(article=article)
+
+    return render(request,'archive-view.html',{'article':article,'feedback':feedback})
+
+def archive_article(request, article_id):
+    article = get_object_or_404(Article, id=article_id)
+
+    if request.method == 'POST':
+        archive_reason = request.POST.get('archive_reason')
+        if archive_reason:
+            # Check if a feedback already exists for this article and editor
+            feedback, created = Feedback.objects.get_or_create(
+                article=article,
+                editor=request.user.userprofile,  # Assuming the user has a UserProfile
+                defaults={'comment': archive_reason}
+            )
+            
+            if not created:
+                # Update the feedback if it exists
+                feedback.comment = archive_reason
+            feedback.status = 'resolved'
+            feedback.save()
+
+            # Update the article status
+            article.status = 'archived'
+            article.save()
+
+            messages.success(request, 'Article archived with feedback.')
+            return redirect('editor_dashboard')
+        else:
+            messages.error(request, 'Please provide a reason for archiving.')
+            return redirect('editor_dashboard')
+    return redirect('editor_dashboard')
+
+
+def publish_article(request, id):
+    article = get_object_or_404(Article, id=id)
+    article.status = 'published'
+    article.save()
+    return redirect('editor_dashboard') 

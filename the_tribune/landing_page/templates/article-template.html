@@ -10,20 +10,23 @@
   </header>
 
   <div id="content-container">
+    {% if article.status == 'published' %}
       <div id="share-links">
-          <div class="link-group">
-              <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
-          </div>
-          <div class="link-group">
-              <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
-          </div>
-          <div class="link-group">
-              <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
-          </div>
-          <div class="link-group">
-              <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
-          </div>
-      </div>
+        <div class="link-group">
+            <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
+        </div>
+        <div class="link-group">
+            <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
+        </div>
+        <div class="link-group">
+            <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
+        </div>
+        <div class="link-group">
+            <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
+        </div>
+    </div>
+    {% endif %}
+      
       <div id="article-content-container">
           {% if article.photo %}
           <div id="photo-container">

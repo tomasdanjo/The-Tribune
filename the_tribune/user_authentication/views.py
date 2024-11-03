@@ -153,3 +153,4 @@ def signup_user_view(request):
         form = Signup_Form()
 
     return render(request, 'signup.html', {'form': form})
+

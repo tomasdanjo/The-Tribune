@@ -11,6 +11,10 @@ urlpatterns = [
     path('create_article/',create_article, name='create_article'),
     path('draft/<int:id>/',draft_article, name='draft'),
     path('edit_article/<int:id>/',edit_article, name='edit_article'),
+    path('approve_article/<int:id>/',approve_article, name='approve'),
+    path('articles/<int:article_id>/archive/', archive_article, name='archive_article'),
+    path('archive/<int:id>', archive_view, name='archive'),
+    path('publish_article/<int:id>', publish_article, name='publish_article'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
     
 ]

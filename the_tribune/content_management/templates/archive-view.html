@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Edit article
+{% endblock %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+
+{% endblock %}
+
+{% block content %}
+
+  {% include 'article-template.html' %}
+
+  {% include 'feedback-template.html' %}
+
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+
+{% endblock %}
