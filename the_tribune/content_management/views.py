@@ -224,20 +224,14 @@ def archive_article(request, article_id):
     if request.method == 'POST':
         archive_reason = request.POST.get('archive_reason')
         if archive_reason:
-            # Check if a feedback already exists for this article and editor
-            feedback, created = Feedback.objects.get_or_create(
+            Feedback.objects.create(
                 article=article,
                 editor=request.user.userprofile,  # Assuming the user has a UserProfile
-                defaults={'comment': archive_reason}
+                comment=archive_reason,
+                status='resolved'
             )
-            
-            if not created:
-                # Update the feedback if it exists
-                feedback.comment = archive_reason
-            feedback.status = 'resolved'
-            feedback.save()
 
-            # Update the article status
+            # Update the article status to 'archived'
             article.status = 'archived'
             article.save()
 

@@ -36,16 +36,16 @@
 
                     <div>
                         <label >Name</label>
-                        <div class="name_field">
+                        <div class="name_field field">
                             {{ form.first_name }}
                             {{ form.last_name }}
                             
                         </div>
                     </div>
 
-                    <div class="email_field">
+                    <div class="email_field field-group">
                         <label>Username </label>
-                        <div class="field">
+                        <div class="field ">
                             {{ form.username }}
                             <div class="icon_container">
                                 <img src="{% static '\icons\user icon.svg'%}" alt="Description of SVG" >
@@ -55,7 +55,7 @@
 
                     
 
-                    <div class="email_field">
+                    <div class="email_field field-group">
                         <label class="">Email Address</label>
                         <div class="field">
                             {{ form.email }}
@@ -68,7 +68,7 @@
                             {% endif %}
                     </div>
 
-                    <div class="password_field">
+                    <div class="password_field field-group">
                         <label class="">Password</label>
                         <div class="field">
                             {{ form.password }}
@@ -79,7 +79,7 @@
                         
                     </div>
 
-                    <div class="password_field">
+                    <div class="password_field field-group">
                         <label class="">Confirm password</label>
                         <div class="field">
                             {{ form.confirm_password }}

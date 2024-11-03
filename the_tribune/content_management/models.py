@@ -24,4 +24,4 @@ class Feedback(models.Model):
       ordering = ['-created_at']  # Sort feedback by latest first
 
   def __str__(self):
-      return f"Feedback for Article ID {self.article.id} by {self.user.username if self.user else 'Anonymous'}"
+      return f"Feedback for Article ID {self.article.id} by {self.editor.first_name if self.editor else 'Anonymous'}"
