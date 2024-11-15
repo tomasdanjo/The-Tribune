@@ -7,7 +7,27 @@
 {% block content %}
 <div class="container mx-auto p-6">
     <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div>  <!-- Display the logged-in user's name -->
-
+    <!-- profile.html -->
+    <div class="flex items-center space-x-4">
+        <!-- Profile Picture -->
+        <div class="w-20 h-20">
+            {% if user.profile_picture %}
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full">
+            {% else %}
+                <div class="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-black text-lg">
+                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
+                </div>
+            {% endif %}
+            
+        </div>
+        <a href="{% url 'update_profile_picture' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update picture</a>  
+        <!-- Name and Bio -->
+        <div>
+            <h2 class="text-xl font-semibold text-black ">{{ user.first_name }} {{ user.last_name }}</h2>
+            <!-- Optionally add a bio or other info here -->
+             
+        </div>
+    </div>
     <div class="mb-4">
         <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}

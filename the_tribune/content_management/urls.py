@@ -17,6 +17,7 @@ urlpatterns = [
     path('publish_article/<int:id>', publish_article, name='publish_article'),
     path('submit-feedback/', submit_feedback, name='submit_feedback'),
     path('editor_dashboard/<int:article_id>/', delete_draft, name='delete_draft'),
+    path('update_profile_picture/',update_profile_picture, name='update_profile_picture'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
     
 ]
