@@ -68,6 +68,14 @@
                 | {{ article.date_created }}
             </p>
             <hr class="border-t border-gray-200 my-4">
+
+            <form method="POST" action="{% url 'delete_draft' article.id %}" class="mt-4">
+                {% csrf_token %}
+                <button type="submit" class="text-red-600 hover:text-red-800">
+                    Delete
+                </button>
+            </form>
+
         </div>
         {% empty %}
         <p class="text-gray-500">No drafts found.</p>

@@ -267,3 +267,12 @@ def submit_feedback(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+def delete_draft(request, article_id):
+
+    article = get_object_or_404(Article, id=article_id)
+    
+    if request.method == 'POST':
+        article.delete()
+        return redirect('editor_dashboard')  # Redirect to the drafts page after deletion
+    return redirect('editor_dashboard')  # Redirect if not a POST request (extra prec
