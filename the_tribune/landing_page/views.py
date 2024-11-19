@@ -27,8 +27,8 @@ def landing_page(request):
 
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)
-    comments = Comment.objects.filter(article_id=id).order_by('-date_published')
-
+    comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
+    comment_count = Comment.objects.filter(article_id=id).count()
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)
 
     request.session['article_id'] = id
@@ -36,7 +36,25 @@ def full_article(request, id):
 
     comment_form = CommentForm()
 
-    return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories,'comment_form':comment_form})
+    return render(request,'full_article_view.html',{'article':article,
+                                                    'comments':comments,
+                                                    'comment_count': comment_count,
+                                                    'related_stories':related_stories,
+                                                    'comment_form':comment_form})
+
+def load_more_comments(request, article_id, offset):
+    comments = Comment.objects.filter(article_id=article_id).order_by('-date_published')[offset:offset+5]
+    comments_data = [
+        {
+            'id': comment.id,
+            'commenter_initials': f"{comment.commenter.user_credentials.first_name[0]}.{comment.commenter.user_credentials.last_name[0]}.",
+            'commenter_name': f"{comment.commenter.user_credentials.first_name} {comment.commenter.user_credentials.last_name}",
+            'content': comment.content,
+            'date_published': comment.date_published.strftime('%Y-%m-%d %H:%M:%S')
+        }
+        for comment in comments
+    ]
+    return JsonResponse({'comments': comments_data})
 
 def subscribe(request):
     if request.method == 'POST':

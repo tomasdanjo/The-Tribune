@@ -53,9 +53,9 @@
   <div id="comment-wrapper">
       <div id="comment-section-heading">
           <h2>Conversation</h2>
-          {% if comments %}
-              <p>{{ comments|length }}
-                  comment{{ comments|length|pluralize:"s" }}
+          {% if comment_count > 0 %}
+              <p>{{ comment_count }}
+                  comment{{ comment_count|pluralize:"s" }}
               </p>
           {% else %}
               <p>No comments yet</p>

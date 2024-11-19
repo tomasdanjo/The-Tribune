@@ -185,7 +185,52 @@
             });
         }
 
-
+        function loadMoreComments(articleId) {
+            const button = document.getElementById("load-more-btn");
+            const offset = parseInt(button.getAttribute("data-offset"));
+            ("--------------CLICKED!------------");
+            $.ajax({
+                url: `/load-more-comments/${articleId}/${offset}/`,
+                type: 'GET',
+                success: function (response) {
+                    const container = document.getElementById("comments-container");
+                    response.comments.forEach(comment => {
+                        const commentElement = `
+                            <div class="comment-group" id="comment-${comment.id}">
+                                <div class="reader-profile">
+                                    <span class="profile-initials">${comment.commenter_initials}</span>
+                                </div>
+                                <div class="comment-container-wrapper">
+                                    <div class="name-date-container">
+                                        <h3 class="commenter-name">${comment.commenter_name}</h3>
+                                        <p>${comment.date_published}</p>
+                                    </div>
+                                    <p class="comment-content">${comment.content}</p>
+                                </div>
+                            </div>`;
+                        container.insertAdjacentHTML('beforeend', commentElement);
+                    });
+                    
+                    if (response.comments.length < 5) {
+                        button.style.display = 'none'; // Hide the button if no more comments
+                    }
+    
+                    button.setAttribute("data-offset", offset + 5); // Update the offset
+                    if (response.comments.length < 5) {
+                        // Hide the button permanently if there are no more comments
+                        button.style.display = "none";
+                    } else {
+                        // Reattach the button at the bottom and make it visible
+                        container.parentNode.appendChild(button);
+                        button.style.display = "block";
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Failed to load comments:", xhr.responseText);
+                }
+            });
+            
+        }
 
         // $('#sort-comments').on('change', function() {
         //     sortComments(this.value);
