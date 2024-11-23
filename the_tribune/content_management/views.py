@@ -6,7 +6,7 @@ from django.contrib import messages
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
-from .forms import ProfilePictureForm
+from .forms import ProfilePictureForm,ProfileBiographyForm
 
 # from django import form
 
@@ -283,13 +283,27 @@ def update_profile_picture(request):
     user_profile = UserProfile.objects.get(user_credentials=request.user)
     # If the request method is POST, we want to handle the form submission
     if request.method == 'POST':
-        form = ProfilePictureForm(request.POST, request.FILES, instance=user_profile)
-        if form.is_valid():
-            form.save()
-            return redirect('editor_dashboard')  # Redirect to the profile page or wherever you want after saving
+        pictureform = ProfilePictureForm(request.POST, request.FILES, instance=user_profile)
+        biographyform = ProfileBiographyForm(request.POST,instance=user_profile)
+
+        if pictureform.is_valid():
+            pictureform.save()  
+        if biographyform.is_valid():
+            biographyform.save()
+
+        if user_profile.is_editor:
+                return redirect('editor_dashboard')  # Redirect
+        elif user_profile.is_writer:
+                return redirect('writer_dashboard')  # Redirect
     else:
         # GET request, so pre-fill the form with the current profile picture
-        form = ProfilePictureForm(instance=user_profile)
-
+        pictureform = ProfilePictureForm(instance=user_profile)
+        biographyform = ProfileBiographyForm(instance=user_profile)
     # Render the template with the form
-    return render(request, 'update_profile_picture.html', {'form': form}) 
+    return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
+
+def view_profile(request, id):
+    
+    user_profile = get_object_or_404(UserProfile, id=id)
+
+    return render(request, 'view_profile.html', {'user_profile': user_profile})

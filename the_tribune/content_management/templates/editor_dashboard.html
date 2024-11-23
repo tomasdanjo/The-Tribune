@@ -6,36 +6,54 @@
 
 {% block content %}
 <div class="container mx-auto p-6">
-    <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div>  <!-- Display the logged-in user's name -->
-    <!-- profile.html -->
-    <div class="flex items-center space-x-4">
+    <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div> <!-- Display the logged-in user's name -->
+
+    <div class="flex items-center space-x-4 relative">
         <!-- Profile Picture -->
-        <div class="w-20 h-20">
+        <div class="w-20 h-20 relative">
             {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full">
+                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full cursor-pointer" onclick="toggleDropdown()">
             {% else %}
-                <div class="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-black text-lg">
+                <div class="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-black text-lg cursor-pointer" onclick="toggleDropdown()">
                     {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
                 </div>
             {% endif %}
-            
-        </div>
-        <a href="{% url 'update_profile_picture' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Update picture</a>  
-        <!-- Name and Bio -->
-        <div>
-            <h2 class="text-xl font-semibold text-black ">{{ user.first_name }} {{ user.last_name }}</h2>
-            <!-- Optionally add a bio or other info here -->
-             
+    
+            <!-- Dropdown Content for Buttons -->
+            <div id="profile-dropdown" class="absolute left-full top-0 ml-2 w-48 bg-gray-200 rounded-lg p-1 space-y-3 hidden">
+                <div class="space-y-1">
+                    <!-- Update Picture Button -->
+                    <a href="{% url 'update_profile_picture' %}" 
+                       class="block w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                        View Profile
+                    </a>
+    
+                    <!-- Log Out Form -->
+                    <form method="POST" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                class="w-full sm:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500">
+                            Log Out
+                        </button>
+                    </form>
+                </div>
+            </div>
+
         </div>
     </div>
-    <div class="mb-4">
-        <form method="POST" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                Log out
-            </button>
-        </form>
+    
+    <div>
+        <h2 class="text-xl font-semibold text-black">{{ user.first_name }} {{ user.last_name }}</h2>
+        <!-- Optionally add a bio or other info here -->
     </div>
+    
+    <!-- JavaScript to toggle visibility -->
+    <script>
+        function toggleDropdown() {
+            var dropdown = document.getElementById("profile-dropdown");
+            dropdown.classList.toggle("hidden");
+        }
+    </script>
   
     <!-- Status Filter Buttons -->
     <div class="mb-4">
@@ -131,7 +149,10 @@
                 <a href="{% url 'approve' article.id %}">{{ article.headline }}</a>
             </h2>
             <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                
+                <a href="{% url 'view_profile' id=article.writer.id %}" class="pr-2 pt-1 pb-1">
+                    By {{ article.writer.first_name }} {{ article.writer.last_name }}
+                </a>
                 | {{ article.date_archived }}
             </p>
             <hr class="border-t border-gray-200 my-4">

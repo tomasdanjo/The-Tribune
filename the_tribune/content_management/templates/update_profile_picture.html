@@ -8,30 +8,58 @@
 
 <!-- update_profile_picture.html -->
 <div class="container mx-auto mt-10 px-4">
-    <h1 class="text-3xl font-bold mb-5">Edit Profile Picture</h1>
+    <h1 class="text-3xl font-bold text-gray-800 mb-6">Profile</h1>
 
-    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+    <form method="POST" enctype="multipart/form-data" class="space-y-2 bg-white p-6 rounded-lg shadow-lg">
         {% csrf_token %}
         
-        <div>
-            <label for="profile_picture" class="block text-sm font-medium text-gray-700">New Profile Picture</label>
-            <div id="image-preview" class="mt-4">
-            <img id="preview-img" src="" alt="Profile Picture Preview" class="w-32 h-32 object-cover rounded-full hidden">
+        <!-- Hidden input to trigger profile picture update -->
+        <input type="hidden" name="profile_picture_form" value="1">
+
+        <!-- Profile Picture Section -->
+        <div class=" items-center inline-block">
+            <label for="profile_picture" class="block text-sm font-medium text-gray-700 mb-2 ml-5">Your Profile Picture</label>
+
+            <div class="mb-1 ml-4 ">
+                {% if user_profile.profile_picture %}
+                    <img id="preview-img" src="{{ user_profile.profile_picture.url }}" alt="Profile Picture Preview" class="w-32 h-32 object-cover rounded-full bg-gray-200">
+                {% else %}
+                    <img id="preview-img" src="" alt="{{ user_profile.first_name|slice:':1' }}{{ user_profile.last_name|slice:':1' }}" class="w-32 h-32 object-cover rounded-full bg-gray-200">
+                {% endif %}
             </div>
-            {{ form.profile_picture }}
+
+            <div class="flex items-center justify-center text-center px-1 py-1 inline-block  ml-4">
+                <p class="font-semibold text-gray-800">{{ user_profile.first_name }} {{ user_profile.last_name }}</p>
+            </div>  
+        </div>
+
+        <div class="">
+            <input type="file" id="profile-picture-input" name="profile_picture" class="hidden" onchange="previewImage(event)">
+            <label for="profile-picture-input" class="inline-block bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 ease-in-out transform hover:scale-105">Choose a Picture</label>
+        
         </div>
         
-        
-        <div class="mt-4">
-            <button type="submit" class=" py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">Update Profile Picture</button>
+
+        <!-- Biography Section -->
+        <div class="mb-6">
+            <label for="biography" class="block text-sm font-medium text-gray-700 mb-2">Your current Biography</label>
+            <textarea name="biography" placeholder="Write something about you" class="w-full p-3 h-72 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200">{{ user_profile.biography }}</textarea>
+        </div>
+
+        <!-- Update Button -->
+        <div class="mt-6">
+            <button type="submit" class="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 ease-in-out transform hover:scale-105">Update</button>
         </div>
     </form>
-    <div class="mt-4">
-        <button onclick="window.history.back()" class="py-2 px-4 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">
+
+    <!-- Back Button -->
+    <div class="mt-4 mb-2 text-center">
+        <button onclick="window.history.back()" class="inline-block bg-gray-500 hover:bg-gray-800 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 ease-in-out transform hover:scale-105">
             Back
         </button>
     </div>
 </div>
+
 <script>
     // Get the file input and the preview image elements
     const fileInput = document.querySelector('input[name="profile_picture"]');
@@ -55,6 +83,24 @@
             previewImg.classList.add('hidden');  // Hide the preview if no file is selected
         }
     });
+</script>
+
+<script>
+    function previewImage(event) {
+        // Get the file from the input
+        const file = event.target.files[0];
+        
+        if (file) {
+            // Create a URL for the file and set it as the source for the preview image
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const preview = document.getElementById('preview-img');
+                preview.src = e.target.result;
+                preview.classList.remove('hidden');  // Show the preview image
+            };
+            reader.readAsDataURL(file);
+        }
+    }
 </script>
 
 
