@@ -11,4 +11,5 @@ urlpatterns = [
     path('dislike-comment/', dislike_comment, name='dislike_comment'),
     path('articles/<int:article_id>/sort_comments/', sort_comments, name='sort_comments'),
     path('delete_comment/<int:comment_id>/', delete_comment, name='delete_comment'),
+    # path('summarize/<int:article_id>/', summarize_article, name='summarize_article'),
 ]

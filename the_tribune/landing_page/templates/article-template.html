@@ -12,6 +12,9 @@
   <div id="content-container">
     {% if article.status == 'published' %}
       <div id="share-links">
+        <div>
+            <button onclick="summarize()">summarize</button>
+        </div>
         <div class="link-group">
             <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
         </div>
@@ -26,8 +29,10 @@
         </div>
     </div>
     {% endif %}
-      
       <div id="article-content-container">
+        <div id="summarize-article-container">
+
+        </div>
           {% if article.photo %}
           <div id="photo-container">
               <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Image for {{ article.headline }}">
@@ -42,3 +47,30 @@
   </div>
   
 </article>
+
+{% load static %}
+
+<script>
+
+    // function summarize(){
+    //     $.ajax({
+    //         url: "{% url 'summarize_article' article.id %}", // Replace with the URL of your like view
+    //         type: "POST",
+    //         data: {
+    //         csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
+    //         },
+    //         success: function (data) {
+    //             document.getElementById("summarize-article-container").innerHTML = `
+    //                 <h3>Summary</h3>
+    //                 <p>${data.summary}</p>
+    //             `;
+    //             console.log('summarized!');
+                
+    //         },
+    //         error: function (xhr, textStatus, errorThrown) {
+    //         console.error("Error summarizing article:", errorThrown);
+    //         },
+    //     });
+
+    // }
+</script>
