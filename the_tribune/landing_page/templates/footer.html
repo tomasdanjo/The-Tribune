@@ -1,0 +1,58 @@
+{% load static %}
+<footer class="mt-10">
+  <!-- <a href="{% url 'home' %}" class="text-indigo-600 hover:underline">Back to Articles</a> -->
+
+  <div>
+      <div id="logo-container">
+          <img src="{% static '\icons\logo.svg' %}" alt="">
+      </div>
+      <div id="summary-container">
+          <p>Join our newsletter</p>
+          <h3>bring fearless news directly to you</h3>
+      </div>
+      
+
+      <form method="POST" action="{% url 'subscribe' %}">
+          {% csrf_token %}
+          <input 
+              type="email" 
+              name="email" 
+              placeholder="Enter your email address..." 
+              required
+          >
+          <button 
+              type="submit" 
+          >
+              Subscribe
+          </button>
+      </form>
+
+      <div>
+          <h3>follow us</h3>
+      <div id="social-links-container">
+          <a href=""><img src="{% static '\icons\social-facebook.svg' %}" alt=""></a>
+          <a href=""><img src="{% static '\icons\social-twitter.svg' %}" alt=""></a>
+          <a href=""><img src="{% static '\icons\social-youtube.svg' %}" alt=""></a>
+          <a href=""><img src="{% static '\icons\social-instagram.svg' %}" alt=""></a>
+          <a href=""><img src="{% static '\icons\social-linkedin.svg' %}" alt=""></a>
+      </div>
+      </div>
+      
+  </div>
+  <div>
+      <a href="">about us</a>
+      <a href="">mission statement</a>
+      <a href="">AI Guidelines</a>
+      <a href="">The Team</a>
+      <a href="">Job Openings</a>
+      <a href="">Contact us</a>
+      <div id="terms-container">
+          <a href="">privacy statement</a>
+          <a href="">terms of use</a>
+          <a href="">community Guidelines</a>
+      </div>
+  </div>
+
+
+
+</footer>

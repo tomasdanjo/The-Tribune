@@ -10,10 +10,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.templatetags.static import static
 from django.db.models import Count
-# from transformers import pipeline
-# from myapp.models import Article
+from transformers import pipeline
 
-# summarizer = pipeline('summarization')  
+summarizer = pipeline('summarization')  
 
 def landing_page(request):
     article_id = request.session.get('article_id')
@@ -60,18 +59,19 @@ def subscribe(request):
         # Optionally, handle GET requests or redirect
         return redirect('home')
 
-# def summarize_article(request,article_id):
-#     article=Article.objects.get(id=article_id)
-#     text = f"{article.headline}\n\n{article.content}"
+def summarize_article(request,article_id):
+    pass
+    article=Article.objects.get(id=article_id)
+    text = f"{article.headline}\n\n{article.content}"
 
-#     try:
-#         summary = summarizer(
-#             text, max_length=300, min_length=150, do_sample=False
-#         )[0]['summary_text']
-#     except Exception as e:
-#         return JsonResponse({'error': str(e)}, status=500)
+    try:
+        summary = summarizer(
+            text, max_length=300, min_length=150, do_sample=False
+        )[0]['summary_text']
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
     
-#     return JsonResponse({'summary': summary})
+    return JsonResponse({'summary': summary})
 
 
 # @require_POST

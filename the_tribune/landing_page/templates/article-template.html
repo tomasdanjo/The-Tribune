@@ -12,8 +12,8 @@
   <div id="content-container">
     {% if article.status == 'published' %}
       <div id="share-links">
-        <div>
-            <button onclick="summarize()">summarize</button>
+        <div class="link-group">
+            <a onclick="summarize()"><img src="{% static '\icons\ai.svg'%}" alt=""></a>
         </div>
         <div class="link-group">
             <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
@@ -30,9 +30,20 @@
     </div>
     {% endif %}
       <div id="article-content-container">
-        <div id="summarize-article-container">
-
+        <div id="summary-wrapper-container" style="display: none;">
+            <div id="summarize-article-container">
+                <h3>Summary</h3>
+                <hr>
+                <p id="summary">
+                    Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aperiam nisi iusto pariatur reiciendis optio, a voluptates porro. Cupiditate, deleniti. Iure accusamus quos voluptatibus! A at minus reiciendis, distinctio et exercitationem aliquam voluptate dolorum soluta recusandae consectetur eum ipsa quidem tempore placeat id, iusto quibusdam neque ea, quos similique accusamus. Quas accusantium corporis eaque. Dolores praesentium minus nesciunt laudantium esse quaerat, sapiente amet neque eligendi mollitia rerum totam libero, dolor voluptate unde rem tenetur ipsum quae quibusdam debitis magni maiores hic. Sed consectetur exercitationem qui ea provident eius quasi perspiciatis! Provident aut sint repellendus perspiciatis laudantium officia molestias quis possimus distinctio.
+                </p>
+            </div>
+            <div id="ai-warning-container">
+                <img src="{% static '\icons\warning.svg' %}" alt="">
+                <p>This is AI generated summarization, which may have errors. For context, always refer to the full article.</p>
+            </div>
         </div>
+        
           {% if article.photo %}
           <div id="photo-container">
               <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Image for {{ article.headline }}">
@@ -52,25 +63,32 @@
 
 <script>
 
-    // function summarize(){
-    //     $.ajax({
-    //         url: "{% url 'summarize_article' article.id %}", // Replace with the URL of your like view
-    //         type: "POST",
-    //         data: {
-    //         csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
-    //         },
-    //         success: function (data) {
-    //             document.getElementById("summarize-article-container").innerHTML = `
-    //                 <h3>Summary</h3>
-    //                 <p>${data.summary}</p>
-    //             `;
-    //             console.log('summarized!');
-                
-    //         },
-    //         error: function (xhr, textStatus, errorThrown) {
-    //         console.error("Error summarizing article:", errorThrown);
-    //         },
-    //     });
+    function summarize(){
+        var container = document.getElementById('summary-wrapper-container');
 
-    // }
+
+
+        $.ajax({
+            url: "{% url 'summarize_article' article.id %}", // Replace with the URL of your like view
+            type: "POST",
+            data: {
+            csrfmiddlewaretoken: "{{ csrf_token }}", // Include CSRF token for security
+            },
+            success: function (data) {
+                document.getElementById("summary").innerText = `
+                    ${data.summary}
+                `;
+                console.log('summarized!');
+
+                if (container.style.display === "none" || container.style.display === "") {
+                container.style.display = "block"; // Show container
+                }
+                
+            },
+            error: function (xhr, textStatus, errorThrown) {
+            console.error("Error summarizing article:", errorThrown);
+            },
+        });
+
+    }
 </script>
