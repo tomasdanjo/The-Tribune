@@ -3,8 +3,11 @@
 <div id="story-comment-wrapper">
   <div id="related-stories-wrapper">
       <h2>Read Next</h2>
-      <div id="related-stories-container">
+      <div id="related-stories-container">  
           {% if related_stories %}
+          <p>{{ related_stories_count }}
+            Related Article{{ related_stories_count|pluralize:"s" }}
+            </p>
               {% for article in related_stories %}
                   <div class="related-story-group">
                       <div class="left-related-story">
@@ -48,8 +51,12 @@
           {% else %}
               <p>No related stories yet.</p>
           {% endif %}
+          
       </div>
+      
   </div>
+
+
   <div id="comment-wrapper">
       <div id="comment-section-heading">
           <h2>Conversation</h2>
@@ -104,6 +111,10 @@
       <div id="comments-container">
           {% include 'comments.html' %}
       </div>
+
+      <div id="show-more-container">
+        <button id="load-more-btn" data-offset="0" onclick="loadMoreComments({{ article.id }})">Show More Comments</button>
+    </div>
 
   </div>
 </div>
