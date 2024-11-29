@@ -63,8 +63,10 @@ This project is created by:
 
 # Built-With
 
-- ![Django Badge](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
-  
+- ![Python Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B)
+
+- ![Django Badge](https://img.shields.io/badge/Django-0c4b33?style=for-the-badge&logo=django&logoColor=white)
+
 - ![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
   
 - ![HTML5 Badge](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
