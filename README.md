@@ -61,6 +61,18 @@ This project is created by:
 9.) Subscribe to newsletter
 - Users must be able to subscribe to a newsletter to instant receive updates and notifications on the latest stories and content posted on the portal.
 
+# Built-With
+
+- ![Django Badge](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
+  
+- ![JavaScript Badge](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
+  
+- ![HTML5 Badge](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
+  
+- ![SQLite Badge](https://img.shields.io/badge/SQLite-0060C0?style=for-the-badge&logo=sqlite&logoColor=white)
+
+- ![Tailwind CSS Badge](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
+  
 # Gant Chart
 
 # ERD
