@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.templatetags.static import static
 from django.db.models import Count
+from datetime import datetime
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
@@ -37,8 +38,9 @@ def full_article(request, id):
     print(id)
 
     comment_form = CommentForm()
+    current_date = datetime.now().strftime('%b %d, %Y') 
 
-    return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories,'comment_form':comment_form})
+    return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories,'comment_form':comment_form,'current_date':current_date})
 
 def subscribe(request):
     if request.method == 'POST':
