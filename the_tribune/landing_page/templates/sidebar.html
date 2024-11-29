@@ -1,0 +1,36 @@
+<div id="sidebar" class="hidden">
+  <div id="sidebar-content">
+      <p>put content here</p>
+  </div>
+</div>
+
+<script>
+  function openSidebar() {
+  const sidebar = document.getElementById('sidebar');
+  const popupContent = document.getElementById('sidebar-content');
+  
+  sidebar.classList.remove('hidden');
+  sidebar.style.display = 'block';
+  
+  // Trigger reflow to ensure animation works
+  popupContent.offsetWidth;
+  
+  popupContent.style.transform = 'translateX(0)';
+}
+
+document.getElementById('sidebar').addEventListener('click', function(event) {
+  const sidebar = this;
+  const popupContent = document.getElementById('sidebar-content');
+  
+  // Close sidebar if clicked outside the popup content
+  if (event.target === sidebar) {
+      popupContent.style.transform = 'translateX(-100%)';
+      
+      // Wait for animation to complete before hiding
+      setTimeout(() => {
+          sidebar.classList.add('hidden');
+          sidebar.style.display = 'none';
+      }, 300);
+  }
+});
+</script>

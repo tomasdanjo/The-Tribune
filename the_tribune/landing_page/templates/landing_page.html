@@ -4,28 +4,16 @@
     News Landing Page 
 {% endblock %}
 
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/landing_page.css' %}"> 
+{% endblock %}
+
+
 {% block content %}
-<div class="max-w-4xl mx-auto p-4">
-    <!-- Search Form -->
 
-  
-
-    <form method="GET" action="{% url 'search' %}" class="mb-6 flex">
-        {% csrf_token %}
-        <input 
-            type="text" 
-            name="query" 
-            placeholder="Search articles..." 
-            required
-            class="flex-grow border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-        <button 
-            type="submit" 
-            class="ml-2 bg-red-500 rounded-lg px-2 py-3"
-        >
-            Search
-        </button>
-    </form>
+{% include 'header.html' %}
 
     <!-- Page Title -->
     <h1 class="text-3xl font-bold mb-4">News Articles</h1>
@@ -57,36 +45,8 @@
     {% empty %}
         <p class="text-gray-500">No articles found.</p>
     {% endfor %}
-    
-     <!-- Subscribe Newsletter -->
-     <div class="mt-8 p-6 bg-gray-100 rounded-lg">
-        <h2 class="text-xl font-bold mb-4">Subscribe to Our Newsletter</h2>
-        <form method="POST" action="{% url 'subscribe' %}">
-            {% csrf_token %}
-            <input 
-                type="email" 
-                name="email" 
-                placeholder="Enter your email address..." 
-                required
-                class="border border-gray-300 rounded-lg px-4 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full"
-            >
-            <button 
-                type="submit" 
-                class="mt-2 bg-blue-500 text-white rounded-lg px-4 py-2"
-            >
-                Subscribe
-            </button>
-        </form>
-        <!-- Display Messages -->
-        {% if messages %}
-            <div class="mt-4">
-                {% for message in messages %}
-                    <p class="text-{{ message.tags }}">{{ message }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
-    </div>
-</div>
+
+    {% include 'footer.html' %}
 
 {% if user.is_authenticated %}
 <div class="mb-4">

@@ -19,6 +19,8 @@ def landing_page(request):
     article_id = request.session.get('article_id')
     if article_id:
         del request.session['article_id']  # Clear session after redirect
+    
+    current_date = datetime.now().strftime('%b %d, %Y')  
 
     articles = Article.objects.filter(status    ='published')
     for article in articles:
@@ -26,7 +28,7 @@ def landing_page(request):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
             article.save()
             
-    return render(request, 'landing_page.html', {'articles': articles})
+    return render(request, 'landing_page.html', {'articles': articles,'current_date':current_date})
 
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)

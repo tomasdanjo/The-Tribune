@@ -6,6 +6,7 @@ Search with The Tribune
 
 {% block style %}
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}">
     <link rel="stylesheet" href="{% static 'css/search_view.css' %}">
 {% endblock %}
 
@@ -16,7 +17,7 @@ Search with The Tribune
 
 <header id="header">
     <div id="date-container">
-        <button>
+        <button onclick="openSidebar()">
             <div></div>
             <div></div>
             <div></div>
@@ -26,7 +27,10 @@ Search with The Tribune
     
     <div id="header-logo"><img src="{% static '\icons\full-logo.svg' %}" alt="">
     </div>
-</header>
+  </header>
+
+  {% include 'sidebar.html' %}
+
 
 
 <form method="GET" action="{% url 'search' %}">
