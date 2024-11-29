@@ -26,9 +26,12 @@ Para sa malaya at tuwid na pamamahayag, lagi’t-lagi.
 
 # Acknowledgement
 This project is created by:
-Thomas Danjo M. Manulat
-Ryan Jay Anthony C. Timagos
-Paul Jes Marc F. Flores
+
+- Thomas Danjo M. Manulat
+
+- Ryan Jay Anthony C. Timagos
+
+- Paul Jes Marc F. Flores
 
 # Functional Requirements
 1.) Administrative Dashboard 
