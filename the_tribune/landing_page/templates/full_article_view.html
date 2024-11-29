@@ -73,7 +73,7 @@
                     refreshIconStates(commentId,data.user_liked,data.user_disliked);
                 },
                 error: function (xhr, textStatus, errorThrown) {
-                console.error("Error disliking comment:", errorThrown);
+                    console.error("Error disliking comment:", errorThrown);
                 },
             });
         }
@@ -183,11 +183,55 @@
             });
         }
 
+        function promptUserToLogin(button) {
+    // Remove any existing popup to prevent duplicates
+    removePopup();
 
+    // Fetch the template from the included HTML
+    const template = document.getElementById("login-popup-template");
+    if (!template) {
+        console.error("Popup template not found!");
+        return;
+    }
 
-        // $('#sort-comments').on('change', function() {
-        //     sortComments(this.value);
-        // });
+    const popup = template.cloneNode(true);
+    popup.id = "login-popup"; // Assign a new ID to the clone
+    popup.style.display = "block"; // Make the cloned popup visible
+
+    // Position the popup relative to the button
+    const rect = button.getBoundingClientRect();
+    popup.style.position = "absolute";
+    popup.style.top = `${rect.bottom + window.scrollY + 5}px`; // Adjust for spacing
+    popup.style.left = `${rect.left + window.scrollX}px`;
+    popup.style.zIndex = "1000";
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+
+    // Add event listeners for the buttons
+    // popup.querySelector("#login-btn").onclick = () => {
+    //     window.location.href = "/login/";
+    // };
+    // popup.querySelector("#signup-btn").onclick = () => {
+    //     window.location.href = "/signup/";
+    // };
+
+    // Add mouseover and mouseout events to handle visibility
+    popup.addEventListener("mouseover", () => {
+        popup.dataset.keep = "true";
+    });
+    popup.addEventListener("mouseout", () => {
+        popup.dataset.keep = "false";
+        setTimeout(() => removePopup(), 200); // Delay for smoothness
+    });
+}
+
+function removePopup() {
+    const popup = document.getElementById("login-popup");
+    if (popup && popup.dataset.keep !== "true") popup.remove();
+}
+
+        
 
     </script>
 

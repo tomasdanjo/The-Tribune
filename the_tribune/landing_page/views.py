@@ -10,9 +10,9 @@ from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.templatetags.static import static
 from django.db.models import Count
-from transformers import pipeline
+# from transformers import pipeline
 
-summarizer = pipeline('summarization')  
+# summarizer = pipeline('summarization')  
 
 def landing_page(request):
     article_id = request.session.get('article_id')
