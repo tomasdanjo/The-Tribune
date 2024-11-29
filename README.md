@@ -61,8 +61,10 @@ This project is created by:
 9.) Subscribe to newsletter
 - Users must be able to subscribe to a newsletter to instant receive updates and notifications on the latest stories and content posted on the portal.
 
-#Gant Chart
+# Gant Chart
 
-#ERD
+# ERD
 
-#UI/UX Design
+https://github.com/tomasdanjo/The-Tribune/blob/main/The%20Tribune%20ERD.pdf
+
+# UI/UX Design
