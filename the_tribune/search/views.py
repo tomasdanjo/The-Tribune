@@ -77,7 +77,7 @@ def search_article(request):
     tags = Tag.objects.all()
     categories = Category.objects.all()
 
-
+    current_date = datetime.now().strftime('%b %d, %Y')  
 
     return render(request, 'search_results.html', {
     'articles': articles,
@@ -92,4 +92,6 @@ def search_article(request):
     'end_month': orig_end_month,
     'has_tag': has_tag,
     'category_id': category_id,
+    'current_date':current_date
+
 })

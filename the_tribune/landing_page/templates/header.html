@@ -1,0 +1,27 @@
+{% load static %}
+
+<header id="header">
+  <div id="date-container">
+      <button>
+          <div></div>
+          <div></div>
+          <div></div>
+      </button>
+      <p>{{current_date}}</p>
+  </div>
+  
+  <div id="header-logo"><img src="{% static '\icons\full-logo.svg' %}" alt="">
+  </div>
+  <form method="GET" action="{% url 'search' %}">
+      {% csrf_token %}
+      <div>
+          <img src="{% static '\icons\search.svg' %}" alt="">
+      </div>
+      <input 
+          type="text" 
+          name="query" 
+          placeholder="Search headlines" value="{{query}}"
+          required 
+      >
+  </form>
+</header>

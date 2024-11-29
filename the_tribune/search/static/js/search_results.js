@@ -100,15 +100,23 @@ function showMonth() {
     const startYearSelect = document.getElementById('start_year');
     const endYearSelect = document.getElementById('end_year');
 
-    month_container = document.getElementById('toFromMonth');
+    fromMonth_container = document.getElementById('fromMonth');
+    toMonth_container = document.getElementById('toMonth');
+
+    // month_container = document.getElementById('toFromMonth');
     const selectedStartYear = parseInt(startYearSelect.value);
     const selectedEndYear = parseInt(endYearSelect.value);
 
     if (isNaN(selectedStartYear) || isNaN(selectedEndYear)) {
-        month_container.classList.add('hidden'); // Use add to append the 'hidden' class
+        // month_container.classList.add('hidden'); 
+        fromMonth_container.classList.remove('filter-group');
+        toMonth_container.classList.remove('filter-group');
     } else {
-        month_container.classList.remove('hidden'); // Remove 'hidden' class to show the container
+        // month_container.classList.remove('hidden'); 
+        fromMonth_container.classList.add('filter-group');
+        toMonth_container.classList.add('filter-group');
     }
+    
 
 }
 
