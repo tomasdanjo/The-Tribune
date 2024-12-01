@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from django.templatetags.static import static
 from django.db.models import Count
 from datetime import datetime
+from article.models import Category
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
@@ -27,8 +28,12 @@ def landing_page(request):
         if timezone.is_naive(article.date_published):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
             article.save()
+
+    news_articles = articles.filter(category__category_name="News")
+
+    categories = Category.objects.all()
             
-    return render(request, 'landing_page.html', {'articles': articles,'current_date':current_date})
+    return render(request, 'landing_page.html', {'articles': articles,'current_date':current_date,'news_articles':news_articles})
 
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)

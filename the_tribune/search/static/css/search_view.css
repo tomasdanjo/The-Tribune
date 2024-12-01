@@ -174,7 +174,7 @@ input[type="checkbox"] {
   height: fit-content;
   gap: 40px;
   padding: 20px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
   border-radius: 15px;
   margin: 10px 0px;
 }

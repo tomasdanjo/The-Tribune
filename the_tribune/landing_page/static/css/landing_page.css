@@ -6,3 +6,65 @@
   background-color: #46445C;
 }
 
+.section{
+  display: flex;
+  flex-direction: column;
+  padding: 0px 100px;
+  gap: 40px;
+}
+
+.section h3{
+  color: #596E9B;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  height: fit-content;
+}
+
+.articles-container{
+  display: flex;
+  gap: 40px;
+}
+
+.article-card{
+  width: 300px;
+}
+
+.section-header-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.section-header-container button{
+  background-color: #596E9B;
+  padding: 5px 20px;
+  height: 100%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.section-header-container div{
+  height: fit-content
+}
+
+#prev-button{
+  border-radius: 15px 0px 0px 15px;
+}
+
+#next-button{
+  border-radius: 0px 15px 15px 0px;
+}
+
+.article-card-photo-container{
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+
+
+}
+
+.article-card-photo-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
