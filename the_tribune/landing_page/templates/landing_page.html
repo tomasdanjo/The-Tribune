@@ -28,6 +28,62 @@
     <a href="#lifestyle-section">Lifestyle</a>
 </nav>
 
+<div id="top-stories-section">
+    <div id="top-four-stories">
+        <div id="top-story-card" style="
+        {% if top_stories|length > 0 %}
+            --bg-image: url('{{ MEDIA_URL }}{{ top_stories.0.photo.photo.url }}');
+        {% endif %}
+     ">
+     <div id="top-story-category-container">
+        <p>{{top_stories.0.category.get_category_name_display}}</p>
+     </div>
+     <h3>
+        <a href="{% url 'full_article_view' top_stories.0.id %}">{{ top_stories.0.headline }}</a>
+        
+     </h3>
+     <p id="photo-caption">{{ top_stories.0.photo.caption }}</p>
+     <p id="date-published">{{ top_stories.0.date_published }}</p>
+
+        </div>
+        {% for article in top_stories %}
+
+            {% if forloop.counter == 2 or forloop.counter == 3 or forloop.counter == 4 %}
+            <div class="article-card top-story-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+            {% endif %}
+        
+    {% endfor %}
+
+
+    </div>
+    <div id="other-top-stories">
+        {% for article in top_stories %}
+            <div class="article-card top-story-card other-story-card">
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+            
+        
+        {% endfor %}
+    </div>
+</div>
 
 
 <div id="news-section" class="section">
@@ -50,7 +106,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -82,7 +138,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -114,7 +170,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -146,7 +202,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -178,7 +234,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -211,7 +267,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -243,7 +299,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -275,7 +331,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -307,7 +363,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -339,7 +395,7 @@
                         >
                     </div>
                 {% endif %}
-                <p class="card-category">{{ article.category.category_name }}</p>
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
                     <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
@@ -353,8 +409,13 @@
 
 
 <script>
+    
+
     document.addEventListener('DOMContentLoaded', function () {
     const navLinks = document.querySelectorAll('nav a');
+
+    
+
 
     navLinks.forEach(link => {
         link.addEventListener('click', function (event) {

@@ -28,6 +28,20 @@ def landing_page(request):
         if timezone.is_naive(article.date_published):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
             article.save()
+        
+    top_stories = articles.annotate(
+        num_likes=Count('comment__liked_by'),  # Count likes from comments
+        num_comments=Count('comment'),  # Count number of comments
+        tag_popularity=Count('tag__article')  # Count articles associated with the same tag
+    )
+
+    # Sort articles and limit to top 10
+    top_stories = top_stories.order_by(
+        '-num_likes',  # Highest likes
+        '-num_comments',  # Highest comments
+        '-date_published',  # Most recent
+        '-tag_popularity'  # Popular tag
+    )[:9]
 
     news_articles = articles.filter(category__category_name="News")
     sports_articles=articles.filter(category__category_name="sports")
@@ -53,7 +67,8 @@ def landing_page(request):
         'editorial_articles':editorial_articles,
         'feature_articles':feature_articles,
         'environment_articles':environment_articles,
-        'scitech_articles':scitech_articles
+        'scitech_articles':scitech_articles,
+        'top_stories':top_stories
     
     }
 

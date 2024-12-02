@@ -19,6 +19,7 @@ class Category(models.Model):
 
     category_name = models.CharField(max_length=100, choices=CATEGORY_CHOICES, default='news')
 
+
     def __str__(self):
         return self.get_category_name_display()  # To display the readable name
 
