@@ -23,13 +23,13 @@ def landing_page(request):
     
     current_date = datetime.now().strftime('%b %d, %Y')  
 
-    articles = Article.objects.filter(status    ='published')
+    articles = Article.objects.filter(status='published')
     for article in articles:
         if timezone.is_naive(article.date_published):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
             article.save()
 
-    news_articles = articles.filter(category__category_name="News")
+    news_articles = articles.filter(category__category_name="News").order_by('-date_published')
 
     categories = Category.objects.all()
             

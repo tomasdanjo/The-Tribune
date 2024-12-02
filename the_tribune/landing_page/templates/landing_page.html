@@ -39,34 +39,111 @@
 
     <div class="articles-container">
         {% for article in news_articles %}
-            
             <div class="article-card">
                 {% if article.photo_id %}
-                    <div class="article-card-photo-container"> <!-- 200px width with 4:3 aspect ratio -->
+                    <div class="article-card-photo-container">
                         <img 
                             src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
                             alt="Photo for {{ article.headline }}" 
                         >
                     </div>
                 {% endif %}
-                <p >{{ article.category.category_name }}</p>
-                <h2 >
+                <p>{{ article.category.category_name }}</p>
+                <h2>
                     <a>{{ article.headline }}</a>
                 </h2>
-                <p> {{ article.date_published }}
-                </p>
-                
-                
+                <p>{{ article.date_published }}</p>
             </div>
         {% empty %}
             <p>No articles found.</p>
         {% endfor %}
-
+        {% for article in news_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p>{{ article.category.category_name }}</p>
+                <h2>
+                    <a>{{ article.headline }}</a>
+                </h2>
+                <p>{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
     </div>
     
 
 
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.articles-container');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const cards = document.querySelectorAll('.article-card');
+    
+    // Get container width and card width
+    const containerWidth = container.clientWidth;
+    const cardWidth = 0.2*containerWidth; // Fixed card width
+    const gap = 40; // Gap between cards
+    const totalCardWidth = cardWidth + gap;
+    
+    // Calculate max visible cards
+    const maxVisibleCards = Math.floor(containerWidth / totalCardWidth);
+    
+    let currentIndex = 0;
+
+    // Function to update visibility
+    function updateCardVisibility() {
+        // Hide all cards first
+        cards.forEach(card => card.style.display = 'none');
+        
+        // Show correct subset of cards
+        for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+            cards[i].style.display = 'block';
+        }
+        
+        // Update button visibility
+        prevButton.style.display = currentIndex > 0 ? 'block' : 'none';
+        nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'block' : 'none';
+    }
+
+    // Next button handler
+    nextButton.addEventListener('click', function() {
+        // Increment by the maximum number of visible cards
+        if (currentIndex + maxVisibleCards < cards.length) {
+            currentIndex += maxVisibleCards;
+            
+            // Adjust if we've gone too far
+            if (currentIndex + maxVisibleCards > cards.length) {
+                currentIndex = cards.length - maxVisibleCards;
+            }
+            
+            updateCardVisibility();
+        }
+    });
+
+    // Previous button handler
+    prevButton.addEventListener('click', function() {
+        // Decrement by the maximum number of visible cards
+        if (currentIndex > 0) {
+            currentIndex = Math.max(0, currentIndex - maxVisibleCards);
+            updateCardVisibility();
+        }
+    });
+
+    // Initial setup
+    updateCardVisibility();
+});
+</script>
+
 
 
     {% include 'footer.html' %}

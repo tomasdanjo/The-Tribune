@@ -24,10 +24,29 @@
 .articles-container{
   display: flex;
   gap: 40px;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  transition: transform 0.3s ease-out;
 }
 
 .article-card{
-  width: 300px;
+  width: 20%;
+  flex-shrink: 0;
+  display: none;
+  transition: 
+        transform 0.3s ease-out, 
+        opacity 0.3s ease-out;
+}
+
+.article-card.swipe-left {
+  transform: translateX(-100%);
+  opacity: 0;
+}
+
+.article-card.swipe-right {
+  transform: translateX(100%);
+  opacity: 0;
 }
 
 .section-header-container{
@@ -41,6 +60,7 @@
   padding: 5px 20px;
   height: 100%;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .section-header-container div{
