@@ -17,13 +17,15 @@
 
 <nav>
     <a href="">Top Stories</a>
-    <a href="">Latest News</a>
-    <a href="">Sports</a>
-    <a href="">Opinion</a>
-    <a href="">Featured Topics</a>
-    <a href="">Environment</a>
-    <a href="">Editorials</a>
-    <a href="">Science & Tech.</a>
+    <a href="#news-section">Latest News</a>
+    <a href="#sports-section">Sports</a>
+    <a href="#opinion-section">Opinion</a>
+    <a href="#feature-section">Featured Topics</a>
+    <a href="#environment-section">Environment</a>
+    <a href="#editorial-section">Editorials</a>
+    <a href="#scitech-section">Science & Tech.</a>
+    <a href="#technology-section">Technology</a>
+    <a href="#lifestyle-section">Lifestyle</a>
 </nav>
 
 
@@ -32,8 +34,8 @@
     <div class="section-header-container">
         <h3>Latest News</h3>
         <div>
-            <button id="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
-            <button id="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
         </div>
     </div>
 
@@ -48,16 +50,29 @@
                         >
                     </div>
                 {% endif %}
-                <p>{{ article.category.category_name }}</p>
-                <h2>
-                    <a>{{ article.headline }}</a>
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
-                <p>{{ article.date_published }}</p>
+                <p class="card-published-date">{{ article.date_published }}</p>
             </div>
         {% empty %}
             <p>No articles found.</p>
         {% endfor %}
-        {% for article in news_articles %}
+    </div>
+</div>
+
+<div id="sports-section" class="section">
+    <div class="section-header-container">
+        <h3>Sports</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in sports_articles %}
             <div class="article-card">
                 {% if article.photo_id %}
                     <div class="article-card-photo-container">
@@ -67,22 +82,460 @@
                         >
                     </div>
                 {% endif %}
-                <p>{{ article.category.category_name }}</p>
-                <h2>
-                    <a>{{ article.headline }}</a>
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
                 </h2>
-                <p>{{ article.date_published }}</p>
+                <p class="card-published-date">{{ article.date_published }}</p>
             </div>
         {% empty %}
             <p>No articles found.</p>
         {% endfor %}
     </div>
-    
-
-
 </div>
 
+<div id="entertainment-section" class="section">
+    <div class="section-header-container">
+        <h3>Entertainment</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in entertainment_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="opinion-section" class="section">
+    <div class="section-header-container">
+        <h3>Opinion</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in opinion_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="technology-section" class="section">
+    <div class="section-header-container">
+        <h3>Technology</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in technology_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div id="lifestyle-section" class="section">
+    <div class="section-header-container">
+        <h3>Lifestyle</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in lifestyle_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="editorial-section" class="section">
+    <div class="section-header-container">
+        <h3>Editorial</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in editorial_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="feature-section" class="section">
+    <div class="section-header-container">
+        <h3>Featured Topics</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in feature_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="environment-section" class="section">
+    <div class="section-header-container">
+        <h3>Environment</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in environment_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<div id="scitech-section" class="section">
+    <div class="section-header-container">
+        <h3>Science and Technology</h3>
+        <div>
+            <button class="prev-button"><img src="{% static '\icons\prev.svg' %}" alt=""></button>
+            <button class="next-button"><img src="{% static '\icons\next.svg' %}" alt=""></button>
+        </div>
+    </div>
+
+    <div class="articles-container">
+        {% for article in scitech_articles %}
+            <div class="article-card">
+                {% if article.photo_id %}
+                    <div class="article-card-photo-container">
+                        <img 
+                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                            alt="Photo for {{ article.headline }}" 
+                        >
+                    </div>
+                {% endif %}
+                <p class="card-category">{{ article.category.category_name }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                </h2>
+                <p class="card-published-date">{{ article.date_published }}</p>
+            </div>
+        {% empty %}
+            <p>No articles found.</p>
+        {% endfor %}
+    </div>
+</div>
+
+
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+    const navLinks = document.querySelectorAll('nav a');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', function (event) {
+            // Prevent default anchor click behavior
+            event.preventDefault();
+
+            // Get the target section
+            const targetId = this.getAttribute('href');
+            const targetElement = document.querySelector(targetId);
+
+            if (targetElement) {
+                // Calculate the position to scroll to
+                const offset = 70; // Adjust if you have a fixed header
+                const elementPosition = targetElement.offsetTop;
+                const offsetPosition = elementPosition - offset;
+
+                // Smooth scroll to the target
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth',
+                });
+            }
+        });
+    });
+});
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+    const sections = document.querySelectorAll('.section');
+
+    sections.forEach(section => {
+        const container = section.querySelector('.articles-container');
+        const prevButton = section.querySelector('.prev-button');
+        const nextButton = section.querySelector('.next-button');
+        const cards = container.querySelectorAll('.article-card');
+
+        const containerWidth = container.clientWidth;
+        const cardWidth = 0.2 * containerWidth; // Fixed card width
+        const gap = 40; // Gap between cards
+        const totalCardWidth = cardWidth + gap;
+
+        const maxVisibleCards = Math.floor(containerWidth / totalCardWidth);
+        let currentIndex = 0;
+
+        function updateCardVisibility() {
+            cards.forEach(card => {
+                card.style.display = 'none';
+                card.classList.remove('swipe-left', 'swipe-right', 'fade-in');
+            });
+
+            for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+                cards[i].style.display = 'block';
+                setTimeout(() => cards[i].classList.add('fade-in'), 100); // Add fade-in with a slight delay
+            }
+
+            prevButton.style.display = currentIndex > 0 ? 'inline-block' : 'none';
+            nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'inline-block' : 'none';
+        }
+
+        nextButton.addEventListener('click', function () {
+            if (currentIndex + maxVisibleCards < cards.length) {
+                for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+                    cards[i].classList.add('swipe-left');
+                }
+
+                currentIndex += maxVisibleCards;
+
+                if (currentIndex + maxVisibleCards > cards.length) {
+                    currentIndex = cards.length - maxVisibleCards;
+                }
+
+                setTimeout(() => {
+                    updateCardVisibility();
+                }, 300); // Match the CSS transition time
+            }
+        });
+
+        prevButton.addEventListener('click', function () {
+            if (currentIndex > 0) {
+                for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+                    cards[i].classList.add('swipe-right');
+                }
+
+                currentIndex = Math.max(0, currentIndex - maxVisibleCards);
+
+                setTimeout(() => {
+                    updateCardVisibility();
+                }, 300); // Match the CSS transition time
+            }
+        });
+
+        updateCardVisibility();
+    });
+});
+
+</script>
+
+<!-- <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const container = document.querySelector('.articles-container');
+    const prevButton = document.getElementById('prev-button');
+    const nextButton = document.getElementById('next-button');
+    const cards = document.querySelectorAll('.article-card');
+    
+    // Get container width and card width
+    const containerWidth = container.clientWidth;
+    const cardWidth = 0.2 * containerWidth; // Fixed card width
+    const gap = 40; // Gap between cards
+    const totalCardWidth = cardWidth + gap;
+    
+    // Calculate max visible cards
+    const maxVisibleCards = Math.floor(containerWidth / totalCardWidth);
+    
+    let currentIndex = 0;
+
+    function updateCardVisibility() {
+    // Reset all cards
+    cards.forEach(card => {
+        card.style.display = 'none';
+        card.classList.remove('swipe-left', 'swipe-right', 'fade-in');
+    });
+    
+    // Show correct subset of cards
+    for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+        cards[i].style.display = 'block';
+        setTimeout(() => cards[i].classList.add('fade-in'), 100); // Add fade-in with a slight delay
+    }
+    
+    // Update button visibility
+    prevButton.style.display = currentIndex > 0 ? 'inline-block' : 'none';
+    nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'inline-block' : 'none';
+}
+
+
+    // Next button handler with animation
+    nextButton.addEventListener('click', function() {
+        if (currentIndex + maxVisibleCards < cards.length) {
+            // Add swipe animation to current visible cards
+            for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+                cards[i].classList.add('swipe-left');
+            }
+            
+            // Increment index
+            currentIndex += maxVisibleCards;
+            
+            // Adjust if we've gone too far
+            if (currentIndex + maxVisibleCards > cards.length) {
+                currentIndex = cards.length - maxVisibleCards;
+            }
+            
+            // Use setTimeout to allow animation to complete before updating
+            setTimeout(() => {
+                updateCardVisibility();
+            }, 300); // Match the CSS transition time
+        }
+    });
+
+    // Previous button handler with animation
+    prevButton.addEventListener('click', function() {
+        if (currentIndex > 0) {
+            // Add swipe animation to current visible cards
+            for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
+                cards[i].classList.add('swipe-right');
+            }
+            
+            // Decrement index
+            currentIndex = Math.max(0, currentIndex - maxVisibleCards);
+            
+            // Use setTimeout to allow animation to complete before updating
+            setTimeout(() => {
+                updateCardVisibility();
+            }, 300); // Match the CSS transition time
+        }
+    });
+
+    // Initial setup
+    updateCardVisibility();
+});
+</script> -->
+
+<!-- <script>
     document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.articles-container');
     const prevButton = document.getElementById('prev-button');
@@ -111,8 +564,8 @@
         }
         
         // Update button visibility
-        prevButton.style.display = currentIndex > 0 ? 'block' : 'none';
-        nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'block' : 'none';
+        prevButton.style.display = currentIndex > 0 ? 'inline-block' : 'none';
+        nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'inline-block' : 'none';
     }
 
     // Next button handler
@@ -142,7 +595,7 @@
     // Initial setup
     updateCardVisibility();
 });
-</script>
+</script> -->
 
 
 

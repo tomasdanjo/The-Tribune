@@ -23,17 +23,42 @@ def landing_page(request):
     
     current_date = datetime.now().strftime('%b %d, %Y')  
 
-    articles = Article.objects.filter(status='published')
+    articles = Article.objects.filter(status='published').order_by('-date_published')
     for article in articles:
         if timezone.is_naive(article.date_published):
             article.date_published = timezone.make_aware(article.date_published, timezone.get_current_timezone())
             article.save()
 
-    news_articles = articles.filter(category__category_name="News").order_by('-date_published')
+    news_articles = articles.filter(category__category_name="News")
+    sports_articles=articles.filter(category__category_name="sports")
+    entertainment_articles = articles.filter(category__category_name="entertainment")
+    opinion_articles = articles.filter(category__category_name="opinion")
+    technology_articles=articles.filter(category__category_name="technology")
+    lifestyle_articles=articles.filter(category__category_name="lifestyle")
+    editorial_articles=articles.filter(category__category_name="editorial")
+    feature_articles=articles.filter(category__category_name="featured_topics")
+    environment_articles=articles.filter(category__category_name="environment")
+    scitech_articles=articles.filter(category__category_name="sci_and_tech")
+    
 
-    categories = Category.objects.all()
+    context =  {
+        'articles': articles,
+        'current_date':current_date,
+        'news_articles':news_articles,
+        'sports_articles':sports_articles,
+        'entertainment_articles':entertainment_articles,
+        'opinion_articles':opinion_articles,
+        'technology_articles':technology_articles,
+        'lifestyle_articles':lifestyle_articles,
+        'editorial_articles':editorial_articles,
+        'feature_articles':feature_articles,
+        'environment_articles':environment_articles,
+        'scitech_articles':scitech_articles
+    
+    }
+
             
-    return render(request, 'landing_page.html', {'articles': articles,'current_date':current_date,'news_articles':news_articles})
+    return render(request, 'landing_page.html',context)
 
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)
