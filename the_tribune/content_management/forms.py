@@ -103,3 +103,14 @@ class ProfilePictureForm(forms.ModelForm):
                 'accept': 'image/*'
             }),
         }
+class ProfileBiographyForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['biography']
+        widgets = {
+            'biography': forms.Textarea(attrs={
+                'class': 'w-full p-3 h-72 py-2 bg-gray-100 text-gray-800 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200',
+                'rows': 10,  # Number of visible lines
+                'cols': 40,  # Number of visible columns
+            }),
+        }

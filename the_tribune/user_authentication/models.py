@@ -13,6 +13,7 @@ class UserProfile(models.Model):
     is_editor = models.BooleanField(default=False)
     is_reader = models.BooleanField(default=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
+    biography = models.TextField(blank=True,null=True)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
