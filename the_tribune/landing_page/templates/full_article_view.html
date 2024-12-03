@@ -122,7 +122,7 @@
 
             // Send AJAX request to add the comment
             $.ajax({
-                url: "{% url 'add_comment' article.id %}",  // Update this with your actual URL for adding comments
+                url: "{% url 'add_comment' article.id %}",  // Update this with your actual URL fo  r adding comments
                 type: "POST",  // Assuming you're using POST to add comments
                 data: {
                     'content': commentContent,
@@ -192,17 +192,21 @@
 
         function loadMoreComments(articleId) {
             const button = document.getElementById("load-more-btn");    
-            var offset = parseInt(button.getAttribute("data-offset"));
-            offset+=5;
-            button.setAttribute('data-offset',""+offset);
-
+            let offset = parseInt(button.getAttribute("data-offset"));
+            offset += 5;
+            button.setAttribute('data-offset', "" + offset);
+        
             $.ajax({
                 url: `/load-more-comments/${articleId}/${offset}/`,
                 type: 'GET',
                 success: function (response) {
                     const container = document.getElementById("comments-container");
                     container.innerHTML += response.comments_html;
-    
+        
+                    // Hide the button if no more comments are available
+                    if (!response.more_comments_available) {
+                        button.style.display = "none";
+                    }
                 },
                 error: function (xhr) {
                     console.error("Failed to load comments:", xhr.responseText);
@@ -210,63 +214,7 @@
             });
         }
         
-
-        function loadMoreStories(article_id) {
-            var offset = parseInt(document.getElementById('load-more-btn').getAttribute('data-offset'));
-            var button = document.getElementById('load-more-btn'); // Get the button element
-            var relatedStoriesContainer = document.getElementById('related-stories-container'); // Get the container where stories will be appended
-
-    // Make an AJAX request to load more related stories
-            fetch(`/load-more-related-stories/${article_id}/${offset}/`)
-            .then(response => response.json())
-        .   then(data => {
-            // Check if related stories are returned
-            if (data.related_stories.length > 0) {
-                // Loop through the returned related stories and append them to the container
-                data.related_stories.forEach(story => {
-                    const storyElement = document.createElement('div');
-                    storyElement.classList.add('related-story-group');
-
-                    // Construct the HTML structure for each related story
-                    storyElement.innerHTML = `
-                        <div class="left-related-story">
-                            <p class="related-story-tag">${story.tag}</p>
-                            <hr>
-                            <a href="${story.url}" class="related-story-headline">${story.headline}</a>
-                            <p class="related-story-writer">${story.writer_name}</p>
-                            <p class="related-story-date">${story.date_published}</p>
-                        </div>
-                        <div>
-                            ${story.photo_url ? `<div class="image-container"><img src="${story.photo_url}" alt="Photo for ${story.headline}"></div>` : ''}
-                            <div class="share-links-related-story">
-                                <div class="link-group link-group-related-story"><a><img src="{% static 'icons/twitter.svg' %}" alt=""></a></div>
-                                <div class="link-group link-group-related-story"><a><img src="{% static 'icons/facebook.svg' %}" alt=""></a></div>
-                                <div class="link-group link-group-related-story"><a><img src="{% static 'icons/reddit.svg' %}" alt=""></a></div>
-                                <div class="link-group link-group-related-story"><a><img src="{% static 'icons/link.svg' %}" alt=""></a></div>
-                            </div>
-                        </div>
-                    `;
-                    
-                    // Append the new story to the container
-                    relatedStoriesContainer.appendChild(storyElement);
-                });
-
-                // Update the offset for the next request (increment by 3)
-                button.setAttribute("data-offset", offset + 3); // Update the offset to load next 3 stories
-            }
-
-            // If there are no more stories to load, hide the button
-            if (data.related_stories.length < 3) {
-                button.style.display = 'none'; // Hide the button if no more related stories are found
-            }
-        })
-        .catch(error => console.error('Error loading more stories:', error));
-        }
-
-        // $('#sort-comments').on('change', function() {
-        //     sortComments(this.value);
-        // });
-
+            
     </script>
 
     

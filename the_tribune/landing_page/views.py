@@ -29,8 +29,7 @@ def full_article(request, id):
     article = get_object_or_404(Article,id=id)
     comment_count = Comment.objects.filter(article_id=id).count()
     comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
-    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)[:3]
-    related_count = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).count()
+    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
 
     request.session['article_id'] = id
     print(id)
@@ -41,54 +40,34 @@ def full_article(request, id):
                                                     'comments':comments,
                                                     'comment_count':comment_count,
                                                     'related_stories':related_stories,
-                                                    'related_count':related_count,
                                                     'comment_form':comment_form})
 
 def load_more_comments(request, article_id, offset):
-    
+
     sort_by = request.session.get('sort_by')
-    sort=""
-
+    sort = ""
+    offset = int(offset)
+    comments_query = Comment.objects.filter(article_id=article_id)
     if sort_by == 'oldest':
-        sort='date_published'
+        sort = 'date_published'
     elif sort_by == 'relevant':
-        sort='-like_count'
+        sort = '-like_count'
     else:  # Default to newest
-        sort='-date_published'
-    
-    comments = Comment.objects.filter(article_id=article_id).order_by(sort)[offset:offset + 5]
+        sort = '-date_published'
 
-    comments_html=render_to_string('comments.html', {'comments': comments}, request=request)
-   
-    
+    offset = int(offset)
+    comments = Comment.objects.filter(article_id=article_id).order_by(sort)[offset:offset + 5]
+    total_comments = comments_query.count()
+    comments_html = render_to_string('comments.html', {'comments': comments}, request=request)
+    more_comments_available = offset + 5 < total_comments
+
     return JsonResponse({
-        'comments_html': comments_html, 
-        'comment_count': len(comments)  # Pass the count of comments retrieved
+        'comments_html': comments_html,
+        'comment_count': len(comments), 
+        'more_comments_available': more_comments_available,
     })
 
 
-
-
-def load_more_related_stories(request, article_id, offset):
-    # Get the current article to fetch its tag_id
-    article = get_object_or_404(Article, id=article_id)
-    
-    # Get the related stories based on the tag of the current article, excluding the current article
-    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)[offset:offset + 3]
-    
-    # Prepare the data to send back as JSON
-    related_stories_data = [
-        {
-            'headline': story.headline,
-            'url': story.get_absolute_url(),
-            'writer_name': f"{story.writer.first_name} {story.writer.last_name}",
-            'date_published': story.date_published.strftime('%B %d, %Y'),
-            'photo_url': story.photo.url if story.photo else None
-        }
-        for story in related_stories
-    ]
-    
-    return JsonResponse({'related_stories': related_stories_data})
 
 
 def subscribe(request):

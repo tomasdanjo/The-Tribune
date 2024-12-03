@@ -12,5 +12,4 @@ urlpatterns = [
     path('articles/<int:article_id>/sort_comments/', sort_comments, name='sort_comments'),
     path('delete_comment/<int:comment_id>/', delete_comment, name='delete_comment'),
      path('load-more-comments/<int:article_id>/<int:offset>/', load_more_comments, name='load_all_comments'),
-    path('load-more-related-stories/<int:article_id>/<int:offset>/', load_more_related_stories, name='load_more_related_stories'),
 ]
