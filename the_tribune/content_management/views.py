@@ -13,7 +13,6 @@ from .forms import ProfilePictureForm,ProfileBiographyForm
 # Create your views here.
 def writer_dashboard_view(request):
     user = UserProfile.objects.get(user_credentials=request.user)
-
     articles = Article.objects.filter(writer = user)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
