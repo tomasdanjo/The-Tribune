@@ -1,5 +1,6 @@
 from django import forms
 from article.models import Article, Category, Photo, Tag
+from user_authentication.models import UserProfile
 
 class Article_Form(forms.ModelForm):
     class Meta:
@@ -91,3 +92,14 @@ class Photo_Form(forms.ModelForm):
             return self.instance.photo  # Return the existing photo
         
         return photo  # Return the new photo if uploaded
+
+class ProfilePictureForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        fields = ['profile_picture']
+        widgets = {
+            'profile_picture': forms.ClearableFileInput(attrs={
+                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'accept': 'image/*'
+            }),
+        }

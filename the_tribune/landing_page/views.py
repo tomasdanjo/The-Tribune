@@ -77,9 +77,9 @@ def landing_page(request):
 
 def full_article(request, id):
     article = get_object_or_404(Article,id=id)
-    comments = Comment.objects.filter(article_id=id).order_by('-date_published')
-
-    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id)
+    comment_count = Comment.objects.filter(article_id=id).count()
+    comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
+    related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
 
     request.session['article_id'] = id
     print(id)
@@ -87,7 +87,39 @@ def full_article(request, id):
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 
 
-    return render(request,'full_article_view.html',{'article':article,'comments':comments,'related_stories':related_stories,'comment_form':comment_form,'current_date':current_date})
+    return render(request,'full_article_view.html',{'article':article,
+                                                    'comments':comments,
+                                                    'comment_count':comment_count,
+                                                    'related_stories':related_stories,
+                                                    'comment_form':comment_form})
+
+def load_more_comments(request, article_id, offset):
+
+    sort_by = request.session.get('sort_by')
+    sort = ""
+    offset = int(offset)
+    comments_query = Comment.objects.filter(article_id=article_id)
+    if sort_by == 'oldest':
+        sort = 'date_published'
+    elif sort_by == 'relevant':
+        sort = '-like_count'
+    else:  # Default to newest
+        sort = '-date_published'
+
+    offset = int(offset)
+    comments = Comment.objects.filter(article_id=article_id).order_by(sort)[offset:offset + 5]
+    total_comments = comments_query.count()
+    comments_html = render_to_string('comments.html', {'comments': comments}, request=request)
+    more_comments_available = offset + 5 < total_comments
+
+    return JsonResponse({
+        'comments_html': comments_html,
+        'comment_count': len(comments), 
+        'more_comments_available': more_comments_available,
+    })
+
+
+
 
 def subscribe(request):
     if request.method == 'POST':
@@ -239,16 +271,17 @@ def dislike_comment(request):
 
 def sort_comments(request, article_id):
     sort_by = request.GET.get('sort_by', 'newest')
+    request.session['sort_by']=sort_by
     print(f"Sort by: {sort_by}")
     comments = Comment.objects.filter(article_id=article_id)
 
     # Sort comments based on the chosen method
     if sort_by == 'oldest':
-        comments = comments.order_by('date_published')
+        comments = comments.order_by('date_published')[:5]
     elif sort_by == 'relevant':
-        comments = comments.annotate(like_count=Count('liked_by')).order_by('-like_count')
+        comments = comments.annotate(like_count=Count('liked_by')).order_by('-like_count')[:5]
     else:  # Default to newest
-        comments = comments.order_by('-date_published')
+        comments = comments.order_by('-date_published')[:5]
 
     # Render the comments to a partial template
     comments_html = render(request, 'comments.html', {'comments': comments}).content.decode('utf-8')

@@ -113,7 +113,7 @@
 
             // Send AJAX request to add the comment
             $.ajax({
-                url: "{% url 'add_comment' article.id %}",  // Update this with your actual URL for adding comments
+                url: "{% url 'add_comment' article.id %}",  // Update this with your actual URL fo  r adding comments
                 type: "POST",  // Assuming you're using POST to add comments
                 data: {
                     'content': commentContent,
@@ -149,6 +149,11 @@
                 },
                 success: function(data) {
                     $('#comments-container').html(data.comments_html);  // Update the comments section
+                    var button = document.getElementById('load-more-btn')
+                    
+                    button.setAttribute('data-offset',0)
+                    button.style.display="block"
+
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     console.error("Error fetching sorted comments:", errorThrown);
@@ -176,6 +181,31 @@
             });
         }
 
+        function loadMoreComments(articleId) {
+            const button = document.getElementById("load-more-btn");    
+            let offset = parseInt(button.getAttribute("data-offset"));
+            offset += 5;
+            button.setAttribute('data-offset', "" + offset);
+        
+            $.ajax({
+                url: `/load-more-comments/${articleId}/${offset}/`,
+                type: 'GET',
+                success: function (response) {
+                    const container = document.getElementById("comments-container");
+                    container.innerHTML += response.comments_html;
+        
+                    // Hide the button if no more comments are available
+                    if (!response.more_comments_available) {
+                        button.style.display = "none";
+                    }
+                },
+                error: function (xhr) {
+                    console.error("Failed to load comments:", xhr.responseText);
+                }
+            });
+        }
+        
+            
         function promptUserToLogin(button) {
     // Remove any existing popup to prevent duplicates
     removePopup();

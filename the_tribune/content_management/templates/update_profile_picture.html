@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Editor Dashboard
+{% endblock %}
+
+{% block content %}
+
+<!-- update_profile_picture.html -->
+<div class="container mx-auto mt-10 px-4">
+    <h1 class="text-3xl font-bold mb-5">Edit Profile Picture</h1>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        {% csrf_token %}
+        
+        <div>
+            <label for="profile_picture" class="block text-sm font-medium text-gray-700">New Profile Picture</label>
+            <div id="image-preview" class="mt-4">
+            <img id="preview-img" src="" alt="Profile Picture Preview" class="w-32 h-32 object-cover rounded-full hidden">
+            </div>
+            {{ form.profile_picture }}
+        </div>
+        
+        
+        <div class="mt-4">
+            <button type="submit" class=" py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600">Update Profile Picture</button>
+        </div>
+    </form>
+    <div class="mt-4">
+        <button onclick="window.history.back()" class="py-2 px-4 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">
+            Back
+        </button>
+    </div>
+</div>
+<script>
+    // Get the file input and the preview image elements
+    const fileInput = document.querySelector('input[name="profile_picture"]');
+    const previewImg = document.getElementById('preview-img');
+    const previewContainer = document.getElementById('image-preview');
+
+    // Add an event listener to the file input to show the preview when a file is selected
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+
+        if (file) {
+            // Create a URL for the selected file
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                // Set the preview image's source to the selected file's URL
+                previewImg.src = e.target.result;
+                previewImg.classList.remove('hidden');  // Show the image preview
+            };
+            reader.readAsDataURL(file);
+        } else {
+            previewImg.classList.add('hidden');  // Hide the preview if no file is selected
+        }
+    });
+</script>
+
+
+{% endblock %}

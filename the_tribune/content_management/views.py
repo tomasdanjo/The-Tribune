@@ -6,6 +6,7 @@ from django.contrib import messages
 from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
+from .forms import ProfilePictureForm
 
 # from django import form
 
@@ -267,3 +268,28 @@ def submit_feedback(request):
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+
+def delete_draft(request, article_id):
+
+    article = get_object_or_404(Article, id=article_id)
+    
+    if request.method == 'POST':
+        article.delete()
+        return redirect('editor_dashboard')  
+    return redirect('editor_dashboard')
+
+def update_profile_picture(request):
+    # Get the user profile for the currently logged-in user
+    user_profile = UserProfile.objects.get(user_credentials=request.user)
+    # If the request method is POST, we want to handle the form submission
+    if request.method == 'POST':
+        form = ProfilePictureForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('editor_dashboard')  # Redirect to the profile page or wherever you want after saving
+    else:
+        # GET request, so pre-fill the form with the current profile picture
+        form = ProfilePictureForm(instance=user_profile)
+
+    # Render the template with the form
+    return render(request, 'update_profile_picture.html', {'form': form}) 
