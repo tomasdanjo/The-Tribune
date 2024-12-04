@@ -5,7 +5,7 @@
       <p id="tag-name">{{ article.tag.tag_name }}</p>
       <hr>
       <h1 id="headline">{{ article.headline }}</h1>
-      <a id="writer-name" href="{% url 'view_profile' user.userprofile.id %}">{{ article.writer.first_name }} {{ article.writer.last_name }}</a>
+      <a id="writer-name" href="{% url 'view_profile' article.writer.id %}">{{ article.writer.first_name }} {{ article.writer.last_name }}</a>
       <p id="date-published">{{ article.date_published }}</p>
   </header>
 
