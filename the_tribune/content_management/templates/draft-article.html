@@ -6,20 +6,20 @@
 
 {% block style %}
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/draft.css' %}"> 
 
 {% endblock %}
 
 {% block content %}
 
+  {% include 'header.html' %}
+ 
+
   {% include 'article-template.html' %}
 
-  {% if request.user.userprofile ==  article.writer or request.user.userprofile ==  article.editor%}
-      <button id="edit-btn" onclick="editArticle({{ article.id }})"
-      class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded shadow-md transition duration-200">
-        Edit
-    </button>
-  {% endif %}
+  
 
 
 {% endblock %}

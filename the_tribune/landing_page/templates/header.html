@@ -42,6 +42,16 @@
   
   <div id="header-logo"><img src="{% static '\icons\full-logo.svg' %}" alt="">
   </div>
+
+    {% if article.status == 'draft' %}
+        {% if request.user.userprofile ==  article.writer or request.user.userprofile ==  article.editor%}
+            <button id="edit-btn" onclick="editArticle({{ article.id }})">
+                <img src="{% static 'icons\edit.svg' %}" alt="">
+                <p>Edit</p>
+            </button>
+        {% endif %}
+    {% else %}
+    
   <form method="GET" action="{% url 'search' %}">
       {% csrf_token %}
       <div>
@@ -54,6 +64,7 @@
           required 
       >
   </form>
+  {% endif %} 
 </header>
 
 {% include 'sidebar.html' %}

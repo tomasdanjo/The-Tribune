@@ -158,8 +158,13 @@ def create_article(request):
     })
 
 def draft_article(request,id):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None
     article = get_object_or_404(Article,id=id)
-    return render(request,'draft-article.html',{'article':article})
+    return render(request,'draft-article.html',{'article':article,'auth_user':user})
 
 
 # def edit_article(request, id):
