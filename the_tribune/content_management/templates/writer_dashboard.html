@@ -1,169 +1,80 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    Writer Dashboard
+    {{ user.userprofile.first_name}} {{ user.userprofile.last_name }}
+{% endblock %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/writer-editor.css' %}"> 
 {% endblock %}
 
 {% block content %}
-<div class="container mx-auto p-6">
-    <div class="text-lg font-bold mb-4">Hello, {{ user.user_credentials.username }}!</div> <!-- Display the logged-in user's name -->
 
-    <div class="flex items-center space-x-4 relative">
-        <!-- Profile Picture -->
-        <div class="w-20 h-20 relative">
-            {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full cursor-pointer" onclick="toggleDropdown()">
-            {% else %}
-                <div class="w-full h-full bg-gray-300 rounded-full flex items-center justify-center text-black text-lg cursor-pointer" onclick="toggleDropdown()">
-                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
-                </div>
-            {% endif %}
-    
-            <!-- Dropdown Content for Buttons -->
-            <div id="profile-dropdown" class="absolute left-full top-0 ml-2 w-48 bg-gray-200 rounded-lg p-1 space-y-3 hidden">
-                <div class="space-y-1">
-                    <!-- Update Picture Button -->
-                    <a href="{% url 'update_profile_picture' %}" 
-                       class="block w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        View Profile
-                    </a>
-    
-                    <!-- Log Out Form -->
-                    <form method="POST" action="{% url 'logout' %}">
-                        {% csrf_token %}
-                        <button type="submit"
-                                class="w-full sm:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-red-500">
-                            Log Out
-                        </button>
-                    </form>
+{% include 'header.html' %}
+
+<div id="main">
+
+    <nav>
+        <button onclick="showSection('published-section')">
+        <img src="{% static 'icons/published.svg' %}" alt="">
+            <p>Published</p></button>
+        <button onclick="showSection('draft-section')" >
+           <img src="{% static 'icons/draft.svg' %}" alt=""> <p>Draft</p></button>
+        <button onclick="showSection('submitted-section')" ><img src="{% static 'icons/submit.svg' %}" alt=""><p>Submitted</p></button>
+        <button onclick="showSection('archived-section')" ><img src="{% static 'icons/archive.svg' %}" alt=""><p>Archived</p></button>
+        <button onclick="showSection('notification-section')" ><img src="{% static 'icons/notif.svg' %}" alt=""><p>Notification</p></button>
+        <a id="write-article-btn" href="{% url 'create_article' %}"><img src="{% static 'icons/write.svg' %}" alt=""><p>Write Article</p></a>  
+    </nav>
+        
+
+    <div id="content">
+        <div id="published-section" class="article-section">
+            <h2>Published Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ published }}
                 </div>
             </div>
-
         </div>
-    </div>
-    
-    <div>
-        <h2 class="text-xl font-semibold text-black">{{ user.first_name }} {{ user.last_name }}</h2>
-        <!-- Optionally add a bio or other info here -->
-    </div>
-    
-    <!-- JavaScript to toggle visibility -->
-    <script>
-        function toggleDropdown() {
-            var dropdown = document.getElementById("profile-dropdown");
-            dropdown.classList.toggle("hidden");
-        }
-    </script>
-    
-
-    
-
-    <!-- Status Filter Buttons -->
-    <div class="mb-4 space-y-2">
-        <button onclick="showSection('published-section')" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Published</button>
-        <button onclick="showSection('draft-section')" class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded">Draft</button>
-        <button onclick="showSection('submitted-section')" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Submitted</button>
-        <button onclick="showSection('archived-section')" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Archived</button>
-    </div>
-
-    <!-- Articles based on status -->
-    <div id="published-section" class="article-section">
-        <h2>Published Articles</h2>
-        {% for article in published %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }} 
-                | {{ article.date_published }}
-            </p>
-            {% if article.photo_id %}
-                <div class="w-48 h-36 overflow-hidden rounded-lg">
-                    <img 
-                        src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                        alt="Photo for {{ article.headline }}" 
-                        class="w-full h-full object-cover"
-                    >
+        
+        <div id="draft-section" class="article-section">
+            <h2>Drafted Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ drafts }}
                 </div>
-            {% endif %}
-            <hr class="border-t border-gray-200 my-4">
+            </div>
         </div>
-        {% empty %}
-        <p class="text-gray-500">No published articles found.</p>
-        {% endfor %}
-    </div>
 
-    <div id="draft-section" class="article-section hidden">
-        <h2>Draft Articles</h2>
-        {% for article in drafts %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'draft' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                | {{ article.date_created }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
+        <div id="submitted-section" class="article-section">
+            <h2>Submitted Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ submitted }}
+                </div>
+            </div>
+        </div>
 
-            <form method="POST" action="{% url 'delete_draft' article.id %}" class="mt-4">
-                {% csrf_token %}
-                <button type="submit" class="text-red-600 hover:text-red-800">
-                    Delete
-                </button>
-            </form>
+        <div id="archived-section" class="article-section">
+            <h2>Archived Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ archived }}
+                </div>
+            </div>
+        </div>
+    
+
+        <div id="notification-section">
 
         </div>
-        {% empty %}
-        <p class="text-gray-500">No drafts found.</p>
-        {% endfor %}
     </div>
 
-    <div id="submitted-section" class="article-section hidden">
-        <h2>Submitted Articles</h2>
-        {% for article in submitted %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                <a href="{% url 'view_profile' id=article.writer.id %}" class="pr-2 pt-1 pb-1">
-                    By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                </a>
-                | {{ article.date_submitted }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No submitted articles found.</p>
-        {% endfor %}
-    </div>
 
-    <div id="archived-section" class="article-section hidden">
-        <h2>Archived Articles</h2>
-        {% for article in archived %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'archive' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                | {{ article.date_archived }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No archived articles found.</p>
-        {% endfor %}
-    </div>
 
-    <!-- Button to write a new article -->
-    <a href="{% url 'create_article' %}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Write Article</a>  
+    
 </div>
 
 <script>
@@ -176,6 +87,19 @@
 
         // Show the selected section
         document.getElementById(sectionId).classList.remove('hidden');
+        
+        // Remove 'selected' class from all buttons
+    document.querySelectorAll('nav button').forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    // Add 'selected' class to the clicked button
+    const clickedButton = [...document.querySelectorAll('nav button')].find(button => 
+        button.onclick.toString().includes(sectionId)
+    );
+    if (clickedButton) clickedButton.classList.add('selected');
+
+
     }
 
     // Initially, show the 'published' section

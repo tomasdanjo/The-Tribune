@@ -2,11 +2,43 @@
 
 <header id="header">
   <div id="date-container">
-      <button onclick="openSidebar()">
-          <div></div>
-          <div></div>
-          <div></div>
-      </button>
+            {% if user.is_authenticated %}
+                {% if user.userprofile.is_writer or user.userprofile.is_editor %}
+                <button onclick="openSidebar()" id="sidebar-btn">
+                    <div id="button-wrapper">
+                        {% if auth_user.profile_picture %}
+                        <div id="img-container">
+                            <img src="{{ auth_user.profile_picture.url }}" alt="Profile Picture">
+                        </div>
+                    
+                    {% else %}
+                        <div id="img-container">
+                            <p>{{ auth_user.first_name|slice:":1" }}.{{ auth_user.last_name|slice:":1" }}.</p>
+                            
+                        </div>
+                    </div>
+                    
+                {% endif %}
+                    <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
+                </button>
+                {% else %}
+                <button onclick="openSidebar()">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </button>
+                {% endif %}
+            {% else %}
+                <button onclick="openSidebar()">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </button>
+            {% endif %}
+        
+           
+          
+      
       <p>{{current_date}}</p>
   </div>
   

@@ -7,28 +7,41 @@ from .models import *
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from .forms import ProfilePictureForm,ProfileBiographyForm
+from datetime import datetime
+from django.template.loader import render_to_string
 
 # from django import form
 
 # Create your views here.
 def writer_dashboard_view(request):
-    user = UserProfile.objects.get(user_credentials=request.user)
-
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
     articles = Article.objects.filter(writer = user)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     submitted = articles.filter(status='submitted')
     archived = articles.filter(status='archived')
+    current_date = datetime.now().strftime('%b %d, %Y')
+
+    published = render_to_string('article-card.html',{'articles':published},request=request)
+    drafts = render_to_string('article-card.html',{'articles':drafts},request=request)
+    submitted = render_to_string('article-card.html',{'articles':submitted},request=request)
+    archived = render_to_string('article-card.html',{'articles':archived},request=request)
 
     context = {
-        'user':user, 
+        'auth_user':user, 
         'articles':articles,
         'published':published,
         'drafts':drafts,
         'submitted':submitted,
-        'archived':archived
+        'archived':archived,
+        'current_date':current_date
 
     }
+
+    print("iswriter ",request.user.userprofile.is_writer)
 
 
     return render(request,'writer_dashboard.html',context)
@@ -278,9 +291,9 @@ def delete_draft(request, article_id):
         return redirect('editor_dashboard')  
     return redirect('editor_dashboard')
 
-def update_profile_picture(request):
+def update_profile(request,id):
     # Get the user profile for the currently logged-in user
-    user_profile = UserProfile.objects.get(user_credentials=request.user)
+    user_profile = get_object_or_404(UserProfile,id=id)
     # If the request method is POST, we want to handle the form submission
     if request.method == 'POST':
         pictureform = ProfilePictureForm(request.POST, request.FILES, instance=user_profile)

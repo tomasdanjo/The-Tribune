@@ -1,0 +1,148 @@
+#main{
+  padding: 40px 100px;
+  display: flex;
+  gap: 40px;
+  height: 100vh;
+  background-color: #f2f2f2;
+}
+
+#main nav{
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  flex-shrink: 0;
+}
+
+
+
+#header #sidebar-btn{
+  background-color: #54526b;
+}
+
+#main nav button, #write-article-btn{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+  padding: 20px 40px;
+  font-family: 'Poppins',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #596E9B;
+  border-radius: 15px;
+  transition: all 0.3 ease;
+}
+
+#main nav button:hover, #write-article-btn:hover{
+  box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.2);
+  transform: translateY(-0.25rem);
+}
+
+#write-article-btn{
+  background-color: #45383F;
+  color: #f2f2f2;
+  justify-content: center;
+  border-radius: 15px;
+}
+
+.selected{
+  background-color: #f2f2f2;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.4);
+  border-radius: 15px;
+  border-left: 5px solid #596E9B;
+}
+
+#content{
+  flex-grow: 1;
+}
+
+#content .article-card-container{
+  height: 100%;
+  overflow-y: scroll;
+  padding: 10px;
+}
+
+.article-section{
+  height: 100%;
+}
+
+.article-section h2{
+  color: #596E9B;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+#content{
+  height: 100%;
+}
+
+#content .article-card-grid{
+  display: grid;
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-rows: auto;
+  gap: 20px;
+
+}
+
+.article-card{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: #f2f2f2; /* Add background color for cards */
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+  height: 100%;
+  transition: transform 0.3s ease;
+  justify-content: start;
+}
+
+
+.article-card .category{
+  color: #596E9B;
+  text-transform: capitalize;
+  font-size: 1.2rem;
+}
+
+.article-card .img-container{
+  width: 100%;
+  height: 200px;
+
+}
+
+.article-card .img-container > img{
+  border-radius: 0px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.article-card .headline{
+  color: #46445C;
+  font-size: 1.5rem;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+}
+
+.article-card .tag{
+  font-family: 'Poppins',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  color: #596E9B;
+  font-size: 1rem;
+}
+
+.article-card .writer{
+  font-size: 1.2rem;
+  color: #46445C;
+
+}
+
+.article-card .date-published{
+  color: #857472;
+  margin-top: auto;
+}
+
+.article-card:hover{
+  transform: translateY(-0.25rem);
+}
