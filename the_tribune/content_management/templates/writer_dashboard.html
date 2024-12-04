@@ -2,9 +2,16 @@
 {% load static %}
 
 {% block title %}
-    Writer Dashboard
+    {{ user.userprofile.first_name}} {{ user.userprofile.last_name }}
 {% endblock %}
 
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/writer-editor.css' %}"> 
+{% endblock %}
+
+<<<<<<< HEAD
 {% block style %}
     <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/landing_page.css' %}"> 
@@ -96,63 +103,72 @@
                         alt="Photo for {{ article.headline }}" 
                         class="w-full h-full object-cover"
                     >
+=======
+{% block content %}
+
+{% include 'header.html' %}
+
+<div id="main">
+
+    <nav>
+        <button onclick="showSection('published-section')">
+        <img src="{% static 'icons/published.svg' %}" alt="">
+            <p>Published</p></button>
+        <button onclick="showSection('draft-section')" >
+           <img src="{% static 'icons/draft.svg' %}" alt=""> <p>Draft</p></button>
+        <button onclick="showSection('submitted-section')" ><img src="{% static 'icons/submit.svg' %}" alt=""><p>Submitted</p></button>
+        <button onclick="showSection('archived-section')" ><img src="{% static 'icons/archive.svg' %}" alt=""><p>Archived</p></button>
+        <button onclick="showSection('notification-section')" ><img src="{% static 'icons/notif.svg' %}" alt=""><p>Notification</p></button>
+        <a id="write-article-btn" href="{% url 'create_article' %}"><img src="{% static 'icons/write.svg' %}" alt=""><p>Write Article</p></a>  
+    </nav>
+        
+
+    <div id="content">
+        <div id="published-section" class="article-section">
+            <h2>Published Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ published }}
                 </div>
-            {% endif %}
-            <hr class="border-t border-gray-200 my-4">
+            </div>
         </div>
-        {% empty %}
-        <p class="text-gray-500">No published articles found.</p>
-        {% endfor %}
+        
+        <div id="draft-section" class="article-section">
+            <h2>Drafted Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ drafts }}
+>>>>>>> origin/tomasdanjo
+                </div>
+            </div>
+        </div>
+
+        <div id="submitted-section" class="article-section">
+            <h2>Submitted Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ submitted }}
+                </div>
+            </div>
+        </div>
+
+        <div id="archived-section" class="article-section">
+            <h2>Archived Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ archived }}
+                </div>
+            </div>
+        </div>
+    
+
+        <div id="notification-section">
+
+        </div>
     </div>
 
-    <div id="draft-section" class="article-section hidden">
-        <h2>Draft Articles</h2>
-        {% for article in drafts %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'draft' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                | {{ article.date_created }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
 
-            <form method="POST" action="{% url 'delete_draft' article.id %}" class="mt-4">
-                {% csrf_token %}
-                <button type="submit" class="text-red-600 hover:text-red-800">
-                    Delete
-                </button>
-            </form>
-
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No drafts found.</p>
-        {% endfor %}
-    </div>
-
-    <div id="submitted-section" class="article-section hidden">
-        <h2>Submitted Articles</h2>
-        {% for article in submitted %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                <a href="{% url 'view_profile' id=article.writer.id %}" class="pr-2 pt-1 pb-1">
-                    By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                </a>
-                | {{ article.date_submitted }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No submitted articles found.</p>
-        {% endfor %}
-    </div>
-
+<<<<<<< HEAD
     <div id="archived-section" class="article-section hidden">
         <h2>Archived Articles</h2>
         {% for article in archived %}
@@ -171,6 +187,10 @@
         <p class="text-gray-500">No archived articles found.</p>
         {% endfor %}
     </div>
+=======
+
+    
+>>>>>>> origin/tomasdanjo
 </div>
 
 <!-- JavaScript to toggle visibility -->
@@ -215,6 +235,19 @@
 
         // Show the selected section
         document.getElementById(sectionId).classList.remove('hidden');
+        
+        // Remove 'selected' class from all buttons
+    document.querySelectorAll('nav button').forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    // Add 'selected' class to the clicked button
+    const clickedButton = [...document.querySelectorAll('nav button')].find(button => 
+        button.onclick.toString().includes(sectionId)
+    );
+    if (clickedButton) clickedButton.classList.add('selected');
+
+
     }
 
     // Initially, show the 'published' section

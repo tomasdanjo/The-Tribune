@@ -12,12 +12,23 @@ from django.templatetags.static import static
 from django.db.models import Count
 from datetime import datetime
 from article.models import Category
+from user_authentication.models import UserProfile
+from django.contrib.auth.models import AnonymousUser
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
 
 def landing_page(request):
     article_id = request.session.get('article_id')
+    
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None  # Handle the case where no UserProfile is found
+    else:
+        user = None  # Handle unauthenticated users
+
     if article_id:
         del request.session['article_id']  # Clear session after redirect
     
@@ -57,6 +68,7 @@ def landing_page(request):
 
     context =  {
         'articles': articles,
+        'auth_user':user,
         'current_date':current_date,
         'news_articles':news_articles,
         'sports_articles':sports_articles,
@@ -76,10 +88,19 @@ def landing_page(request):
     return render(request, 'landing_page.html',context)
 
 def full_article(request, id):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None  # Handle the case where no UserProfile is found
+    else:
+        user = None 
+
     article = get_object_or_404(Article,id=id)
     comment_count = Comment.objects.filter(article_id=id).count()
     comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
+    related_stories_count = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published').count()
 
     request.session['article_id'] = id
     print("Comment count: ",comment_count)
@@ -91,7 +112,10 @@ def full_article(request, id):
                                                     'comments':comments,
                                                     'comment_count':comment_count,
                                                     'related_stories':related_stories,
-                                                    'comment_form':comment_form})
+                                                    'comment_form':comment_form,
+                                                    'related_stories_count':related_stories_count,
+                                                    'auth_user':user,
+                                                    'current_date':current_date})
 
 def load_more_comments(request, article_id, offset):
 

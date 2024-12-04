@@ -1,15 +1,40 @@
 <div id="sidebar" class="hidden">
   <div id="sidebar-content">
-    <p>put some contents here</p>
       {% if user.is_authenticated %}
-      <div class="mb-4">
+        <a class="img-container" href="{% url 'view_profile' user.userprofile.id %}" >
+        {% if auth_user.profile_picture %}
+          <img src="{{ auth_user.profile_picture.url }}" alt="Profile Picture">
+        {% else %}
+          <p>
+            {{ auth_user.first_name|slice:":1" }}.
+            {{ auth_user.last_name|slice:":1" }}.
+          </p>
+      
+        {% endif %}
+        </a>
+          <h2 class="user-full-name">
+            {{ auth_user.first_name}} {{ auth_user.last_name}}
+          </h2>
+          {% if not user.userprofile.is_reader %}
+          <div class="designation">
+            <p>
+              {% if user.userprofile.is_writer %}
+                Writer
+              {% elif  user.userprofile.is_editor%}
+                Editor
+              {% endif %}
+            </p>
+          </div>
+          {% endif %}
+
+
+      
           <form method="POST" action="{% url 'logout' %}">
               {% csrf_token %}
-              <button type="submit" class="px-4 py-2 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
+              <button type="submit">
                   Log out
               </button>
           </form>
-      </div>
       {% endif %}
   </div>
 </div>

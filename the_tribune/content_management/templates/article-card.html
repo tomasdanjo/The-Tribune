@@ -1,0 +1,29 @@
+{% for article in articles %}
+<div class="article-card">
+  <p class="category">{{ article.category.get_category_name_display }}</p>
+  {% if article.photo_id %}
+  <div class="img-container">
+    <img
+      src="{{ MEDIA_URL }}{{ article.photo.photo.url }}"
+      alt="Photo for {{ article.headline }}"
+      class="w-full h-full object-cover"
+    />
+  </div>
+  {% endif %}
+  <div>
+    <p class="tag">{{ article.tag.tag_name }}</p>
+    <h2 class="headline">
+      <a href="{% url 'full_article_view' article.id %}"
+        >{{ article.headline }}</a
+      >
+    </h2>
+  </div>
+  <a class="writer" href="{% url 'view_profile' user.userprofile.id %}">
+    {{article.writer.first_name}} {{article.writer.last_name}}
+  </a>
+
+  <p class="date-published">{{ article.date_published }}</p>
+</div>
+{% empty %}
+<p>No articles found.</p>
+{% endfor %}

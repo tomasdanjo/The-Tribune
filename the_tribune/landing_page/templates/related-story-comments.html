@@ -2,46 +2,43 @@
 
 <div id="story-comment-wrapper">
   <div id="related-stories-wrapper">
-      <h2>Read Next</h2>
+    <div class="heading">
+        <h2>Read Next</h2>
+      {% if related_stories_count > 0 %}
+              <p>{{ related_stories_count }}
+                  Article{{ related_stories_count|pluralize:"s" }}
+              </p>
+    {% else %}
+        <p>No related stories yet</p>
+    {% endif %}
+    </div>
+      
       <div id="related-stories-container">  
           {% if related_stories %}
-          <p>{{ related_stories_count }}
-            Related Article{{ related_stories_count|pluralize:"s" }}
-            </p>
               {% for article in related_stories %}
                   <div class="related-story-group">
+                    <div>
+                        {% if article.photo %}
+                        <div class="image-container">
+                            <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}">
+                        </div>
+                        {% endif %}
+                    </div>
                       <div class="left-related-story">
                           <p class="related-story-tag">{{ article.tag.tag_name }}</p>
                           <hr>
                           <a href="{% url 'full_article_view' article.id %}"
                           class="related-story-headline">{{ article.headline }}</a>
                           
-                          <p class="related-story-writer"> {{ article.writer.first_name }} {{ article.writer.last_name }}</p>
-                          <p class="related-story-date">{{ article.date_published }}</p>
+                          <div>
+                            <p class="related-story-writer"> {{ article.writer.first_name }} {{ article.writer.last_name }}</p>
+                            <p class="related-story-date">{{ article.date_published }}</p>
+                          </div>
+                          
                          
                           
                       </div>
-                      <div>
-                          {% if article.photo %}
-                          <div class="image-container">
-                              <img src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" alt="Photo for {{ article.headline }}">
-                          </div>
-                          {% endif %}
-                          <div class="share-links-related-story">
-                              <div class="link-group  link-group-related-story">
-                                  <a><img src="{% static '\icons\twitter.svg'%}" alt=""></a>
-                              </div>
-                              <div class="link-group  link-group-related-story">
-                                  <a ><img src="{% static '\icons\facebook.svg'%}" alt=""></a>
-                              </div>
-                              <div class="link-group link-group-related-story ">
-                                  <a ><img src="{% static '\icons\reddit.svg'%}" alt=""></a>
-                              </div>
-                              <div class="link-group link-group-related-story">
-                                  <a><img src="{% static '\icons\link.svg'%}" alt=""></a>
-                              </div>
-                          </div>
-                      </div>
+                      
 
                       
 
@@ -58,7 +55,7 @@
 
 
   <div id="comment-wrapper">
-      <div id="comment-section-heading">
+      <div class="heading">
           <h2>Conversation</h2>
           {% if comment_count > 0 %}
               <p>{{ comment_count }}

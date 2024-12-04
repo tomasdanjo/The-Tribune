@@ -27,7 +27,10 @@ SECRET_KEY = 'django-insecure-cayg-r2ue_i_nblm(j$ud8di(ejgi@4d$alo7vh^1+@f7c*hds
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '192.168.0.102',
+    '192.168.1.11'
+]
 
 
 # Application definition
@@ -47,6 +50,10 @@ INSTALLED_APPS = [
     'search',
 
 
+]
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 MIDDLEWARE = [
