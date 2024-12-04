@@ -18,9 +18,9 @@
       >
     </h2>
   </div>
-  <p class="writer">
+  <a class="writer" href="{% url 'view_profile' user.userprofile.id %}">
     {{article.writer.first_name}} {{article.writer.last_name}}
-  </p>
+  </a>
 
   <p class="date-published">{{ article.date_published }}</p>
 </div>
