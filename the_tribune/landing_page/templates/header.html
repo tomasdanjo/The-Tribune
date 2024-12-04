@@ -14,12 +14,10 @@
                     {% else %}
                         <div id="img-container">
                             <p>{{ auth_user.first_name|slice:":1" }}.{{ auth_user.last_name|slice:":1" }}.</p>
-                            
                         </div>
-                    </div>
-                    
                 {% endif %}
                     <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
+                </div>
                 </button>
                 {% else %}
                 <button onclick="openSidebar()">

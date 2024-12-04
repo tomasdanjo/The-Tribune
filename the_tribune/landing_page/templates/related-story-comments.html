@@ -109,7 +109,7 @@
           {% include 'comments.html' %}
       </div>
 
-      {% if comment_count <= 5 %}
+      {% if comment_count > 5 %}
         <div id="show-more-container">
             <button id="load-more-btn" data-offset="0" onclick="loadMoreComments({{ article.id }})">Show More Comments</button>
         </div>
