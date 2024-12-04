@@ -2,176 +2,80 @@
 {% load static %}
 
 {% block title %}
-    Editor Dashboard
+    {{ user.userprofile.first_name}} {{ user.userprofile.last_name }}
 {% endblock %}
 
 {% block style %}
-    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
-    <link rel="stylesheet" href="{% static 'css/landing_page.css' %}"> 
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/writer-editor.css' %}"> 
 {% endblock %}
 
 {% block content %}
-<header id="header">
-   
-    <div class="flex items-center space-x-4 relative">
-        <!-- Profile Picture -->
-        <div class="ml-5 absolute" style="width: 90px; height: 90px; z-index: 2;">
-            {% if user.profile_picture %}
-                <img src="{{ user.profile_picture.url }}" alt="Profile Picture" class="w-full h-full object-cover rounded-full cursor-pointer" onclick="toggleDropdown()">
 
-            {% else %}
-                <div class="w-full h-full rounded-full flex items-center justify-center text-white text-lg cursor-pointer" style="background-color: #45383f; user-select: none;" onclick="toggleDropdown()">
-                    {{ user.first_name|slice:":1" }}{{ user.last_name|slice:":1" }}
-                </div>
+{% include 'header.html' %}
 
-            {% endif %}
-            <!-- Dropdown Content for Buttons -->
-            <div id="profile-dropdown" class="absolute left-full top-0 ml-2 w-48 bg-gray-200 rounded-lg p-1 space-y-3 hidden">
-                <div class="space-y-1">
-                    <!-- Update Picture Button -->
-                    <a href="{% url 'update_profile_picture' %}" 
-                       class="block w-full sm:w-auto text-center bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        View Profile
-                    </a>
-                    <button type="button" 
-                        style="display: block;width: auto; height: auto; text-align: center; background-color: #e11d48; color: white; font-weight: 600; padding: 0.5rem 1.5rem; border-radius: 0.5rem;"
-                        onmouseover="this.style.backgroundColor='#b2183c'" 
-                        onmouseout="this.style.backgroundColor='#e11d48'"
-                        onclick="logoutUser();">
-                        Log Out
-                    </button>
+<div id="main">
+
+    <nav>
+        <button onclick="showSection('published-section')">
+        <img src="{% static 'icons/published.svg' %}" alt="">
+            <p>Published</p></button>
+        <button onclick="showSection('draft-section')" >
+           <img src="{% static 'icons/draft.svg' %}" alt=""> <p>Draft</p></button>
+        <button onclick="showSection('archived-section')" ><img src="{% static 'icons/archive.svg' %}" alt=""><p>Archived</p></button>
+        <button onclick="showSection('review-section')" ><img src="{% static 'icons/review.svg' %}" alt=""><p>Review</p></button>
+        <button onclick="showSection('notification-section')" ><img src="{% static 'icons/notif.svg' %}" alt=""><p>Notification</p></button>
+        <a id="write-article-btn" href="{% url 'create_article' %}"><img src="{% static 'icons/write.svg' %}" alt=""><p>Write Article</p></a>  
+    </nav>
+        
+
+    <div id="content">
+        <div id="published-section" class="article-section">
+            <h2>Published Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ published }}
                 </div>
             </div>
         </div>
-        <div class="absolute" style="z-index: 1; pointer-events: none; user-select: none;"><img src="{% static '\icons\full-logo.svg' %}" alt="Logo"></div>
-
-        <form method="GET" action="{% url 'search' %}" style="border-radius: 15px; margin-left: 425px; margin-right: 25px;">
-            {% csrf_token %}
-            <div>
-                <img src="{% static '\icons\search.svg' %}" alt="">
-            </div>
-            <input style="width: 900px;"
-                type="text" 
-                name="query" 
-                placeholder="Search headlines" value="{{query}}"
-                required>
-        </form>
-
-        <a href="{% url 'create_article' %}" 
-        class="w-48 h-20 text-white font-bold py-2 px-4" 
-        style="display: flex; justify-content: center; align-items: center; border-radius: 15px; background-color: #45383f; transition: background-color 0.3s ease;"
-        onmouseover="this.style.backgroundColor='#6A5F61'" 
-        onmouseout="this.style.backgroundColor='#45383f'">
-        Write Article
-     </a>    
-    </div>
-</header>
-
-<nav class="flex justify-between">
-    <button onclick="showSection('published-section')" style="margin-left: 500px;">Published</button>
-    <button onclick="showSection('draft-section')" style="margin-right: 0px;">Draft</button>
-    <button onclick="showSection('archived-section')" style="margin-right: 0px;">Archived</button>
-    <button onclick="showSection('review-section')" style="margin-right: 500px;">For review</button>
-</nav>
-
-<div style="margin-left: 500px; margin-right: 500px; margin-top: 35px;">
-    <!-- Articles based on status -->
-    <div id="published-section" class="article-section">
-        <h2>Published Articles</h2>
-        {% for article in published %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }} 
-                | {{ article.date_published }}
-            </p>
-            {% if article.photo_id %}
-                <div class="w-48 h-36 overflow-hidden rounded-lg">
-                    <img 
-                        src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                        alt="Photo for {{ article.headline }}" 
-                        class="w-full h-full object-cover"
-                    >
+        
+        <div id="draft-section" class="article-section">
+            <h2>Drafted Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ drafts }}
                 </div>
-            {% endif %}
-            <hr class="border-t border-gray-200 my-4">
+            </div>
         </div>
-        {% empty %}
-        <p class="text-gray-500">No published articles found.</p>
-        {% endfor %}
-    </div>
 
-    <div id="draft-section" class="article-section hidden">
-        <h2>Draft Articles</h2>
-        {% for article in drafts %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'draft' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                | {{ article.date_created }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
+        <div id="archived-section" class="article-section">
+            <h2>Archived Articles</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ archived }}
+                </div>
+            </div>
+        </div>
 
-            <form method="POST" action="{% url 'delete_draft' article.id %}" class="mt-4">
-                {% csrf_token %}
-                <button type="submit" class="text-red-600 hover:text-red-800">
-                    Delete
-                </button>
-            </form>
+        <div id="review-section" class="article-section">
+            <h2>Articles Under Revision</h2>
+            <div class="article-card-container">
+                <div class="article-card-grid">
+                    {{ review }}
+                </div>
+            </div>
+        </div>
+    
+
+        <div id="notification-section">
 
         </div>
-        {% empty %}
-        <p class="text-gray-500">No drafts found.</p>
-        {% endfor %}
     </div>
 
 
-    <div id="archived-section" class="article-section hidden">
-        <h2>Archived Articles</h2>
-        {% for article in archived %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'archive' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                | {{ article.date_archived }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No archived articles found.</p>
-        {% endfor %}
-    </div>
 
-    <div id="review-section" class="article-section hidden">
-        <h2>For review Articles</h2>
-        {% for article in to_approve %}
-        <div class="mb-8 p-6 bg-white rounded-lg shadow-md">
-            <p class="text-sm text-gray-600">{{ article.tag_id.tag_name }}</p>
-            <h2 class="text-2xl font-semibold text-blue-600 hover:text-blue-800">
-                <a href="{% url 'approve' article.id %}">{{ article.headline }}</a>
-            </h2>
-            <p class="text-gray-500 text-sm mb-2">
-                
-                <a href="{% url 'view_profile' id=article.writer.id %}" class="pr-2 pt-1 pb-1">
-                    By {{ article.writer.first_name }} {{ article.writer.last_name }}
-                </a>
-                | {{ article.date_archived }}
-            </p>
-            <hr class="border-t border-gray-200 my-4">
-        </div>
-        {% empty %}
-        <p class="text-gray-500">No archived articles found.</p>
-        {% endfor %}
-    </div>
+    
 </div>
 
 <script>
@@ -215,6 +119,19 @@
 
         // Show the selected section
         document.getElementById(sectionId).classList.remove('hidden');
+        
+        // Remove 'selected' class from all buttons
+    document.querySelectorAll('nav button').forEach(button => {
+        button.classList.remove('selected');
+    });
+
+    // Add 'selected' class to the clicked button
+    const clickedButton = [...document.querySelectorAll('nav button')].find(button => 
+        button.onclick.toString().includes(sectionId)
+    );
+    if (clickedButton) clickedButton.classList.add('selected');
+
+
     }
 
     // Initially, show the 'published' section

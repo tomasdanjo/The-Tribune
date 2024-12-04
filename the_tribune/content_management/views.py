@@ -47,22 +47,33 @@ def writer_dashboard_view(request):
     return render(request,'writer_dashboard.html',context)
 
 def editor_dashboard_view(request):
-    user = UserProfile.objects.get(user_credentials=request.user)
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None
 
-    articles = Article.objects.filter(writer = user)
+    articles = Article.objects.filter(editor=user)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
-    # submitted = articles.filter(status='submitted')
     archived = articles.filter(status='archived')
-    to_approve = Article.objects.filter(editor=user,status='submitted')
+    review = articles.filter(status='submitted')
+    
+    current_date = datetime.now().strftime('%b %d, %Y')
+
+    published = render_to_string('article-card.html',{'articles':published},request=request)
+    drafts = render_to_string('article-card.html',{'articles':drafts},request=request)
+    archived = render_to_string('article-card.html',{'articles':archived},request=request)
+    review = render_to_string('article-card.html',{'articles':review},request=request)
 
     context = {
-        'user':user, 
+        'auth_user':user, 
         'articles':articles,
         'published':published,
         'drafts':drafts,
         'archived':archived,
-        'to_approve':to_approve
+        'review':review,
+        'current_date':current_date
 
     }
 

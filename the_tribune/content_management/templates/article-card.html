@@ -13,7 +13,16 @@
   <div>
     <p class="tag">{{ article.tag.tag_name }}</p>
     <h2 class="headline">
-      <a href="{% url 'full_article_view' article.id %}"
+      <a 
+        {% if article.status == 'published' %}
+          href="{% url 'full_article_view' article.id %}"
+        {% elif article.status == 'archived' %} 
+          href="{% url 'archive' article.id %}"
+        {% elif article.status == 'draft' %}
+          href="{% url 'draft' article.id %}"
+        {% elif article.status == 'submitted' %}
+          href="{% url 'approve' article.id %}"
+        {% endif %}
         >{{ article.headline }}</a
       >
     </h2>

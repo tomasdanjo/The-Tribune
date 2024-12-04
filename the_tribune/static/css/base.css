@@ -74,11 +74,6 @@
   font-size: 0.7rem;
   line-height: 100%;
 }
-#header button > div {
-  background-color: #f2f2f2;
-  width: 100%;
-  height: 5px;
-}
 
 #header button {
   width: 50px;
@@ -90,7 +85,19 @@
   justify-content: center;
   padding: 10px;
   box-shadow: 0px 4px 8px rgba(59, 29, 29, 0.2);
+  transition: all 0.1s ease-in;
 }
+
+#header button:hover{
+  transform: translateY(-0.15rem);
+}
+
+#header button > div{
+  background-color: #f2f2f2;
+  height: 5px;
+  width: 100%;
+}
+
 
 #sidebar {
   height: 100vh;
@@ -117,12 +124,12 @@
   padding: 10px;
   display: flex;
   gap: 15px;
-  width: fit-content;
   flex-direction: row;
   align-items: center;
-  background-color: transparent;
-  height: 100%;
   border-radius: 5px;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
 }
 
 #img-container{
@@ -152,9 +159,10 @@
 }
 
 #header #sidebar-btn{
+  display: flex;
   width: fit-content;
   padding: 5px;
-  height: 70px;
+  height: fit-content;
   border-radius: 15px;
 }
 
