@@ -29,7 +29,7 @@ def landing_page(request):
     else:
         user = None  # Handle unauthenticated users
 
-    if article_id:
+    if article_id:  
         del request.session['article_id']  # Clear session after redirect
     
     current_date = datetime.now().strftime('%b %d, %Y')  
