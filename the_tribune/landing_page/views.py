@@ -82,7 +82,7 @@ def full_article(request, id):
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
 
     request.session['article_id'] = id
-    print(id)
+    print("Comment count: ",comment_count)
 
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 

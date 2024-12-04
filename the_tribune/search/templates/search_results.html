@@ -151,7 +151,7 @@ Search with The Tribune
                     </div>
 
                     <div class="headline-container">
-                        <p>{{ article.tag.tag_name }}</p>
+                        <p class="article-tag">{{ article.tag.tag_name }}</p>
                         
                          <a href="{% url 'full_article_view' article.id %}" class="hover:underline">
                             <h2>{{ article.headline }}</h2>
@@ -176,7 +176,7 @@ Search with The Tribune
 </form>
 
 
-{%load static%}
+{% load static %}
 
 <script src="{%static 'js/search_results.js'%}"></script>
 {% endblock %}
