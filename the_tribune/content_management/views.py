@@ -14,14 +14,10 @@ from django.template.loader import render_to_string
 
 # Create your views here.
 def writer_dashboard_view(request):
-<<<<<<< HEAD
-    user = UserProfile.objects.get(user_credentials=request.user)
-=======
     try:
         user = UserProfile.objects.get(user_credentials=request.user)
     except UserProfile.DoesNotExist:
         user = None
->>>>>>> origin/tomasdanjo
     articles = Article.objects.filter(writer = user)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
