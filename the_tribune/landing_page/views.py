@@ -107,15 +107,16 @@ def full_article(request, id):
 
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 
+    context = {'article':article,
+               'comments':comments,
+               'comment_count':comment_count,
+                'related_stories':related_stories,
+                'comment_form':comment_form,
+                'related_stories_count':related_stories_count,
+                'auth_user':user,
+                'current_date':current_date}
 
-    return render(request,'full_article_view.html',{'article':article,
-                                                    'comments':comments,
-                                                    'comment_count':comment_count,
-                                                    'related_stories':related_stories,
-                                                    'comment_form':comment_form,
-                                                    'related_stories_count':related_stories_count,
-                                                    'auth_user':user,
-                                                    'current_date':current_date})
+    return render(request,'full_article_view.html',context)
 
 def load_more_comments(request, article_id, offset):
 

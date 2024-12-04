@@ -18,7 +18,9 @@
 
         <!-- Profile Picture Section -->
         <div class=" items-center inline-block">
+            {% if user.is_authenticated %}
             <a href="{%url 'update_profile' user.userprofile.id %}">edit</a>
+            {% endif %}
 
 
             <div class="mb-1 ml-4 ">
