@@ -109,10 +109,14 @@ function showMonth() {
 
     if (isNaN(selectedStartYear) || isNaN(selectedEndYear)) {
         // month_container.classList.add('hidden'); 
+        fromMonth_container.classList.add('hidden');
+        toMonth_container.classList.add('hidden');
         fromMonth_container.classList.remove('filter-group');
         toMonth_container.classList.remove('filter-group');
     } else {
         // month_container.classList.remove('hidden'); 
+        fromMonth_container.classList.remove('hidden');
+        toMonth_container.classList.remove('hidden');
         fromMonth_container.classList.add('filter-group');
         toMonth_container.classList.add('filter-group');
     }
