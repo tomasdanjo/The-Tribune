@@ -18,6 +18,7 @@ urlpatterns = [
     path('editor_dashboard/<int:article_id>/', delete_draft, name='delete_draft'),
     path('update_profile/<int:id>',update_profile, name='update_profile'),
     path('view_profile/<int:id>',view_profile, name='view_profile'),
+    path('tags/', tag_search_view, name='tag-search'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
     
 ]

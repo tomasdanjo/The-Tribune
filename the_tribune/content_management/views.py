@@ -336,3 +336,14 @@ def view_profile(request, id):
     user_profile = get_object_or_404(UserProfile, id=id)
 
     return render(request, 'view_profile.html', {'user_profile': user_profile})
+
+def tag_search_view(request):
+    query = request.GET.get('search', '')  # Get the search query
+    if query:
+        tags = Tag.objects.filter(tag_name__icontains=query)  # Correct field name: tag_name
+        articles = Article.objects.filter(tag__in=tags)  # Get articles for matching tags
+    else:
+        tags = Tag.objects.all()  # Show all tags if no search query
+        articles = Article.objects.none()  # No articles displayed initially
+
+    return render(request, 'tag-search.html', {'tags': tags, 'articles': articles, 'query': query})
