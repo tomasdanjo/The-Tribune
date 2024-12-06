@@ -50,21 +50,27 @@
                 <p>Edit</p>
             </button>
         {% endif %}
-    {% else %}
+    {% endif %}
+
+    {% if show_search %}
+
+    <form method="GET" action="{% url 'search' %}">
+        {% csrf_token %}
+        <div>
+            <img src="{% static '\icons\search.svg' %}" alt="">
+        </div>
+        <input 
+            type="text" 
+            name="query" 
+            placeholder="Search headlines" value="{{query}}"
+            required 
+        >
+    </form>
+
+    {% endif %}
     
-  <form method="GET" action="{% url 'search' %}">
-      {% csrf_token %}
-      <div>
-          <img src="{% static '\icons\search.svg' %}" alt="">
-      </div>
-      <input 
-          type="text" 
-          name="query" 
-          placeholder="Search headlines" value="{{query}}"
-          required 
-      >
-  </form>
-  {% endif %} 
+
+
 </header>
 
 {% include 'sidebar.html' %}

@@ -17,11 +17,11 @@ class Article_Form(forms.ModelForm):
         ]
         widgets = {
             'headline': forms.Textarea(attrs={
-                'class': 'field headline',
+                'class': 'field headline textarea',
                 'placeholder': 'Enter headline'
             }),
             'content': forms.Textarea(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'class': 'field body textarea',
                 'placeholder': 'Enter article content',
                 'rows': 10  # Optional: adjust the number of rows for the textarea
             }),
@@ -60,7 +60,7 @@ class Tag_Form(forms.ModelForm):
         ]
         widgets = {
             'tag_name': forms.Textarea(attrs={
-                'class': 'field tag',
+                'class': 'field tag textarea',
                 'placeholder': 'Enter Tag'
             }),
         }
@@ -78,12 +78,12 @@ class Photo_Form(forms.ModelForm):
                 'class': 'custom-file-input',
                 'accept': 'image/*'
             }),
-            'caption': forms.TextInput(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+            'caption': forms.Textarea(attrs={
+                'class': 'textarea field caption',
                 'placeholder': 'Enter a caption for the photo'
             }),
             'date_taken': forms.DateInput(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+                'class': '',
                 'type': 'date'  # HTML5 date picker
             }),
         }

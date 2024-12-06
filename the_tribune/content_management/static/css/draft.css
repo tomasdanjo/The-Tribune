@@ -71,8 +71,9 @@
 .field{
   width: 100%;
   background-color: transparent;
-  padding: 10px;
+  padding: 20px;
   border-radius: 15px;
+
 }
 
 .field:hover{
@@ -91,20 +92,24 @@
   font-weight: 500;
   font-size: 2rem;
   overflow-y: auto;
+  text-transform: capitalize;
 }
 
-.form-field{
-  margin: 10px 0px;
+.other-fields .form-field{
+  width: fit-content;
+  display: inline-flex;
+  min-width: 0;
 }
 
-.form-field textarea{
+.form-field .textarea {
+  width: 100%;
   height: auto;
-  line-height: 1.5rem;
-  min-height: 2.5rem;
-  max-height: 2.5rem;
-  overflow: hidden;
+  min-height: 3rem;
+  line-height: auto;
   resize: none;
-  padding: 0.5rem;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: hidden; /* Key change: prevents scrollbar */
 }
 
 .tag{
@@ -117,6 +122,7 @@
   display: flex;
   margin: 10px 0px;
   justify-content: space-between;
+  height: fit-content;
 }
 
 .other-fields div{
@@ -130,12 +136,13 @@
 .other-fields label{
   display: flex;
   gap: 5px;
+  flex-shrink: 0;
 }
 
 .select-field{
   width: fit-content;
   background-color: #f2f2f2;
-  color: #46445C;
+  color: #596E9B;
   padding: 5px 10px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
   border-radius: 15px;
@@ -161,7 +168,7 @@
 .file-field{
   padding: 5px 10px;
   border-radius: 15px;
-  color: #46445C;
+  color: #596E9B;
 }
 
 .custom-file-input {
@@ -174,8 +181,41 @@
 
 #edit-write-article-form .form-field{
   display: flex;
-  flex-direction: column; 
-  flex-wrap: wrap;
+  flex-direction: row; 
+  flex-grow: 1;
 }
+
+.form-field .caption{
+  /* width: auto;
+  color: #596E9B; */
+  flex-grow: 1;
+  color: #596E9B;
+}
+
+input[type="date"] {
+  width: 200px;
+  padding: 5px;
+  font-size: 16px;
+  border: 2px solid #46445C;
+  border-radius: 15px;
+  color: #596E9B;
+  background-color: #f9f9f9;
+  transition: all 0.1s ease-in;
+}
+input[type="date"]:hover{
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+}
+
+input[type="date"]:focus{
+  outline: none;
+}
+
+#edit-write-article-form .article-content{
+  padding: 10px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  border-radius: 25px;
+}
+
+
 
 

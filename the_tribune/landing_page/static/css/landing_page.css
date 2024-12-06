@@ -245,3 +245,6 @@ nav>a:hover{
   padding: 20px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
+#header #sidebar-btn {
+  background-color: #7186b3;
+}
