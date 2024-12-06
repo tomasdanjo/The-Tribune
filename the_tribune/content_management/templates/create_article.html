@@ -1,114 +1,148 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Edit Article
+    
+{% endblock %}
+
+{% block style %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/draft.css' %}"> 
+
 {% endblock %}
 
 {% block content %}
 
-<div class="container mx-auto mt-10 px-4">
-    <h1 class="text-3xl font-bold mb-5">Edit Article</h1>
-    <form method="POST" enctype="multipart/form-data" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" id="articleForm">
-        {% csrf_token %}
+
+{% include 'header.html' %}
+
+
+<form method="POST" enctype="multipart/form-data" id="edit-write-article-form">
+    {% csrf_token %}
+    <div class="btn-group">
+        <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
+        <div class="submit-btn-group">
+            <button type="submit"  name="action" value="save_draft" class="submit-btn" onclick="return validateForm();">Save as Draft</button>
+        
+            {% if writer.is_writer %}
+                <button type="submit" name="action" value="submit_review" class="submit-btn highlight-btn" onclick="return validateForm();">Submit to Editor</button>
+            {% elif writer.is_editor %}
+                <button type="submit" class="submit-btn highlight-btn" name="action" value="publish" onclick="return validateForm();">Publish</button>
+            {% endif %}
+        </div>
+            
+    </div>
+
+    <div class="form-fields-group">
+
+    
+        <div class="form-field">
+            <label for="{{ tag_form.tag_name.id_for_label }}"></label>
+            {{ tag_form.tag_name }}
+            {% if tag_form.tag_name.errors %}
+            <div class="text-red-500 text-xs italic mt-1">{{ tag_form.tag_name.errors }}</div>
+            {% endif %}
+        </div>
         
         <!-- Headline Field -->
-        <div class="mb-4">
-            <label for="{{ article_form.headline.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Headline</label>
+        <div class="form-field">
+            <label for="{{ article_form.headline.id_for_label }}"></label>
             {{ article_form.headline }}
             {% if article_form.headline.errors %}
             <div class="text-red-500 text-xs italic mt-1">{{ article_form.headline.errors }}</div>
             {% endif %}
         </div>
 
-        <!-- Content Field -->
-        <div class="mb-4">
-            <label for="{{ article_form.content.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Content</label>
-            {{ article_form.content }}
-            {% if article_form.content.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ article_form.content.errors }}</div>
-            {% endif %}
-        </div>
-
-        {% if writer.is_writer %}
-        <div class="mb-4">
-            <label for="editor" class="block text-gray-700 text-sm font-bold mb-2">Editor</label>
-            <select name="editor" id="editor" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
-                <option value="" disabled {% if not article.editor %}selected{% endif %}>Select Editor</option>
-                {% for editor in editors %}
-                <option value="{{ editor.id }}" {% if editor.id == selected_editor %}selected{% endif %}>{{ editor }}</option>
-                {% endfor %}
-            </select>
-            {% if article_form.editor.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ article_form.editor.errors }}</div>
-            {% endif %}
+        {% if photo_instance %}
+        <div class="img-container">
+            <img src="{{ photo_instance.photo.url }}" alt="">
         </div>
         {% endif %}
 
-        <!-- Tag Field -->
-        <div class="mb-4">
-            <label for="{{ tag_form.tag_name.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Tag</label>
-            {{ tag_form.tag_name }}
-            {% if tag_form.tag_name.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ tag_form.tag_name.errors }}</div>
-            {% endif %}
-        </div>
+        <div class="other-fields">
+            <div class="form-field">
+                <label for="{{ photo_form.photo.id_for_label }}"><img src="{% static 'icons\category.svg' %}" alt="">Category</label>
+                {{ article_form.category }}
+                {% if article_form.category.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ article_form.category.errors }}</div>
+                {% endif %}
+            </div>
 
-        <!-- Category Field -->
-        <div class="mb-4">
-            <label for="{{ article_form.category.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Category</label>
-            {{ article_form.category }}
-            {% if article_form.category.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ article_form.category.errors }}</div>
-            {% endif %}
-        </div>
-
-        <!-- Photo Field -->
-        <div class="mb-4">
-            <label for="{{ photo_form.photo.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Upload Photo</label>
-            {{ photo_form.photo }}
-            {% if photo_form.photo.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ photo_form.photo.errors }}</div>
-            {% endif %}
-        </div>
-
-
-
-
-
-
-        <!-- Caption Field -->
-        <div class="mb-4">
-            <label for="{{ photo_form.caption.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Caption</label>
-            {{ photo_form.caption }}
-            {% if photo_form.caption.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ photo_form.caption.errors }}</div>
-            {% endif %}
-        </div>
-
-        <!-- Date Taken Field -->
-        <div class="mb-4">
-            <label for="{{ photo_form.date_taken.id_for_label }}" class="block text-gray-700 text-sm font-bold mb-2">Date Taken</label>
-            {{ photo_form.date_taken }}
-            {% if photo_form.date_taken.errors %}
-            <div class="text-red-500 text-xs italic mt-1">{{ photo_form.date_taken.errors }}</div>
-            {% endif %}
-        </div>
-
-        <div class="flex justify-between">
-            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" name="action" value="save_draft" onclick="return validateForm();">Save as Draft</button>
-            
             {% if writer.is_writer %}
-            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="submit_review" onclick="return validateForm();">Submit to Editor</button>
-            {% elif writer.is_editor %}
-            <button type="submit" class="bg-red-400 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" name="action" value="publish" onclick="return validateForm();">Publish</button>
+            <div class="form-field">
+                <label for="editor"><img src="{% static 'icons\editor.svg' %}" alt="">Editor</label>
+                <select name="editor" id="editor" class="select-field">
+                    <option value="" disabled {% if not article.editor %}selected{% endif %}>Select Editor</option>
+                    {% for editor in editors %}
+                    <option value="{{ editor.id }}" {% if editor.id == selected_editor %}selected{% endif %}>{{ editor }}</option>
+                    {% endfor %}
+                </select>
+                {% if article_form.editor.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ article_form.editor.errors }}</div>
+                {% endif %}
+            </div>
             {% endif %}
-            
-            <!-- Cancel Button -->
-            <a href="javascript:history.back()" class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded">Cancel</a>
 
+            <!-- Photo Field -->
+            <div class="form-field">
+                <label for="{{ photo_form.photo.id_for_label }}"><img src="{% static 'icons\photo.svg' %}" alt="">Upload Photo</label>
+                {{ photo_form.photo }}
+                {% if photo_form.photo.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ photo_form.photo.errors }}</div>
+                {% endif %}
+            </div>
         </div>
-    </form>
-</div>
+
+        <div class="other-fields">
+            <!-- Date Taken Field -->
+            <div class="form-field">
+                <label for="{{ photo_form.date_taken.id_for_label }}"><img src="{% static 'icons\calendar.svg' %}" alt="">Date Taken</label>
+                {{ photo_form.date_taken }}
+                {% if photo_form.date_taken.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ photo_form.date_taken.errors }}</div>
+                {% endif %}
+            </div>
+            <!-- Caption Field -->
+            <div class="form-field">
+                <label for="{{ photo_form.caption.id_for_label }}"><img src="{% static 'icons\caption.svg' %}" alt="">Caption</label>
+                {{ photo_form.caption }}
+                {% if photo_form.caption.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ photo_form.caption.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+
+
+         
+
+
+        
+
+        <div class="article-content">
+            <!-- Content Field -->
+            <div class="form-field">
+                <label for="{{ article_form.content.id_for_label }}"></label>
+                {{ article_form.content }}
+                {% if article_form.content.errors %}
+                <div class="text-red-500 text-xs italic mt-1">{{ article_form.content.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        
+
+        
+
+        
+
+        
+    </div>
+
+
+    
+</form>
+
 
 <script>
     function validateForm() {
@@ -149,6 +183,27 @@ Edit Article
         // All checks passed, allow form submission
         return true;
     }
+
+    function autoResize(textarea) {
+    // Reset height to default
+    textarea.style.height = '2.5rem';
+    
+    // If content exceeds one line, expand
+    textarea.style.height = `${textarea.scrollHeight}px`;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const textareas = document.querySelectorAll('textarea.textarea');
+    
+    textareas.forEach(textarea => {
+        // Initial auto-resize
+        autoResize(textarea);
+        
+        // Add event listeners for input and change
+        textarea.addEventListener('input', () => autoResize(textarea));
+        textarea.addEventListener('change', () => autoResize(textarea));
+    });
+});
 </script>
 
 {% endblock %}

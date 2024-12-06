@@ -37,7 +37,8 @@ def writer_dashboard_view(request):
         'drafts':drafts,
         'submitted':submitted,
         'archived':archived,
-        'current_date':current_date
+        'current_date':current_date,
+        'show_search':True
 
     }
 
@@ -73,7 +74,8 @@ def editor_dashboard_view(request):
         'drafts':drafts,
         'archived':archived,
         'review':review,
-        'current_date':current_date
+        'current_date':current_date,
+        'show_search':True
 
     }
 
@@ -84,6 +86,7 @@ def editor_dashboard_view(request):
 def create_article(request):
     editors = UserProfile.objects.filter(is_editor=True)
     writer = UserProfile.objects.get(user_credentials=request.user)
+    current_date = datetime.now().strftime('%b %d, %Y')
 
     if request.method == 'POST':
         article_form = Article_Form(request.POST)
@@ -155,6 +158,8 @@ def create_article(request):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
+        'auth_user':writer,
+        'current_date':current_date
     })
 
 def draft_article(request,id):
@@ -164,32 +169,18 @@ def draft_article(request,id):
         except UserProfile.DoesNotExist:
             user = None
     article = get_object_or_404(Article,id=id)
-    return render(request,'draft-article.html',{'article':article,'auth_user':user})
+    current_date = datetime.now().strftime('%b %d, %Y')
+
+    context = {
+        'article':article,
+        'auth_user':user,
+        'current_date':current_date,
+        'show_search':False
+    }
+    
+    return render(request,'draft-article.html',context)
 
 
-# def edit_article(request, id):
-#     # Get the article by ID
-#     article = get_object_or_404(Article, id=id)
-
-#     # Pre-fill the forms with the article's existing data
-#     article_form = Article_Form(instance=article)
-#     photo_form = Photo_Form(instance=article.photo)
-#     tag_form = Tag_Form(instance=article.tag)
-
-#     # Get the writer's profile
-#     writer = UserProfile.objects.get(user_credentials=request.user)
-
-#     # Get the list of editors (assuming you have a method to retrieve this)
-#     editors = UserProfile.objects.filter(is_editor=True)
-
-#     return render(request, 'create_article.html', {
-#         'article_form': article_form,
-#         'photo_form': photo_form,
-#         'tag_form': tag_form,
-#         'writer': writer,  # Pass the writer profile
-#         'editors': editors,  # Pass the list of editors
-#         'is_editing': True  # Optional: can be used in the template to distinguish between create and edit
-#     })
 
 
 
@@ -197,6 +188,7 @@ def edit_article(request, id):
     article = get_object_or_404(Article, id=id)
     editors = UserProfile.objects.filter(is_editor=True)
     writer = UserProfile.objects.get(user_credentials=request.user)
+    current_date = datetime.now().strftime('%b %d, %Y')
 
     if request.method == 'POST':
         article_form = Article_Form(request.POST, instance=article)
@@ -227,6 +219,7 @@ def edit_article(request, id):
         article_form = Article_Form(instance=article)
         photo_form = Photo_Form(instance=article.photo)
         tag_form = Tag_Form(instance=article.tag)
+        photo_instance=article.photo
 
     return render(request, 'create_article.html', {
         'article_form': article_form,
@@ -234,7 +227,10 @@ def edit_article(request, id):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
-        'selected_editor': article.editor.id if article.editor else None,  
+        'selected_editor': article.editor.id if article.editor else None, 
+        'auth_user':writer,
+        'photo_instance':photo_instance,
+        'current_date':current_date
     })
 
 

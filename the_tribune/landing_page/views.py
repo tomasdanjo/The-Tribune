@@ -80,7 +80,8 @@ def landing_page(request):
         'feature_articles':feature_articles,
         'environment_articles':environment_articles,
         'scitech_articles':scitech_articles,
-        'top_stories':top_stories
+        'top_stories':top_stories,
+        'show_search':True
     
     }
 
@@ -107,14 +108,17 @@ def full_article(request, id):
 
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 
-    context = {'article':article,
-               'comments':comments,
-               'comment_count':comment_count,
-                'related_stories':related_stories,
-                'comment_form':comment_form,
-                'related_stories_count':related_stories_count,
-                'auth_user':user,
-                'current_date':current_date}
+    context = {
+        'article':article,
+        'comments':comments,
+        'comment_count':comment_count,
+        'related_stories':related_stories,
+        'comment_form':comment_form,
+        'related_stories_count':related_stories_count,
+        'auth_user':user,
+        'current_date':current_date,
+        'show_search':True
+    }
 
     return render(request,'full_article_view.html',context)
 

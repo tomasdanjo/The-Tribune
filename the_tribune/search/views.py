@@ -1,7 +1,7 @@
 from django.shortcuts import render
-
 from article.models import Article, Category, Tag
 from datetime import datetime
+from user_authentication.models import UserProfile
 
 from django.db.models import Q
 from django.shortcuts import render
@@ -9,6 +9,12 @@ from datetime import date
 import calendar
 
 def search_article(request):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None
+
     current_year = datetime.now().year
     years = range(2000, current_year + 1)[::-1]
     months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -79,19 +85,22 @@ def search_article(request):
 
     current_date = datetime.now().strftime('%b %d, %Y')  
 
-    return render(request, 'search_results.html', {
-    'articles': articles,
-    'tags': tags,
-    'categories': categories,
-    'years': years,
-    'months': months,
-    'query': query,
-    'start_year': start_year,
-    'start_month': orig_start_month,
-    'end_year': end_year,
-    'end_month': orig_end_month,
-    'has_tag': has_tag,
-    'category_id': category_id,
-    'current_date':current_date
+    context = {
+        'articles': articles,
+        'tags': tags,
+        'categories': categories,
+        'years': years,
+        'months': months,
+        'query': query,
+        'start_year': start_year,
+        'start_month': orig_start_month,
+        'end_year': end_year,
+        'end_month': orig_end_month,
+        'has_tag': has_tag,
+        'category_id': category_id,
+        'current_date':current_date,
+        'auth_user':user
+        
+    }
 
-})
+    return render(request, 'search_results.html', context )
