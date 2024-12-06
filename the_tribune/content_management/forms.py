@@ -1,6 +1,10 @@
 from django import forms
 from article.models import Article, Category, Photo, Tag
 from user_authentication.models import UserProfile
+from django.forms.widgets import ClearableFileInput
+
+class CustomClearableFileInput(ClearableFileInput):
+    template_name = 'custom_file_input.html'
 
 class Article_Form(forms.ModelForm):
     class Meta:
@@ -12,8 +16,8 @@ class Article_Form(forms.ModelForm):
             'category'
         ]
         widgets = {
-            'headline': forms.TextInput(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+            'headline': forms.Textarea(attrs={
+                'class': 'field headline',
                 'placeholder': 'Enter headline'
             }),
             'content': forms.Textarea(attrs={
@@ -22,10 +26,10 @@ class Article_Form(forms.ModelForm):
                 'rows': 10  # Optional: adjust the number of rows for the textarea
             }),
             'editor': forms.Select(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                'class': 'select-field'
             }),
             'category': forms.Select(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+                'class': 'select-field'
             }),
         }
         
@@ -55,8 +59,8 @@ class Tag_Form(forms.ModelForm):
             'tag_name'
         ]
         widgets = {
-            'tag_name': forms.TextInput(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+            'tag_name': forms.Textarea(attrs={
+                'class': 'field tag',
                 'placeholder': 'Enter Tag'
             }),
         }
@@ -70,8 +74,8 @@ class Photo_Form(forms.ModelForm):
             'date_taken'
         ]
         widgets = {
-            'photo': forms.ClearableFileInput(attrs={
-                'class': 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline',
+            'photo': CustomClearableFileInput(attrs={
+                'class': 'custom-file-input',
                 'accept': 'image/*'
             }),
             'caption': forms.TextInput(attrs={

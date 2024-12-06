@@ -155,6 +155,7 @@ def create_article(request):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
+        'auth_user':writer
     })
 
 def draft_article(request,id):
@@ -227,6 +228,7 @@ def edit_article(request, id):
         article_form = Article_Form(instance=article)
         photo_form = Photo_Form(instance=article.photo)
         tag_form = Tag_Form(instance=article.tag)
+        photo_instance=article.photo
 
     return render(request, 'create_article.html', {
         'article_form': article_form,
@@ -234,7 +236,9 @@ def edit_article(request, id):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
-        'selected_editor': article.editor.id if article.editor else None,  
+        'selected_editor': article.editor.id if article.editor else None, 
+        'auth_user':writer,
+        'photo_instance':photo_instance
     })
 
 
