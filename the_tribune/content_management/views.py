@@ -9,6 +9,8 @@ from django.http import JsonResponse
 from .forms import ProfilePictureForm,ProfileBiographyForm
 from datetime import datetime
 from django.template.loader import render_to_string
+from .models import Feedback
+import json
 
 # from django import form
 
@@ -493,3 +495,11 @@ def delete_feedback(request, feedback_id):
 
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
+def update_feedback(request, feedback_id):
+    if request.method == "POST":
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        data = json.loads(request.body)
+        feedback.comment = data.get("comment", feedback.comment)
+        feedback.save()
+        return JsonResponse({"success": True})
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=400)

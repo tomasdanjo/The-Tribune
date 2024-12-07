@@ -29,7 +29,7 @@
         
 
     </div>
-    <div class="body-container">
+    <div class="body-container" id="body-container-{{ feedback.id }}">
         <p>{{feedback.comment}}</p>
     </div>
     <div class="replies-container">
@@ -43,6 +43,16 @@
 {% endfor %}
 
 <script>
+     function autoResize(textarea) {
+    // Reset height to default
+    textarea.style.height = '2.5rem';
+    // If content exceeds one line, expand
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }
+
+
+
+
     function togglePopup(button) {
         // Find the popup menu associated with this button
         const popupMenu = button.nextElementSibling;
@@ -124,5 +134,71 @@
     });
 
     }
+
+    function editFeedback(feedbackId) {
+    const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
+    const originalComment = bodyContainer.querySelector("p").textContent;
+
+    // Replace the body container content with a textarea and save/cancel buttons
+    bodyContainer.innerHTML = `
+        <textarea id="edit-textarea-${feedbackId}" class="textarea field edit-textarea">${originalComment}</textarea>
+        <div class="edit-actions submit-btn-group">
+            <button class="cancel-btn submit-btn" onclick="cancelEdit(${feedbackId}, '${originalComment}')">Cancel</button>
+            <button class="save-btn submit-btn highlight-btn" onclick="saveFeedback(${feedbackId})">Save</button>
+        </div>
+    `;
+
+    bodyContainer.classList.add('edit-active');
+
+    const textareas = document.querySelectorAll('textarea.textarea');
+    const feedbackTextarea = document.getElementById('feedback-text');
+    const feedbackSubmitGroup = document.querySelector('#feedback-form-container .submit-btn-group');
+    const feedbackMessage = document.getElementById('feedback-message');
+
+    textareas.forEach(textarea => {
+        // Initial auto-resize
+        autoResize(textarea);
+
+        // Add event listeners for input and change
+        textarea.addEventListener('input', () => autoResize(textarea));
+        textarea.addEventListener('change', () => autoResize(textarea));
+    });
+
+
+}
+
+function saveFeedback(feedbackId) {
+    const textarea = document.getElementById(`edit-textarea-${feedbackId}`);
+    const updatedComment = textarea.value;
+
+    // Send an AJAX request to update the feedback on the server
+    fetch(`/feedback/update/${feedbackId}/`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
+        },
+        body: JSON.stringify({ comment: updatedComment }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Update the UI with the new comment
+            const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
+            bodyContainer.innerHTML = `<p>${updatedComment}</p>`;
+            bodyContainer.classList.remove('edit-active');
+        } else {
+            alert("Failed to update feedback.");
+        }
+    })
+    .catch(error => console.error("Error:", error));
+}
+
+function cancelEdit(feedbackId, originalComment) {
+    // Restore the original comment
+    const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
+    bodyContainer.innerHTML = `<p>${originalComment}</p>`;
+    bodyContainer.classList.remove('edit-active');
+}
 
 </script>
