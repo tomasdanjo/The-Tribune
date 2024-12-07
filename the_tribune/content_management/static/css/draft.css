@@ -172,11 +172,9 @@
 }
 
 .custom-file-input {
-  appearance: none;
-  border-radius: 15px;
-  padding: 5px 10px;
-  cursor: pointer;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  width: 100%; /* Allows the input to adjust to the container width */
+  max-width: 100%; /* Ensures the input does not exceed its parent's width */
+  box-sizing: border-box; /* Includes padding and border in the element's total width */
 }
 
 #edit-write-article-form .form-field{
