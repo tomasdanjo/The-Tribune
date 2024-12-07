@@ -236,13 +236,40 @@ def edit_article(request, id):
 
 def approve_article(request,id):
     article = get_object_or_404(Article,id=id)
-    return render(request,'approve-article.html',{'article':article})
+    current_date = datetime.now().strftime('%b %d, %Y')
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    context = {
+        'article':article,
+        'current_date':current_date,
+        'auth_user':user,
+    }
+    return render(request,'approve-article.html',context)
 
 def archive_view(request,id):
     article = get_object_or_404(Article,id=id)
     feedback = Feedback.objects.filter(article=article)
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+    
+    current_date = datetime.now().strftime('%b %d, %Y')
 
-    return render(request,'archive-view.html',{'article':article,'feedback':feedback})
+    context = {
+        'article':article,
+        'feedback':feedback,
+        'auth_user':user,
+        'current_date':current_date,
+        'show_search':True
+    }
+
+    return render(request,'archive-view.html',context)
 
 def archive_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)

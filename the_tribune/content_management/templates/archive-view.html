@@ -6,15 +6,24 @@
 
 {% block style %}
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/archive.css' %}"> 
 
 {% endblock %}
 
 {% block content %}
 
-  {% include 'article-template.html' %}
+  {% include 'header.html' %}
 
-  {% include 'feedback-template.html' %}
+  <div>
+    {% include 'article-template.html' %}
+    {% include 'feedback-template.html' %}
+  </div>
+
+  
+
+ 
 
 
 

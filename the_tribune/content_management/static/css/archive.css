@@ -1,0 +1,49 @@
+#main{
+  display: flex;
+  padding: 0px 100px;
+  gap: 40px;
+}
+
+#main #article-wrapper{
+  width: 60%;
+}
+
+#main #feedbacks-wrapper{
+  flex: 1;
+}
+
+#main .form{
+  width: 100%;
+  padding: 10px;
+}
+
+#action-group .form-group{
+  height: fit-content;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  margin: 10px;
+  border-radius: 25px;
+}
+
+
+
+#action-group{
+  /* width: 80vw; */
+  margin: 50px 100px;
+}
+
+#action-group .form-group form{
+  padding: 20px;
+  color: #596e9b;
+}
+
+#action-group .form-group .submit-btn-group{
+  margin-top: 10px;
+} 
+
+#action-group p{
+  font-size: 1.2rem;
+  padding: 0px 20px;
+}
+
+
+
