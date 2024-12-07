@@ -244,7 +244,15 @@ def approve_article(request,id):
         user = None
 
 
-    feedbacks = Feedback.objects.all().filter(article=article)
+    feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            )
+    
     context = {
         'article':article,
         'current_date':current_date,
@@ -315,7 +323,14 @@ def submit_feedback(request):
         if article_id and feedback_text:
             article = Article.objects.get(id=article_id)
             feedback = Feedback.objects.create(article=article, editor=request.user.userprofile, comment=feedback_text)
-            feedbacks = Feedback.objects.all().filter(article=article)
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            ) # Fetch all feedbacks
         
             # Render the feedback template as a string
             feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks},request=request)
@@ -371,7 +386,14 @@ def filter_feedbacks(request, id):
         status = request.POST.get("status")
 
         if status == "show-all":
-            feedbacks = Feedback.objects.filter(article=article)  # Fetch all feedbacks
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            ) # Fetch all feedbacks
         else:
             feedbacks = Feedback.objects.filter(article=article, status=status)  # Filter by status
 
@@ -381,3 +403,37 @@ def filter_feedbacks(request, id):
         return JsonResponse({"status": "success", "feedback_html": feedback_html})
 
     return JsonResponse({"status": "error", "message": "Invalid request method"})
+
+@csrf_exempt
+def resolve_feedback(request, feedback_id):
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    if request.method == 'POST':
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        feedback.status = 'resolved'
+        feedback.save()
+
+        # Fetch all feedbacks related to the article
+        article = feedback.article
+        feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            ) 
+
+        # Render the updated feedback list
+        feedback_html = render_to_string(
+            'feedback-template.html',
+            {'feedbacks': feedbacks,'auth_user':user},
+            request=request
+        )
+        return JsonResponse({'status': 'success', 'feedback_html': feedback_html})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})

@@ -1,14 +1,29 @@
+{% load static %}
 {% for feedback in feedbacks %}
-<div class="feedback-container">
+<div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}">
     <div class="top">
-        {% include 'profile-picture.html' with user=feedback.editor %}
-        <div>
-            <h2>{{ feedback.editor.first_name }} {{ feedback.editor.last_name }}</h2>
-            <p>{{ feedback.created_at }}</p>
+        <div class="left"> 
+            {% include 'profile-picture.html' with user=feedback.editor %}
+            <div>
+                <a href="{% url 'view_profile' feedback.editor.id %}"><h2>{{ feedback.editor.first_name }} {{ feedback.editor.last_name }}</h2></a>
+                
+                <p class="created-at">{{ feedback.created_at }}</p>
+            </div>
         </div>
+
+        <div class="actions-btn submit-btn-group">
+            {% if feedback.status != 'resolved' %}
+                <button class="submit-btn" onclick="resolveFeedback({{feedback.id}})"><img src="{% static 'icons\check.svg' %}" alt=""></button>
+            {% endif %}
+            {% if auth_user == feedback.editor %}
+                <button class="submit-btn"><img src="{% static 'icons\triple-dot.svg' %}" alt=""></button>
+            {% endif %}
+        </div>
+        
+
     </div>
     <div class="body-container">
-
+        <p>{{feedback.comment}}</p>
     </div>
     <div class="replies-container">
 
@@ -17,3 +32,34 @@
     
 </div>
 {% endfor %}
+
+<script>
+    function resolveFeedback(feedbackId) {
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    $.ajax({
+        url: `/resolve_feedback/${feedbackId}/`, // Adjust the URL based on your project structure
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: csrfToken
+        },
+        beforeSend: function () {
+            $('#feedbacks-container').html('<p>Updating feedbacks...</p>'); // Optional: loading message
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                // Refresh the feedback container with updated feedbacks
+                $('#feedbacks-container').html(response.feedback_html);
+            } else {
+                alert(response.message || 'Failed to resolve feedback.');
+            }
+        },
+        error: function () {
+            alert('An error occurred while resolving the feedback.');
+        }
+    });
+}
+
+
+
+</script>
