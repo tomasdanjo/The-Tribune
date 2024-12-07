@@ -31,11 +31,19 @@
                 {% endif %}
             </div>
 
-            <div class="flex items-center justify-center text-center px-1 py-1 inline-block  ml-4">
+            <div class="flex flex-col items-center text-center ml-4">
                 <p class="font-semibold text-gray-800">{{ user_profile.first_name }} {{ user_profile.last_name }}</p>
-            </div>  
+                {% if not user.userprofile.is_reader %}
+                    <p class="text-gray-600 text-sm mt-1">
+                        {% if user.userprofile.is_writer %}
+                            Writer
+                        {% elif user.userprofile.is_editor %}
+                            Editor
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
         </div>
-
         <!-- Biography Section -->
         <div class="mb-6">
             <label for="biography" class="block text-sm font-medium text-gray-700 mb-2">Biography</label>
@@ -43,7 +51,19 @@
                 
             </div>
         </div>
-    </div>
+    </div><div class="flex flex-col items-center text-center ml-4">
+                <p class="font-semibold text-gray-800">{{ user_profile.first_name }} {{ user_profile.last_name }}</p>
+                {% if not user.userprofile.is_reader %}
+                    <p class="text-gray-600 text-sm mt-1">
+                        {% if user.userprofile.is_writer %}
+                            Writer
+                        {% elif user.userprofile.is_editor %}
+                            Editor
+                        {% endif %}
+                    </p>
+                {% endif %}
+            </div>
+        </div>
 
     <!-- Back Button -->
     <div class="mt-4 mb-2 text-center">

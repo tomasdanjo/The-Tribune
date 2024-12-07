@@ -328,10 +328,10 @@ def update_profile(request,id):
     return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
 
 def view_profile(request, id):
-    
     user_profile = get_object_or_404(UserProfile, id=id)
-
-    return render(request, 'view_profile.html', {'user_profile': user_profile})
+    
+    return render(request, 'view_profile.html', {'user_profile': user_profile,
+                                                 })
 
 def tag_search_view(request):
     query = request.GET.get('search', '')
