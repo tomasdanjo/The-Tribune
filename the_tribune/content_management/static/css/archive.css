@@ -162,3 +162,42 @@
 .feedback-container .submit-btn-group{
   gap: 5px;
 }
+
+.popup-menu {
+  display: none;
+  position: absolute;
+  background: #DEDEDE;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.popup-menu button img{
+  height: 20px;
+  width: auto;
+}
+
+.popup-menu button{
+  display: flex;
+  color: #45383F;
+  padding: 5px;
+  font-size: 0.8rem;
+  height: fit-content;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.popup-menu button:hover{
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.popup-menu.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.triple-dot-btn {
+  cursor: pointer;
+  position: relative;
+}

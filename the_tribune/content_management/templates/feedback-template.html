@@ -16,7 +16,14 @@
                 <button class="submit-btn" onclick="resolveFeedback({{feedback.id}})"><img src="{% static 'icons\check.svg' %}" alt=""></button>
             {% endif %}
             {% if auth_user == feedback.editor %}
-                <button class="submit-btn"><img src="{% static 'icons\triple-dot.svg' %}" alt=""></button>
+            <button class="submit-btn triple-dot-btn" onclick="togglePopup(this)">
+                <img src="{% static 'icons/triple-dot.svg' %}" alt="">
+            </button>
+            <div class="popup-menu">
+                <button class="edit-btn" onclick="editFeedback({{feedback.id}})"><img src="{% static 'icons\edit-feedback.svg' %}" alt="">Edit</button>
+                <button class="delete-btn" onclick="deleteFeedback({{feedback.id}})"><img src="{% static 'icons\delete.svg' %}" alt="">Delete</button>
+            </div>
+            
             {% endif %}
         </div>
         
@@ -31,17 +38,45 @@
 
     
 </div>
+{% empty %}
+<p>No feedbacks to show.</p>
 {% endfor %}
 
 <script>
+    function togglePopup(button) {
+        // Find the popup menu associated with this button
+        const popupMenu = button.nextElementSibling;
+
+        // Toggle the "active" class on the popup menu
+        popupMenu.classList.toggle("active");
+
+        // Close any other open popup menus
+        document.querySelectorAll(".popup-menu").forEach(menu => {
+            if (menu !== popupMenu) {
+                menu.classList.remove("active");
+            }
+        });
+    }
+
+    document.addEventListener("click", function(event) {
+        if (!event.target.closest(".popup-menu") && !event.target.closest(".triple-dot-btn")) {
+            document.querySelectorAll(".popup-menu").forEach(menu => {
+                menu.classList.remove("active");
+            });
+        }
+    });
+
     function resolveFeedback(feedbackId) {
     const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+    const dropdown = document.querySelector(`#display-feedback`);
+    const status = dropdown ? dropdown.value : "show-all";
 
     $.ajax({
         url: `/resolve_feedback/${feedbackId}/`, // Adjust the URL based on your project structure
         type: 'POST',
         data: {
-            csrfmiddlewaretoken: csrfToken
+            csrfmiddlewaretoken: csrfToken,
+            status: status,
         },
         beforeSend: function () {
             $('#feedbacks-container').html('<p>Updating feedbacks...</p>'); // Optional: loading message
@@ -60,6 +95,34 @@
     });
 }
 
+    function deleteFeedback(feedbackId){
+        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+        const dropdown = document.querySelector(`#display-feedback`);
+        const status = dropdown ? dropdown.value : "show-all";
 
+        $.ajax({
+        url: `/delete_feedback/${feedbackId}/`, // Adjust the URL based on your project structure
+        type: 'POST',
+        data: {
+            csrfmiddlewaretoken: csrfToken,
+            status: status,
+        },
+        beforeSend: function () {
+            $('#feedbacks-container').html('<p>deleting feedback...</p>'); // Optional: loading message
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                // Refresh the feedback container with updated feedbacks
+                $('#feedbacks-container').html(response.feedback_html);
+            } else {
+                alert(response.message || 'Failed to resolve feedback.');
+            }
+        },
+        error: function () {
+            alert('An error occurred while resolving the feedback.');
+        }
+    });
+
+    }
 
 </script>

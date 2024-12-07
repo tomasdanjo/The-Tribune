@@ -20,6 +20,7 @@ urlpatterns = [
     path('view_profile/<int:id>',view_profile, name='view_profile'),
     path('filter_feedbacks/<int:id>/',filter_feedbacks, name='filter_feedbacks'),
     path('resolve_feedback/<int:feedback_id>/', resolve_feedback, name='resolve_feedback'),
+     path('delete_feedback/<int:feedback_id>/', delete_feedback, name='delete_feedback'),
 
 
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
