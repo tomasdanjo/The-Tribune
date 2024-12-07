@@ -318,3 +318,30 @@
   box-sizing: border-box;
   overflow-y: hidden; /* Key change: prevents scrollbar */
 }
+
+.dropdown{
+  width: fit-content;
+  margin: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.dropdown select {
+  padding: 10px; /* Add padding */
+  padding-right: 40px; /* Space for icon */
+  border: none;
+  background-color: transparent;
+  font-size: 16px; /* Font size */
+  width: 100%; /* Full width */
+}
+
+.dropdown  select:focus {
+  outline: none;
+}
+
+.dropdown  select option {
+  background-color: #f2f2f2;
+  padding: 10px;
+}

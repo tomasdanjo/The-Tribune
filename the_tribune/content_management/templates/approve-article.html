@@ -111,10 +111,19 @@
       </div>
       <p id="feedback-message"></p> <!-- For success/error messages -->
     </div>
+    
+    <div class="dropdown" data-article-id="{{ article.id }}">
+      <select name="" id="display-feedback" onchange="filter_feedback(this.value)">
+        <option value="show-all">Show all</option>
+        <option value="pending">Pending</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    </div>
+
     <div id="feedbacks-container">
       {% include 'feedback-template.html' %}
     </div>
-    
+
   </div>
 
 </div>
@@ -133,6 +142,39 @@
 {% block scripts %}
 
 <script>
+
+
+  function filter_feedback(selectedStatus) {
+    console.log(selectedStatus);
+   
+    const articleId = document.querySelector('.dropdown').getAttribute('data-article-id');
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    $.ajax({
+        url: `/filter_feedbacks/${articleId}/`, // Dynamically set the URL
+        type: "POST",
+        data: {
+            status: selectedStatus,
+            csrfmiddlewaretoken: csrfToken, // CSRF token for security
+        },
+        beforeSend: function () {
+            $('#feedbacks-container').html('<p>Loading feedback...</p>');
+        },
+        success: function (response) {
+            if (response.status === 'success') {
+                $('#feedbacks-container').html(response.feedback_html);
+            } else {
+                alert('Failed to filter feedback. Please try again.');
+            }
+        },
+        error: function () {
+            alert('An error occurred while fetching feedback. Please try again.');
+        },
+    });
+
+  }
+
+
   function autoResize(textarea) {
     // Reset height to default
     textarea.style.height = '2.5rem';

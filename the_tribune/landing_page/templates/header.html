@@ -6,7 +6,7 @@
                 {% if user.userprofile.is_writer or user.userprofile.is_editor %}
                 <button onclick="openSidebar()" id="sidebar-btn">
                     <div id="button-wrapper">
-                        {% include 'profile-picture.html' %}
+                        {% include 'profile-picture.html' with user=auth_user %}
                         <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
                     </div>
                 </button>

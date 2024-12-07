@@ -60,13 +60,17 @@
   height: fit-content;
 }
 
-#form-profile-container #img-container{
+#img-container{
   border-radius: 50%;
   width: 50px;
   height: 50px;
   flex-shrink: 0;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   border: 1px solid #2a2d33;
+}
+
+#img-container > img{
+  border-radius: 50%;
 }
 
 #form-profile-container .textarea{
@@ -77,6 +81,25 @@
   display: flex;
   gap: 10px;
   justify-content: flex-end;
+}
+
+#feedbacks-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0px;
+}
+
+.feedback-container{
+  display: flex;
+  flex-direction: column;
+  background-color: #DEDEDE;
+  padding: 15px;
+  border-radius: 15px;
+}
+
+.feedback-container .top{
+  display: flex;
 }
 
 

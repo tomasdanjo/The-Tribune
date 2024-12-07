@@ -243,10 +243,13 @@ def approve_article(request,id):
     except UserProfile.DoesNotExist:
         user = None
 
+
+    feedbacks = Feedback.objects.all().filter(article=article)
     context = {
         'article':article,
         'current_date':current_date,
         'auth_user':user,
+        'feedbacks':feedbacks
     }
     return render(request,'approve-article.html',context)
 
@@ -266,7 +269,7 @@ def archive_view(request,id):
         'feedback':feedback,
         'auth_user':user,
         'current_date':current_date,
-        'show_search':True
+        'show_search':True,
     }
 
     return render(request,'archive-view.html',context)
@@ -312,9 +315,10 @@ def submit_feedback(request):
         if article_id and feedback_text:
             article = Article.objects.get(id=article_id)
             feedback = Feedback.objects.create(article=article, editor=request.user.userprofile, comment=feedback_text)
+            feedbacks = Feedback.objects.all().filter(article=article)
         
             # Render the feedback template as a string
-            feedback_html = render(request, 'feedback-template.html', {'article': article}).content.decode('utf-8')
+            feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks},request=request)
             return JsonResponse({'status': 'success','feedback_html':feedback_html})
 
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
@@ -359,3 +363,21 @@ def view_profile(request, id):
     user_profile = get_object_or_404(UserProfile, id=id)
 
     return render(request, 'view_profile.html', {'user_profile': user_profile})
+
+
+def filter_feedbacks(request, id):
+    if request.method == "POST":
+        article = get_object_or_404(Article, id=id)
+        status = request.POST.get("status")
+
+        if status == "show-all":
+            feedbacks = Feedback.objects.filter(article=article)  # Fetch all feedbacks
+        else:
+            feedbacks = Feedback.objects.filter(article=article, status=status)  # Filter by status
+
+        feedback_html = render_to_string(
+            "feedback-template.html", {"feedbacks": feedbacks}, request=request
+        )
+        return JsonResponse({"status": "success", "feedback_html": feedback_html})
+
+    return JsonResponse({"status": "error", "message": "Invalid request method"})

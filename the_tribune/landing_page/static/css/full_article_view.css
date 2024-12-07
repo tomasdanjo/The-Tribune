@@ -393,32 +393,10 @@ hr {
   border-radius: 10px;
 }
 
-#sort-by-container {
-  width: fit-content;
-  margin: 20px 0px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  font-size: 0.9rem;
-}
 
-#sort-by-container select {
-  padding: 10px; /* Add padding */
-  padding-right: 40px; /* Space for icon */
-  border: none;
-  background-color: transparent;
-  font-size: 16px; /* Font size */
-  width: 100%; /* Full width */
-}
 
-#sort-by-container select:focus {
-  outline: none;
-}
 
-#sort-by-container select option {
-  background-color: #f2f2f2;
-  padding: 10px;
-}
+
 
 .comment-group {
   display: flex;
