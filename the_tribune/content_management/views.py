@@ -11,6 +11,54 @@ from datetime import datetime
 from django.template.loader import render_to_string
 
 # from django import form
+def writer_view_profile(request, id):
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    user_profile = get_object_or_404(UserProfile, id=id)
+
+    # Fetch published articles authored by the user
+    articles = Article.objects.filter(writer=user)
+    published_articles = articles.filter(status='published')
+
+    # Render published articles into an HTML string
+    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
+
+    context = {
+        'auth_user': user,
+        'user_profile': user_profile,
+        'articles': articles,
+        'published': published_html,
+    }
+
+    return render(request, 'writer_view_profile.html', context)
+
+def editor_view_profile(request, id):
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    user_profile = get_object_or_404(UserProfile, id=id)
+
+    # Fetch published articles authored by the user
+    articles = Article.objects.filter(editor=user)
+    published_articles = articles.filter(status='published')
+
+    # Render published articles into an HTML string
+    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
+
+    context = {
+        'auth_user': user,
+        'user_profile': user_profile,
+        'articles': articles,
+        'published': published_html,
+    }
+
+    return render(request, 'editor_view_profile.html', context)
+
 
 # Create your views here.
 def writer_dashboard_view(request):
@@ -327,11 +375,7 @@ def update_profile(request,id):
     # Render the template with the form
     return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
 
-def view_profile(request, id):
-    user_profile = get_object_or_404(UserProfile, id=id)
-    
-    return render(request, 'view_profile.html', {'user_profile': user_profile,
-                                                 })
+
 
 def tag_search_view(request):
     query = request.GET.get('search', '')

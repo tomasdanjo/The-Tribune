@@ -339,3 +339,8 @@ def delete_comment(request, comment_id):
         else:
             return JsonResponse({'error': 'You are not authorized to delete this comment.'}, status=403)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+def view_profile(request, id):
+    user_profile = get_object_or_404(UserProfile, id=id)
+    
+    return render(request, 'view_profile.html', {'user_profile': user_profile,})

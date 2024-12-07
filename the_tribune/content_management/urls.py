@@ -17,7 +17,8 @@ urlpatterns = [
     path('submit-feedback/', submit_feedback, name='submit_feedback'),
     path('editor_dashboard/<int:article_id>/', delete_draft, name='delete_draft'),
     path('update_profile/<int:id>',update_profile, name='update_profile'),
-    path('view_profile/<int:id>',view_profile, name='view_profile'),
+    path('writer_view_profile/<int:id>',writer_view_profile, name='writer_view_profile'),
+    path('editor_View_profile/<int:id>',editor_view_profile, name='editor_view_profile'),
     path('tags/', tag_search_view, name='tag-search'),
     # path('editor-dashboard/',editor_dashboard_view,name='editor-dashboard'),
     
