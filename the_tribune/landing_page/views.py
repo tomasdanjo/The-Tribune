@@ -344,3 +344,21 @@ def view_profile(request, id):
     user_profile = get_object_or_404(UserProfile, id=id)
     
     return render(request, 'view_profile.html', {'user_profile': user_profile,})
+
+def about_us(request):
+    return render(request, 'about-us.html')
+
+def mission_statement(request):
+    return render(request, 'mission-us.html')
+
+def ai_guidelines(request):
+    return render(request, 'ai-guidelines.html')
+
+def the_team(request):
+    return render(request, 'the-team.html')
+
+def job_openings(request):
+    return render(request, 'job-opening.html')
+
+def contact_us(request):
+    return render(request, 'contact-us.html')
