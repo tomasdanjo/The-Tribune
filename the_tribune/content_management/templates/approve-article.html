@@ -89,26 +89,32 @@
 
 <div id="main">
   <div id="article-wrapper">
-    
-
     <div>
       {% include 'article-template.html' %}
     </div>
-
-
   </div>
 
   <div id="feedbacks-wrapper">
-    <div id="feedback-wrapper" >
-      <p>Add Feedback</p>
-      <textarea name="feedback" id="feedback-text" placeholder="Enter your feedback here..."></textarea>
-      <div>
-        <button type="button" onclick="clearFeedbackForm()">Cancel</button>
-        <button type="button" onclick="submitFeedback()">Submit Feedback</button>
+    <div>
+      <div id="feedback-form-container">
+        <div id="form-profile-container" class="form-field">
+          {% include 'profile-picture.html' %}
+          <textarea name="feedback" id="feedback-text" placeholder="What do you think?"
+          class="field textarea"
+          ></textarea>
+        </div>
+        
+        <div class="submit-btn-group" style="display: none;">
+          <button type="button" class="submit-btn" onclick="clearFeedbackForm()">Cancel</button>
+          <button type="button" class="submit-btn highlight-btn"  onclick="submitFeedback()">Submit Feedback</button>
+        </div>
       </div>
       <p id="feedback-message"></p> <!-- For success/error messages -->
     </div>
-    {% include 'feedback-template.html' %}
+    <div id="feedbacks-container">
+      {% include 'feedback-template.html' %}
+    </div>
+    
   </div>
 
 </div>
@@ -130,97 +136,128 @@
   function autoResize(textarea) {
     // Reset height to default
     textarea.style.height = '2.5rem';
-    
     // If content exceeds one line, expand
     textarea.style.height = `${textarea.scrollHeight}px`;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
       const textareas = document.querySelectorAll('textarea.textarea');
-      
+      const feedbackTextarea = document.getElementById('feedback-text');
+      const feedbackSubmitGroup = document.querySelector('#feedback-form-container .submit-btn-group');
+      const feedbackMessage = document.getElementById('feedback-message');
+
       textareas.forEach(textarea => {
           // Initial auto-resize
           autoResize(textarea);
-          
+
           // Add event listeners for input and change
           textarea.addEventListener('input', () => autoResize(textarea));
           textarea.addEventListener('change', () => autoResize(textarea));
       });
 
-      const form = document.querySelector('.form-field');
-        const textarea = form.querySelector('textarea[name="archive_reason"]');
-        const archiveButton = form.querySelector('button[type="submit"]');
+      // Toggle visibility of submit-btn-group based on feedback textarea interaction
+      feedbackTextarea.addEventListener('input', () => {
+          if (feedbackTextarea.value.trim()) {
+              feedbackSubmitGroup.style.display = 'flex';
+              feedbackMessage.textContent = ''; // Clear validation message
+          } else {
+              feedbackSubmitGroup.style.display = 'none';
+          }
+      });
 
-        archiveButton.addEventListener('click', function (event) {
-            // Check if the textarea is empty
-            if (textarea.value.trim() === "") {
-                event.preventDefault(); // Prevent form submission
-                alert("Please provide a reason before archiving."); // Display a warning
-                textarea.focus(); // Focus the textarea for user input
-            }
-        });
+      const form = document.querySelector('.form-field');
+      const textarea = form.querySelector('textarea[name="archive_reason"]');
+      const archiveButton = form.querySelector('button[type="submit"]');
+
+      archiveButton.addEventListener('click', function (event) {
+          // Check if the textarea is empty
+          if (textarea.value.trim() === "") {
+              event.preventDefault(); // Prevent form submission
+              alert("Please provide a reason before archiving."); // Display a warning
+              textarea.focus(); // Focus the textarea for user input
+          }
+      });
   });
-  
+
   function showArchiveForm() {
       document.getElementById("archive-form").style.display = "block";
-      hidePublishForm()
-    }
-    function hideArchiveForm() {
+      hidePublishForm();
+  }
+
+  function hideArchiveForm() {
       document.getElementById("archive-form").style.display = "none";
-    }
+  }
 
-    function showPublishForm() {
-        document.getElementById("publish-form").style.display = "block";
-        hideArchiveForm()
-    }
-    function hidePublishForm() {
-        document.getElementById("publish-form").style.display = "none";
-    }
+  function showPublishForm() {
+      document.getElementById("publish-form").style.display = "block";
+      hideArchiveForm();
+  }
 
+  function hidePublishForm() {
+      document.getElementById("publish-form").style.display = "none";
+  }
 
-    function clearFeedbackForm() {
-    $('#feedback-text').val('');
-    $('#feedback-message').text('');
+  function clearFeedbackForm() {
+      const feedbackTextarea = document.getElementById('feedback-text');
+      const feedbackMessage = document.getElementById('feedback-message');
+      const feedbackSubmitGroup = document.querySelector('#feedback-form-container .submit-btn-group');
+
+      feedbackTextarea.value = '';
+      feedbackMessage.textContent = '';
+      feedbackSubmitGroup.style.display = 'none'; // Hide submit buttons after clearing
   }
 
   function submitFeedback() {
-    const feedbackText = $('#feedback-text').val().trim();
-    const articleId = {{ article.id }}; // Assuming article ID is available in context
+      const feedbackTextarea = document.getElementById('feedback-text');
+      const feedbackText = feedbackTextarea.value.trim();
+      const feedbackMessage = document.getElementById('feedback-message');
+      const articleId = {{ article.id }}; // Assuming article ID is available in context
 
-    if (!feedbackText) {
-      $('#feedback-message').text('Please enter feedback before submitting.').addClass('text-red-500');
-      return;
-    }
-
-    $.ajax({
-      url: "{% url 'submit_feedback' %}", // Define this URL in Django to handle feedback
-      type: "POST",
-      data: {
-        feedback: feedbackText,
-        article_id: articleId,
-        csrfmiddlewaretoken: '{{ csrf_token }}' // Ensure CSRF token is included
-      },
-      beforeSend: function() {
-        $('#feedback-message').text('Submitting...').removeClass('text-red-500').addClass('text-gray-500');
-      },
-      success: function(response) {
-        if (response.status === 'success') {
-          $('#feedback-message').text('Feedback submitted successfully!').removeClass('text-red-500').addClass('text-green-500');
-          clearFeedbackForm();
-        } else {
-          $('#feedback-message').text('Error submitting feedback. Please try again.').addClass('text-red-500');
-        }
-        
-        $('#feedbacks-wrapper').html(response.feedback_html);
-          
-          // Clear the textarea after submission
-        $('#feedback-textarea').val('');
-      },
-      error: function() {
-        $('#feedback-message').text('An error occurred. Please try again later.').addClass('text-red-500');
+      // Validate feedback input
+      if (!feedbackText) {
+          feedbackMessage.textContent = 'Please enter feedback before submitting.';
+          feedbackMessage.classList.add('text-red-500');
+          feedbackTextarea.focus(); // Highlight input
+          return;
       }
-    });
+
+      $.ajax({
+          url: "{% url 'submit_feedback' %}", // Define this URL in Django to handle feedback
+          type: "POST",
+          data: {
+              feedback: feedbackText,
+              article_id: articleId,
+              csrfmiddlewaretoken: '{{ csrf_token }}' // Ensure CSRF token is included
+          },
+          beforeSend: function() {
+              feedbackMessage.textContent = 'Submitting...';
+              feedbackMessage.classList.remove('text-red-500');
+              feedbackMessage.classList.add('text-gray-500');
+          },
+          success: function(response) {
+              if (response.status === 'success') {
+                  feedbackMessage.textContent = 'Feedback submitted successfully!';
+                  feedbackMessage.classList.remove('text-red-500');
+                  feedbackMessage.classList.add('text-green-500');
+                  clearFeedbackForm();
+              } else {
+                  feedbackMessage.textContent = 'Error submitting feedback. Please try again.';
+                  feedbackMessage.classList.add('text-red-500');
+              }
+
+              $('#feedbacks-container').html(response.feedback_html);
+
+              // Clear the textarea after submission
+              $('#feedback-text').val('');
+          },
+          error: function() {
+              feedbackMessage.textContent = 'An error occurred. Please try again later.';
+              feedbackMessage.classList.add('text-red-500');
+          }
+      });
   }
 </script>
+
+
 
 {% endblock %}

@@ -24,8 +24,6 @@
   border-radius: 25px;
 }
 
-
-
 #action-group{
   /* width: 80vw; */
   margin: 50px 100px;
@@ -44,6 +42,43 @@
   font-size: 1.2rem;
   padding: 0px 20px;
 }
+
+#form-profile-container{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+#feedback-form-container{
+  padding: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+}
+
+#form-profile-container #img-container{
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2a2d33;
+}
+
+#form-profile-container .textarea{
+  color: #596e9b;
+}
+
+.submit-btn-group{
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
 
 
 

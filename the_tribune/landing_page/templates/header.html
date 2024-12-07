@@ -6,18 +6,9 @@
                 {% if user.userprofile.is_writer or user.userprofile.is_editor %}
                 <button onclick="openSidebar()" id="sidebar-btn">
                     <div id="button-wrapper">
-                        {% if auth_user.profile_picture %}
-                        <div id="img-container">
-                            <img src="{{ auth_user.profile_picture.url }}" alt="Profile Picture">
-                        </div>
-                    
-                    {% else %}
-                        <div id="img-container">
-                            <p>{{ auth_user.first_name|slice:":1" }}.{{ auth_user.last_name|slice:":1" }}.</p>
-                        </div>
-                {% endif %}
-                    <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
-                </div>
+                        {% include 'profile-picture.html' %}
+                        <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
+                    </div>
                 </button>
                 {% else %}
                 <button onclick="openSidebar()">
