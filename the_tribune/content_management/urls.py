@@ -14,7 +14,9 @@ urlpatterns = [
     path('articles/<int:article_id>/archive/', archive_article, name='archive_article'),
     path('archive/<int:id>', archive_view, name='archive'),
     path('publish_article/<int:id>', publish_article, name='publish_article'),
-    path('submit-feedback/', submit_feedback, name='submit_feedback'),
+    path('submit_feedback/<int:article_id>/', submit_feedback, name='submit_feedback'),
+
+
     path('editor_dashboard/<int:article_id>/', delete_draft, name='delete_draft'),
     path('update_profile/<int:id>',update_profile, name='update_profile'),
     path('view_profile/<int:id>',view_profile, name='view_profile'),
@@ -22,6 +24,7 @@ urlpatterns = [
     path('resolve_feedback/<int:feedback_id>/', resolve_feedback, name='resolve_feedback'),
     path('delete_feedback/<int:feedback_id>/', delete_feedback, name='delete_feedback'),
     path('feedback/update/<int:feedback_id>/', update_feedback, name='update_feedback'),
+    path('reply/add/<int:feedback_id>/', add_reply, name='add_reply'),
 
 
 

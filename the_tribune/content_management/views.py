@@ -317,14 +317,14 @@ def publish_article(request, id):
 
 
 @csrf_exempt  # Use this decorator if needed, or include CSRF middleware for this view
-def submit_feedback(request):
+def submit_feedback(request, article_id):
     user = None
     try:
         user = UserProfile.objects.get(user_credentials=request.user)
     except UserProfile.DoesNotExist:
         user = None
     if request.method == 'POST':
-        article_id = request.POST.get('article_id')
+        article_id = article_id
         feedback_text = request.POST.get('feedback')
 
         if article_id and feedback_text:
@@ -503,3 +503,34 @@ def update_feedback(request, feedback_id):
         feedback.save()
         return JsonResponse({"success": True})
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=400)
+
+
+
+
+@csrf_exempt  # Use CSRF token in production for security
+def add_reply(request, feedback_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        reply_text = data.get('reply')
+
+        if not reply_text:
+            return JsonResponse({'success': False, 'error': 'Reply text is required'}, status=400)
+
+        feedback = Feedback.objects.get(id=feedback_id)
+        reply = Reply.objects.create(
+            feedback=feedback,
+            author=request.user.userprofile,  # Assuming the user is authenticated
+            reply=reply_text
+        )
+
+        # Retrieve all replies for the feedback to update the UI
+        replies = Reply.objects.filter(feedback=feedback)
+        replies_html = render_to_string('replies-template.html', {'replies': replies},request=request)
+
+        response_data = {
+            'success': True,
+            'replies_html': replies_html,
+        }
+        return JsonResponse(response_data)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)

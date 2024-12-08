@@ -1,0 +1,19 @@
+{% for reply in replies %}
+        <div class="reply-container">
+            <div class="top">
+                <div class="left"> 
+                    {% include 'profile-picture.html' with user=reply.author %}
+                    <div>
+                        <a href="{% url 'view_profile' reply.author.id %}"><h2>{{ reply.author.first_name }} {{ reply.author.last_name }}</h2></a>
+                        <p class="created-at">{{ reply.created_at }}</p>
+                        
+                    </div>
+                </div>
+
+            </div>
+            <div class="body-container" id="body-container-{{ reply.id }}">
+                <p>{{ reply.reply }}</p>
+            </div>
+
+        </div>
+{% endfor %}

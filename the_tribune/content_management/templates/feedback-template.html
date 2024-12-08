@@ -1,6 +1,6 @@
 {% load static %}
 {% for feedback in feedbacks %}
-<div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}">
+<div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}" onclick="showReplyForm(event)" id="feedback-container-{{feedback.id}}">
     <div class="top">
         <div class="left"> 
             {% include 'profile-picture.html' with user=feedback.editor %}
@@ -16,11 +16,11 @@
                 <button class="submit-btn" onclick="resolveFeedback({{feedback.id}})"><img src="{% static 'icons\check.svg' %}" alt=""></button>
             {% endif %}
             {% if auth_user == feedback.editor %}
-            <button class="submit-btn triple-dot-btn" onclick="togglePopup(this)">
+            <button class="submit-btn triple-dot-btn" onclick="togglePopup(this,event)">
                 <img src="{% static 'icons/triple-dot.svg' %}" alt="">
             </button>
             <div class="popup-menu">
-                <button class="edit-btn" onclick="editFeedback({{feedback.id}})"><img src="{% static 'icons\edit-feedback.svg' %}" alt="">Edit</button>
+                <button class="edit-btn" onclick="editFeedback({{feedback.id}},event)"><img src="{% static 'icons\edit-feedback.svg' %}" alt="">Edit</button>
                 <button class="delete-btn" onclick="deleteFeedback({{feedback.id}})"><img src="{% static 'icons\delete.svg' %}" alt="">Delete</button>
             </div>
             
@@ -32,8 +32,19 @@
     <div class="body-container" id="body-container-{{ feedback.id }}">
         <p>{{feedback.comment}}</p>
     </div>
-    <div class="replies-container">
 
+    <div class="reply-container">
+        {% include 'replies-template.html' with replies=feedback.replies.all %}
+    </div>
+
+    <div class="replies-container">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <textarea name="" id="" class="field textarea" placeholder="Reply"></textarea>
+        <div class="submit-btn-group">
+            <button class="submit-btn" onclick="hideRepliesContainer(event)">Cancel</button> 
+            <button class="submit-btn highlight-btn" onclick="addreply({{feedback.id}})">Reply</button>
+        </div>
+        
     </div>
 
     
@@ -42,163 +53,5 @@
 <p>No feedbacks to show.</p>
 {% endfor %}
 
-<script>
-     function autoResize(textarea) {
-    // Reset height to default
-    textarea.style.height = '2.5rem';
-    // If content exceeds one line, expand
-    textarea.style.height = `${textarea.scrollHeight}px`;
-  }
-
-
-
-
-    function togglePopup(button) {
-        // Find the popup menu associated with this button
-        const popupMenu = button.nextElementSibling;
-
-        // Toggle the "active" class on the popup menu
-        popupMenu.classList.toggle("active");
-
-        // Close any other open popup menus
-        document.querySelectorAll(".popup-menu").forEach(menu => {
-            if (menu !== popupMenu) {
-                menu.classList.remove("active");
-            }
-        });
-    }
-
-    document.addEventListener("click", function(event) {
-        if (!event.target.closest(".popup-menu") && !event.target.closest(".triple-dot-btn")) {
-            document.querySelectorAll(".popup-menu").forEach(menu => {
-                menu.classList.remove("active");
-            });
-        }
-    });
-
-    function resolveFeedback(feedbackId) {
-    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-    const dropdown = document.querySelector(`#display-feedback`);
-    const status = dropdown ? dropdown.value : "show-all";
-
-    $.ajax({
-        url: `/resolve_feedback/${feedbackId}/`, // Adjust the URL based on your project structure
-        type: 'POST',
-        data: {
-            csrfmiddlewaretoken: csrfToken,
-            status: status,
-        },
-        beforeSend: function () {
-            $('#feedbacks-container').html('<p>Updating feedbacks...</p>'); // Optional: loading message
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                // Refresh the feedback container with updated feedbacks
-                $('#feedbacks-container').html(response.feedback_html);
-            } else {
-                alert(response.message || 'Failed to resolve feedback.');
-            }
-        },
-        error: function () {
-            alert('An error occurred while resolving the feedback.');
-        }
-    });
-}
-
-    function deleteFeedback(feedbackId){
-        const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
-        const dropdown = document.querySelector(`#display-feedback`);
-        const status = dropdown ? dropdown.value : "show-all";
-
-        $.ajax({
-        url: `/delete_feedback/${feedbackId}/`, // Adjust the URL based on your project structure
-        type: 'POST',
-        data: {
-            csrfmiddlewaretoken: csrfToken,
-            status: status,
-        },
-        beforeSend: function () {
-            $('#feedbacks-container').html('<p>deleting feedback...</p>'); // Optional: loading message
-        },
-        success: function (response) {
-            if (response.status === 'success') {
-                // Refresh the feedback container with updated feedbacks
-                $('#feedbacks-container').html(response.feedback_html);
-            } else {
-                alert(response.message || 'Failed to resolve feedback.');
-            }
-        },
-        error: function () {
-            alert('An error occurred while resolving the feedback.');
-        }
-    });
-
-    }
-
-    function editFeedback(feedbackId) {
-    const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
-    const originalComment = bodyContainer.querySelector("p").textContent;
-
-    // Replace the body container content with a textarea and save/cancel buttons
-    bodyContainer.innerHTML = `
-        <textarea id="edit-textarea-${feedbackId}" class="textarea field edit-textarea">${originalComment}</textarea>
-        <div class="edit-actions submit-btn-group">
-            <button class="cancel-btn submit-btn" onclick="cancelEdit(${feedbackId}, '${originalComment}')">Cancel</button>
-            <button class="save-btn submit-btn highlight-btn" onclick="saveFeedback(${feedbackId})">Save</button>
-        </div>
-    `;
-
-    bodyContainer.classList.add('edit-active');
-
-    const textareas = document.querySelectorAll('textarea.textarea');
-    const feedbackTextarea = document.getElementById('feedback-text');
-    const feedbackSubmitGroup = document.querySelector('#feedback-form-container .submit-btn-group');
-    const feedbackMessage = document.getElementById('feedback-message');
-
-    textareas.forEach(textarea => {
-        // Initial auto-resize
-        autoResize(textarea);
-
-        // Add event listeners for input and change
-        textarea.addEventListener('input', () => autoResize(textarea));
-        textarea.addEventListener('change', () => autoResize(textarea));
-    });
-
-
-}
-
-function saveFeedback(feedbackId) {
-    const textarea = document.getElementById(`edit-textarea-${feedbackId}`);
-    const updatedComment = textarea.value;
-
-    // Send an AJAX request to update the feedback on the server
-    fetch(`/feedback/update/${feedbackId}/`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value,
-        },
-        body: JSON.stringify({ comment: updatedComment }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Update the UI with the new comment
-            const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
-            bodyContainer.innerHTML = `<p>${updatedComment}</p>`;
-            bodyContainer.classList.remove('edit-active');
-        } else {
-            alert("Failed to update feedback.");
-        }
-    })
-    .catch(error => console.error("Error:", error));
-}
-
-function cancelEdit(feedbackId, originalComment) {
-    // Restore the original comment
-    const bodyContainer = document.getElementById(`body-container-${feedbackId}`);
-    bodyContainer.innerHTML = `<p>${originalComment}</p>`;
-    bodyContainer.classList.remove('edit-active');
-}
-
-</script>
+{% load static %}
+<script src="{% static 'js\feedback.js' %}"></script>
