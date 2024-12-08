@@ -222,7 +222,7 @@
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
 
-.feedback-container .edit-active .submit-btn{
+.edit-active .submit-btn{
   border-radius: 15px;
   width: fit-content;
   padding: 5px 10px;

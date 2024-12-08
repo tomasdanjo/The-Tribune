@@ -1,5 +1,6 @@
+{% load static %}
 {% for reply in replies %}
-        <div class="reply-container">
+        <div class="reply-container" id="reply-container-{{ reply.id }}">
             <div class="top">
                 <div class="left"> 
                     {% include 'profile-picture.html' with user=reply.author %}
@@ -10,8 +11,21 @@
                     </div>
                 </div>
 
+                <div class="actions-btn submit-btn-group">
+                  {% if auth_user == reply.author %}
+                  <button class="submit-btn triple-dot-btn" onclick="togglePopup(this,event)">
+                      <img src="{% static 'icons\triple-dot.svg' %}" alt="">
+                  </button>
+                  <div class="popup-menu">
+                      <button class="edit-btn" onclick="editReply({{reply.id}},event)"><img src="{% static 'icons\edit-feedback.svg' %}" alt="">Edit</button>
+                      <button class="delete-btn" onclick="deleteReply({{reply.id}})"><img src="{% static 'icons\delete.svg' %}" alt="">Delete</button>
+                  </div>
+                  
+                  {% endif %}
+              </div>
+
             </div>
-            <div class="body-container" id="body-container-{{ reply.id }}">
+            <div class="body-container" id="reply-body-container-{{ reply.id }}">
                 <p>{{ reply.reply }}</p>
             </div>
 

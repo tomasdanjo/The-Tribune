@@ -25,6 +25,8 @@ urlpatterns = [
     path('delete_feedback/<int:feedback_id>/', delete_feedback, name='delete_feedback'),
     path('feedback/update/<int:feedback_id>/', update_feedback, name='update_feedback'),
     path('reply/add/<int:feedback_id>/', add_reply, name='add_reply'),
+    path('reply/update/<int:reply_id>/', update_reply, name='update_reply'),
+    path('delete_reply/<int:reply_id>/', delete_reply, name='delete_reply'),
 
 
 

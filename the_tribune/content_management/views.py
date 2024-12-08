@@ -509,6 +509,12 @@ def update_feedback(request, feedback_id):
 
 @csrf_exempt  # Use CSRF token in production for security
 def add_reply(request, feedback_id):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None
+
     if request.method == 'POST':
         data = json.loads(request.body)
         reply_text = data.get('reply')
@@ -525,7 +531,7 @@ def add_reply(request, feedback_id):
 
         # Retrieve all replies for the feedback to update the UI
         replies = Reply.objects.filter(feedback=feedback)
-        replies_html = render_to_string('replies-template.html', {'replies': replies},request=request)
+        replies_html = render_to_string('replies-template.html', {'replies': replies,'auth_user':user},request=request)
 
         response_data = {
             'success': True,
@@ -534,3 +540,37 @@ def add_reply(request, feedback_id):
         return JsonResponse(response_data)
 
     return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt  # Remove this decorator if you want CSRF protection
+def update_reply(request, reply_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        updated_reply_text = data.get('reply')
+
+        if not updated_reply_text:
+            return JsonResponse({'success': False, 'error': 'Reply text is required'}, status=400)
+
+        try:
+            reply = Reply.objects.get(id=reply_id)
+            # Ensure the current user is allowed to edit this reply
+            if request.user == reply.author.user_credentials:
+                reply.reply = updated_reply_text
+                reply.save()
+                return JsonResponse({'success': True, 'reply': updated_reply_text})
+            else:
+                return JsonResponse({'success': False, 'error': 'Permission denied'}, status=403)
+        except Reply.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Reply not found'}, status=404)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
+def delete_reply(request, reply_id):
+    if request.method == "POST":
+        try:
+            reply = Reply.objects.get(id=reply_id)
+            reply.delete()
+            return JsonResponse({"status": "success"})  # Match "status" with your JS logic
+        except Reply.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Reply not found."})
+    return JsonResponse({"status": "error", "message": "Invalid request method."})

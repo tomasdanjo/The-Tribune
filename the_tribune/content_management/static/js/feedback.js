@@ -21,6 +21,30 @@ function togglePopup(button,event) {
       container.style.display = "none";
     }
   });
+
+  document.querySelectorAll(".edit-active").forEach((activeContainer) => {
+    const textarea = activeContainer.querySelector("textarea");
+    if (textarea) {
+      const originalContent = textarea.getAttribute("data-original-content");
+      if (originalContent) {
+        // Determine if it's a reply or feedback based on its ID
+        const isReply = textarea.id.startsWith("reply-edit-textarea-");
+        if (isReply) {
+          const replyID = textarea.id.split("-")[3];
+          activeContainer.innerHTML = `
+            <p>${originalContent}</p>
+          `;
+        } else {
+          const feedbackID = textarea.id.split("-")[2];
+          activeContainer.innerHTML = `
+            <p>${originalContent}</p>
+          `;
+        }
+        activeContainer.classList.remove("edit-active");
+      }
+    }
+  });
+
 }
 
 
@@ -126,7 +150,7 @@ function editFeedback(feedbackId,event) {
 
   // Replace the body container content with a textarea and save/cancel buttons
   bodyContainer.innerHTML = `
-        <textarea id="edit-textarea-${feedbackId}" class="textarea field edit-textarea">${originalComment}</textarea>
+        <textarea id="edit-textarea-${feedbackId}" class="textarea field edit-textarea" data-original-content="${originalComment}">${originalComment}</textarea>
         <div class="edit-actions submit-btn-group">
             <button class="cancel-btn submit-btn" onclick="cancelEdit(${feedbackId}, '${originalComment}')">Cancel</button>
             <button class="save-btn submit-btn highlight-btn" onclick="saveFeedback(${feedbackId},event)">Save</button>
@@ -197,6 +221,9 @@ function saveFeedback(feedbackId, event) {
 
   remove_injected_Attr(); // Ensure this function is defined to remove any injected styles or attributes
 }
+
+
+
  
 function cancelEdit(feedbackId, originalComment) {
   // Restore the original comment
@@ -352,4 +379,134 @@ function addreply(feedbackId) {
     }
   });
 }
+
+function editReply(replyID, event) {
+  event.stopPropagation();
+  console.log('clicked');
+
+  const bodyContainer = document.getElementById(`reply-body-container-${replyID}`);
+  const originalReply = bodyContainer.querySelector("p").textContent;
+  const replyContainer = document.getElementById(`reply-body-container-${replyID}`).closest(".reply-container");
+
+  const repliesContainer = replyContainer.querySelector(".replies-container");
+  if (repliesContainer) {
+    repliesContainer.style.display = "none";
+  }
+
+  // Replace the body container content with a textarea and save/cancel buttons
+  bodyContainer.innerHTML = `
+        <textarea id="reply-edit-textarea-${replyID}" class="textarea field edit-textarea" data-original-content='${originalReply}'">${originalReply}</textarea>
+        <div class="edit-actions submit-btn-group">
+            <button class="cancel-btn submit-btn" onclick="cancelReplyEdit(${replyID}, '${originalReply}')">Cancel</button>
+            <button class="save-btn submit-btn highlight-btn" onclick="saveReplyEdit(${replyID}, event)">Save</button>
+        </div>
+  `;
+
+  bodyContainer.classList.add("edit-active");
+
+  // Attach auto-resize functionality to the textarea
+  const textarea = document.getElementById(`reply-edit-textarea-${replyID}`);
+  autoResize(textarea);
+
+  // Add event listeners for input and change to auto-resize the textarea
+  textarea.addEventListener("input", () => autoResize(textarea));
+  textarea.addEventListener("change", () => autoResize(textarea));
+
+  textarea.addEventListener('click', (e) => {
+    e.stopPropagation(); // Prevents event from propagating up to parent elements
+    if (repliesContainer) {
+      repliesContainer.style.display = "none"; // Keeps replies container hidden
+    }
+  });
+
+  // Function to auto-resize the textarea
+  function autoResize(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = (textarea.scrollHeight) + 'px';
+  }
+}
+
+function cancelReplyEdit(replyID, originalReply) {
+  // Restore the original reply content
+  const bodyContainer = document.getElementById(`reply-body-container-${replyID}`);
+  bodyContainer.innerHTML = `<p>${originalReply}</p>`;
+  bodyContainer.classList.remove("edit-active");
+
+  const replyContainer = bodyContainer.closest('.reply-container');
+  const popupBtn = replyContainer.querySelector('.triple-dot-btn');
+  if (popupBtn) {
+    togglePopup(popupBtn, event);
+  }
+}
+
+function saveReplyEdit(replyID, event) {
+  event.stopPropagation();
+  const textarea = document.getElementById(`reply-edit-textarea-${replyID}`);
+  const updatedReply = textarea.value;
+
+  // Send an AJAX request to update the reply on the server
+  fetch(`/reply/update/${replyID}/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+    },
+    body: JSON.stringify({ reply: updatedReply }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        // Update the UI with the new reply
+        const bodyContainer = document.getElementById(`reply-body-container-${replyID}`);
+        bodyContainer.innerHTML = `<p>${updatedReply}</p>`;
+        bodyContainer.classList.remove("edit-active");
+
+        // Hide the popup menu after saving
+        const replyContainer = bodyContainer.closest('.reply-container');
+        const popupBtn = replyContainer.querySelector('.triple-dot-btn');
+        if (popupBtn) {
+          togglePopup(popupBtn, event);
+        }
+      } else {
+        alert("Failed to update reply.");
+      }
+    })
+    .catch((error) => console.error("Error:", error));
+
+  remove_injected_Attr(); // Ensure this function is defined to remove any injected styles or attributes
+}
+
+
+function deleteReply(replyId) {
+  const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+  $.ajax({
+    url: `/delete_reply/${replyId}/`, // Adjust the URL based on your project structure
+    type: "POST",
+    data: {
+      csrfmiddlewaretoken: csrfToken,
+    },
+    beforeSend: function () {
+      $(`#reply-container-${replyId}`).html("<p>Deleting reply...</p>"); // Optional: loading message
+    },
+    success: function (response) {
+      if (response.status === "success") {
+        // Remove the reply container from the DOM
+        $(`#reply-container-${replyId}`).remove();
+      } else {
+        alert(response.message);
+      }
+    },
+    error: function () {
+      alert("An error occurred while deleting the reply.");
+    },
+  });
+}
+
+
+
+
+
+
+
 
