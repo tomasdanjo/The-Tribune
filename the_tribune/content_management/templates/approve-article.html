@@ -6,94 +6,132 @@
 
 {% block style %}
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/archive.css' %}"> 
 
 {% endblock %}
 
 {% block content %}
 
-<div style="display: flex; justify-self: center; justify-content: center;">
-  <div>
-    {% include 'article-template.html' %}
-  </div>
-
-  <!-- Feedback Section -->
-  <div id="feedback-wrapper" class="w-full max-w-sm bg-white p-6 rounded-lg shadow-lg">
-    <p class="text-lg font-semibold mb-4">Add Feedback</p>
-    <textarea name="feedback" id="feedback-text" class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Enter your feedback here..."></textarea>
-    <div class="mt-4 flex justify-end space-x-2">
-      <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400" onclick="clearFeedbackForm()">Cancel</button>
-      <button type="button" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700" onclick="submitFeedback()">Submit Feedback</button>
+{% include 'header.html' %}
+<div id="action-group">
+  <div class="btn-group">
+    <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
+  
+    <div class="submit-btn-group">
+      <button onclick="showArchiveForm()" class="submit-btn">
+          Archive
+      </button>
+  
+      <button onclick="showPublishForm()" class="submit-btn highlight-btn">
+          Publish
+      </button>
     </div>
-    <p id="feedback-message" class="text-sm mt-2"></p> <!-- For success/error messages -->
+        
   </div>
-</div>
-
-<div id="feedbacks-wrapper">
-  {% include 'feedback-template.html' %}
-</div>
-
-
-  <div class="space-x-4 mb-4">
-    <button 
-        onclick="showArchiveForm()" 
-        class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
-    >
-        Archive
-    </button>
-
-    <button 
-        onclick="showPublishForm()" 
-        class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
-    >
-        Publish
-    </button>
-</div>
-
-<div id="archive-form" style="display: none;" class="bg-white p-4 border rounded-lg shadow-md mb-4">
-    <form method="post" action="{% url 'archive_article' article.id %}">
-        {% csrf_token %}
-        <textarea 
-            name="archive_reason" 
-            placeholder="Please provide a reason" 
-            class="w-full p-2 border border-gray-300 rounded mb-2"
-        ></textarea>
-        <p class="text-gray-600 mb-2">Please provide a reason</p>
-        <button 
+  
+  <div class="form-group">
+    <div id="archive-form" style="display: none;" class="form">
+      <form method="post" action="{% url 'archive_article' article.id %}" class="form-field">
+          {% csrf_token %}
+          <textarea 
+              name="archive_reason" 
+              placeholder="Please provide a reason" 
+              class="field textarea"
+              cols="40" rows="10"
+          ></textarea>
+          <div class="submit-btn-group">
+            <button 
             type="button" 
             onclick="hideArchiveForm()" 
-            class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400 transition duration-200"
+            class="submit-btn"
         >
             Cancel
         </button>
         <button 
             type="submit" 
-            class="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600 transition duration-200"
+            class="submit-btn highlight-btn"
         >
             Archive
         </button>
-    </form>
+          </div>
+          
+      </form>
+  </div>
+  
+  <div id="publish-form" style="display: none;" class="form">
+      <form method="post" action="{% url 'publish_article' article.id %}">
+          {% csrf_token %}
+          <p>Are you sure you want to publish this article?</p>
+          <div class="submit-btn-group">
+            <button 
+              type="button" 
+              onclick="hidePublishForm()" 
+              class="submit-btn"
+          >
+              Cancel
+          </button>
+          <button 
+              type="submit" 
+              class="submit-btn highlight-btn"
+          >
+              Publish
+          </button>
+          </div>
+          
+      </form>
+  </div>
+  
+  </div>
 </div>
 
-<div id="publish-form" style="display: none;" class="bg-white p-4 border rounded-lg shadow-md mb-4">
-    <form method="post" action="{% url 'publish_article' article.id %}">
-        {% csrf_token %}
-        <p class="mb-2">Are you sure you want to publish this article?</p>
-        <button 
-            type="button" 
-            onclick="hidePublishForm()" 
-            class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded hover:bg-gray-400 transition duration-200"
-        >
-            Cancel
-        </button>
-        <button 
-            type="submit" 
-            class="bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600 transition duration-200"
-        >
-            Publish
-        </button>
-    </form>
+
+<div id="main">
+  <div id="article-wrapper">
+    <div>
+      {% include 'article-template.html' %}
+    </div>
+  </div>
+
+  <div id="feedbacks-wrapper">
+    <div>
+      <div id="feedback-form-container">
+        <div id="form-profile-container" class="form-field">
+          {% include 'profile-picture.html' with user=auth_user %}
+          <textarea name="feedback" id="feedback-text" placeholder="What do you think?"
+          class="field textarea"
+          ></textarea>
+        </div>
+        
+        <div class="submit-btn-group" style="display: none;">
+          <button type="button" class="submit-btn" onclick="clearFeedbackForm()">Cancel</button>
+          <button type="button" class="submit-btn highlight-btn"  onclick="submitFeedback({{ article.id }})">Submit Feedback</button>
+        </div>
+      </div>
+      <p id="feedback-message"></p> <!-- For success/error messages -->
+    </div>
+    
+    <div class="dropdown" data-article-id="{{ article.id }}">
+      <select name="" id="display-feedback" onchange="filter_feedback(this.value)">
+        <option value="show-all">Show all</option>
+        <option value="pending">Pending</option>
+        <option value="resolved">Resolved</option>
+      </select>
+    </div>
+
+    <div id="feedbacks-container">
+      {% include 'feedback-template.html' %}
+    </div>
+
+  </div>
+
 </div>
+
+
+
+
+
 
 
 
@@ -103,67 +141,8 @@
 
 {% block scripts %}
 
-<script>
-  function showArchiveForm() {
-      document.getElementById("archive-form").style.display = "block";
-      hidePublishForm()
-    }
-    function hideArchiveForm() {
-      document.getElementById("archive-form").style.display = "none";
-    }
+<script src="{% static 'js\approve-article.js' %}">
 
-    function showPublishForm() {
-        document.getElementById("publish-form").style.display = "block";
-        hideArchiveForm()
-    }
-    function hidePublishForm() {
-        document.getElementById("publish-form").style.display = "none";
-    }
-
-
-    function clearFeedbackForm() {
-    $('#feedback-text').val('');
-    $('#feedback-message').text('');
-  }
-
-  function submitFeedback() {
-    const feedbackText = $('#feedback-text').val().trim();
-    const articleId = {{ article.id }}; // Assuming article ID is available in context
-
-    if (!feedbackText) {
-      $('#feedback-message').text('Please enter feedback before submitting.').addClass('text-red-500');
-      return;
-    }
-
-    $.ajax({
-      url: "{% url 'submit_feedback' %}", // Define this URL in Django to handle feedback
-      type: "POST",
-      data: {
-        feedback: feedbackText,
-        article_id: articleId,
-        csrfmiddlewaretoken: '{{ csrf_token }}' // Ensure CSRF token is included
-      },
-      beforeSend: function() {
-        $('#feedback-message').text('Submitting...').removeClass('text-red-500').addClass('text-gray-500');
-      },
-      success: function(response) {
-        if (response.status === 'success') {
-          $('#feedback-message').text('Feedback submitted successfully!').removeClass('text-red-500').addClass('text-green-500');
-          clearFeedbackForm();
-        } else {
-          $('#feedback-message').text('Error submitting feedback. Please try again.').addClass('text-red-500');
-        }
-        
-        $('#feedbacks-wrapper').html(response.feedback_html);
-          
-          // Clear the textarea after submission
-        $('#feedback-textarea').val('');
-      },
-      error: function() {
-        $('#feedback-message').text('An error occurred. Please try again later.').addClass('text-red-500');
-      }
-    });
-  }
 </script>
 
 {% endblock %}

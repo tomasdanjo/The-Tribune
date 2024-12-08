@@ -86,7 +86,7 @@
 
             <!-- Photo Field -->
             <div class="form-field">
-                <label for="{{ photo_form.photo.id_for_label }}"><img src="{% static 'icons\photo.svg' %}" alt="">Upload Photo</label>
+                <label for="{{ photo_form.photo.id_for_label }}"><img src="{% static 'icons\photo.svg' %}" alt="">Photo</label>
                 {{ photo_form.photo }}
                 {% if photo_form.photo.errors %}
                 <div class="text-red-500 text-xs italic mt-1">{{ photo_form.photo.errors }}</div>

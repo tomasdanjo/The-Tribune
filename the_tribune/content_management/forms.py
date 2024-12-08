@@ -75,7 +75,7 @@ class Photo_Form(forms.ModelForm):
         ]
         widgets = {
             'photo': CustomClearableFileInput(attrs={
-                'class': 'custom-file-input',
+                'class': 'custom-file-input select-field',
                 'accept': 'image/*'
             }),
             'caption': forms.Textarea(attrs={

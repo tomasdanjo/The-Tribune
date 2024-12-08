@@ -1,7 +1,57 @@
-{% for feedback in article.feedbacks.all %}
-    <div class="border rounded-lg p-4 mb-4 shadow-md bg-white">
-        <p class="font-semibold text-gray-800">Feedback by {{ feedback.editor.first_name }} {{ feedback.editor.last_name }}:</p>
-        <p class="text-gray-700 mt-1">{{ feedback.comment }}</p>
-        <p class="text-sm text-gray-500 mt-2">Status: <span class="font-medium text-gray-900">{{ feedback.status }}</span></p>
+{% load static %}
+{% for feedback in feedbacks %}
+<div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}" onclick="showReplyForm(event)" id="feedback-container-{{feedback.id}}">
+    <div class="top">
+        <div class="left"> 
+            {% include 'profile-picture.html' with user=feedback.editor %}
+            <div>
+                <a href="{% url 'view_profile' feedback.editor.id %}"><h2>{{ feedback.editor.first_name }} {{ feedback.editor.last_name }}</h2></a>
+                
+                <p class="created-at">{{ feedback.created_at }}</p>
+            </div>
+        </div>
+
+        <div class="actions-btn submit-btn-group">
+            {% if feedback.status != 'resolved' %}
+                <button class="submit-btn" onclick="resolveFeedback({{feedback.id}})"><img src="{% static 'icons\check.svg' %}" alt=""></button>
+            {% endif %}
+            {% if auth_user == feedback.editor %}
+            <button class="submit-btn triple-dot-btn" onclick="togglePopup(this,event)">
+                <img src="{% static 'icons/triple-dot.svg' %}" alt="">
+            </button>
+            <div class="popup-menu">
+                <button class="edit-btn" onclick="editFeedback({{feedback.id}},event)"><img src="{% static 'icons\edit-feedback.svg' %}" alt="">Edit</button>
+                <button class="delete-btn" onclick="deleteFeedback({{feedback.id}})"><img src="{% static 'icons\delete.svg' %}" alt="">Delete</button>
+            </div>
+            
+            {% endif %}
+        </div>
+        
+
     </div>
+    <div class="body-container" id="body-container-{{ feedback.id }}">
+        <p>{{feedback.comment}}</p>
+    </div>
+
+    <div class="reply-container">
+        {% include 'replies-template.html' with replies=feedback.replies.all %}
+    </div>
+
+    <div class="replies-container">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <textarea name="" id="" class="field textarea" placeholder="Reply"></textarea>
+        <div class="submit-btn-group">
+            <button class="submit-btn" onclick="hideRepliesContainer(event)">Cancel</button> 
+            <button class="submit-btn highlight-btn" onclick="addreply({{feedback.id}})">Reply</button>
+        </div>
+        
+    </div>
+
+    
+</div>
+{% empty %}
+<p>No feedbacks to show.</p>
 {% endfor %}
+
+{% load static %}
+<script src="{% static 'js\feedback.js' %}"></script>

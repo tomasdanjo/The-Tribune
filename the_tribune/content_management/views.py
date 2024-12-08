@@ -9,6 +9,8 @@ from django.http import JsonResponse
 from .forms import ProfilePictureForm,ProfileBiographyForm
 from datetime import datetime
 from django.template.loader import render_to_string
+from .models import Feedback
+import json
 
 # from django import form
 def writer_view_profile(request, id):
@@ -284,13 +286,51 @@ def edit_article(request, id):
 
 def approve_article(request,id):
     article = get_object_or_404(Article,id=id)
-    return render(request,'approve-article.html',{'article':article})
+    current_date = datetime.now().strftime('%b %d, %Y')
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+
+    feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            )
+    
+    context = {
+        'article':article,
+        'current_date':current_date,
+        'auth_user':user,
+        'feedbacks':feedbacks
+    }
+    return render(request,'approve-article.html',context)
 
 def archive_view(request,id):
     article = get_object_or_404(Article,id=id)
     feedback = Feedback.objects.filter(article=article)
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+    
+    current_date = datetime.now().strftime('%b %d, %Y')
 
-    return render(request,'archive-view.html',{'article':article,'feedback':feedback})
+    context = {
+        'article':article,
+        'feedback':feedback,
+        'auth_user':user,
+        'current_date':current_date,
+        'show_search':True,
+    }
+
+    return render(request,'archive-view.html',context)
 
 def archive_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
@@ -325,17 +365,30 @@ def publish_article(request, id):
 
 
 @csrf_exempt  # Use this decorator if needed, or include CSRF middleware for this view
-def submit_feedback(request):
+def submit_feedback(request, article_id):
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
     if request.method == 'POST':
-        article_id = request.POST.get('article_id')
+        article_id = article_id
         feedback_text = request.POST.get('feedback')
 
         if article_id and feedback_text:
             article = Article.objects.get(id=article_id)
             feedback = Feedback.objects.create(article=article, editor=request.user.userprofile, comment=feedback_text)
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            ) # Fetch all feedbacks
         
             # Render the feedback template as a string
-            feedback_html = render(request, 'feedback-template.html', {'article': article}).content.decode('utf-8')
+            feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks,'auth_user':user},request=request)
             return JsonResponse({'status': 'success','feedback_html':feedback_html})
 
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
@@ -376,6 +429,7 @@ def update_profile(request,id):
     return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
 
 
+<<<<<<< HEAD
 
 def tag_search_view(request):
     query = request.GET.get('search', '')
@@ -387,3 +441,195 @@ def tag_search_view(request):
         articles = Article.objects.none()  
 
     return render(request, 'tag-search.html', {'tags': tags, 'articles': articles, 'query': query})
+=======
+    return render(request, 'view_profile.html', {'user_profile': user_profile})
+
+
+def filter_feedbacks(request, id):
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    if request.method == "POST":
+        article = get_object_or_404(Article, id=id)
+        status = request.POST.get("status")
+
+        if status == "show-all":
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain the ordering by date within each status group
+            ) # Fetch all feedbacks
+        else:
+            feedbacks = Feedback.objects.filter(article=article, status=status)  # Filter by status
+
+        feedback_html = render_to_string(
+            "feedback-template.html", {"feedbacks": feedbacks,'auth_user':user}, request=request
+        )
+        return JsonResponse({"status": "success", "feedback_html": feedback_html})
+
+    return JsonResponse({"status": "error", "message": "Invalid request method"})
+
+@csrf_exempt
+def resolve_feedback(request, feedback_id):
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    if request.method == 'POST':
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        feedback.status = 'resolved'
+        feedback.save()
+
+        # Fetch all feedbacks related to the article
+        article = feedback.article
+        selected_status = request.POST.get("status", "show-all")
+
+        if selected_status == "show-all":
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain ordering by date within each status group
+            )
+        else:
+            feedbacks = Feedback.objects.filter(article=article, status=selected_status).order_by('-created_at')
+
+
+        # Render the updated feedback list
+        feedback_html = render_to_string(
+            'feedback-template.html',
+            {'feedbacks': feedbacks,'auth_user':user},
+            request=request
+        )
+        return JsonResponse({'status': 'success', 'feedback_html': feedback_html})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def delete_feedback(request, feedback_id):
+    user = None
+    try:
+        user = UserProfile.objects.get(user_credentials=request.user)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    if request.method == 'POST':
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        feedback.delete()
+
+        # Fetch all feedbacks related to the article
+        article = feedback.article
+        selected_status = request.POST.get("status", "show-all")
+
+        if selected_status == "show-all":
+            feedbacks = Feedback.objects.filter(article=article).order_by(
+                models.Case(
+                    models.When(status='pending', then=0),
+                    models.When(status='resolved', then=1),
+                    default=2,
+                ),
+                '-created_at'  # Maintain ordering by date within each status group
+            )
+        else:
+            feedbacks = Feedback.objects.filter(article=article, status=selected_status).order_by('-created_at')
+
+
+        # Render the updated feedback list
+        feedback_html = render_to_string(
+            'feedback-template.html',
+            {'feedbacks': feedbacks,'auth_user':user},
+            request=request
+        )
+        return JsonResponse({'status': 'success', 'feedback_html': feedback_html})
+
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
+
+def update_feedback(request, feedback_id):
+    if request.method == "POST":
+        feedback = get_object_or_404(Feedback, id=feedback_id)
+        data = json.loads(request.body)
+        feedback.comment = data.get("comment", feedback.comment)
+        feedback.save()
+        return JsonResponse({"success": True})
+    return JsonResponse({"success": False, "error": "Invalid request method."}, status=400)
+
+
+
+
+@csrf_exempt  # Use CSRF token in production for security
+def add_reply(request, feedback_id):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None
+
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        reply_text = data.get('reply')
+
+        if not reply_text:
+            return JsonResponse({'success': False, 'error': 'Reply text is required'}, status=400)
+
+        feedback = Feedback.objects.get(id=feedback_id)
+        reply = Reply.objects.create(
+            feedback=feedback,
+            author=request.user.userprofile,  # Assuming the user is authenticated
+            reply=reply_text
+        )
+
+        # Retrieve all replies for the feedback to update the UI
+        replies = Reply.objects.filter(feedback=feedback)
+        replies_html = render_to_string('replies-template.html', {'replies': replies,'auth_user':user},request=request)
+
+        response_data = {
+            'success': True,
+            'replies_html': replies_html,
+        }
+        return JsonResponse(response_data)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+@csrf_exempt  # Remove this decorator if you want CSRF protection
+def update_reply(request, reply_id):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        updated_reply_text = data.get('reply')
+
+        if not updated_reply_text:
+            return JsonResponse({'success': False, 'error': 'Reply text is required'}, status=400)
+
+        try:
+            reply = Reply.objects.get(id=reply_id)
+            # Ensure the current user is allowed to edit this reply
+            if request.user == reply.author.user_credentials:
+                reply.reply = updated_reply_text
+                reply.save()
+                return JsonResponse({'success': True, 'reply': updated_reply_text})
+            else:
+                return JsonResponse({'success': False, 'error': 'Permission denied'}, status=403)
+        except Reply.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Reply not found'}, status=404)
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
+
+
+def delete_reply(request, reply_id):
+    if request.method == "POST":
+        try:
+            reply = Reply.objects.get(id=reply_id)
+            reply.delete()
+            return JsonResponse({"status": "success"})  # Match "status" with your JS logic
+        except Reply.DoesNotExist:
+            return JsonResponse({"status": "error", "message": "Reply not found."})
+    return JsonResponse({"status": "error", "message": "Invalid request method."})
+>>>>>>> origin/tomasdanjo

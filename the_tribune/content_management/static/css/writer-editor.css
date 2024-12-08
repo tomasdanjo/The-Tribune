@@ -39,6 +39,10 @@
   transform: translateY(-0.25rem);
 }
 
+#main nav button:focus, #write-article-btn:focus{
+  outline: none;
+}
+
 #write-article-btn{
   background-color: #45383F;
   color: #f2f2f2;

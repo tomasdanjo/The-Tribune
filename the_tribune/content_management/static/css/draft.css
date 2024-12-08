@@ -18,49 +18,6 @@
   margin: 40px auto;
 }
 
-.btn-group{
-  display: flex;
-  justify-content: space-between;
-}
-
-.btn-group > #back-btn{
-  display: flex;
-  flex-shrink: 0;
-  width: fit-content;
-  height: 100%;
-  gap: 10px;
-  color: #46445C;
-  padding: 5px 10px;
-  border-radius: 15px;
-  transition: all 0.1s ease-in;
-
-}
-
-.btn-group > #back-btn:hover, 
-.submit-btn-group .submit-btn:hover{
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-  transform: translateY(-0.25rem);
-}
-
-.btn-group .submit-btn-group{
-  display: flex;
-  gap: 20px;
-}
-
-.submit-btn-group .submit-btn{
-  padding: 10px 20px;
-  text-transform: uppercase;
-  border-radius: 15px;
-  transition: all 0.1s ease-in;
-  color: #46445C;
-}
-
-.submit-btn-group .highlight-btn{
-  background-color: #46445C;
-  color: #f2f2f2;
-
-}
-
 #edit-write-article-form .form-fields-group{
   margin: 20px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
@@ -68,23 +25,7 @@
   border-radius: 15px;
 }
 
-.field{
-  width: 100%;
-  background-color: transparent;
-  padding: 20px;
-  border-radius: 15px;
 
-}
-
-.field:hover{
-  
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-  background-color: rgb(233, 231, 231);
-}
-
-.field:focus{
-  outline: none;
-}
 
 .headline{
   color: #596E9B;
@@ -101,16 +42,7 @@
   min-width: 0;
 }
 
-.form-field .textarea {
-  width: 100%;
-  height: auto;
-  min-height: 3rem;
-  line-height: auto;
-  resize: none;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: hidden; /* Key change: prevents scrollbar */
-}
+
 
 .tag{
   color: #46445C;
@@ -172,11 +104,9 @@
 }
 
 .custom-file-input {
-  appearance: none;
-  border-radius: 15px;
-  padding: 5px 10px;
-  cursor: pointer;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  width: 100%; /* Allows the input to adjust to the container width */
+  max-width: 100%; /* Ensures the input does not exceed its parent's width */
+  box-sizing: border-box; /* Includes padding and border in the element's total width */
 }
 
 #edit-write-article-form .form-field{

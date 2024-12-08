@@ -1,0 +1,262 @@
+#main{
+  display: flex;
+  padding: 0px 100px;
+  gap: 40px;
+}
+
+#main #article-wrapper{
+  width: 60%;
+}
+
+#main #feedbacks-wrapper{
+  flex: 1;
+}
+
+#main .form{
+  width: 100%;
+  padding: 10px;
+}
+
+#action-group .form-group{
+  height: fit-content;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  margin: 10px;
+  border-radius: 25px;
+}
+
+#action-group{
+  /* width: 80vw; */
+  margin: 50px 100px;
+}
+
+#action-group .form-group form{
+  padding: 20px;
+  color: #596e9b;
+}
+
+#action-group .form-group .submit-btn-group{
+  margin-top: 10px;
+} 
+
+#action-group p{
+  font-size: 1.2rem;
+  padding: 0px 20px;
+}
+
+#form-profile-container{
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+
+#feedback-form-container{
+  padding: 10px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: fit-content;
+}
+
+#img-container{
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  border: 1px solid #2a2d33;
+}
+
+#img-container > img{
+  border-radius: 50%;
+}
+
+#form-profile-container .textarea{
+  color: #596e9b;
+  border: 1px solid #857472;
+  height: 2rem;
+}
+
+.submit-btn-group{
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+#feedbacks-container{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 10px 0px;
+}
+
+.feedback-container{
+  display: flex;
+  flex-direction: column;
+  background-color: #DEDEDE;
+  padding: 15px;
+  border-radius: 15px;
+  transition: all 0.1s ease-in;
+}
+
+
+.feedback-container .top{
+  display: flex;
+  justify-content: space-between;
+}
+
+.feedback-container .top .left{
+  display: flex;
+  gap: 10px;
+  flex-grow: 1;
+}
+
+.pending{
+  border-left: 5px solid #596e9b;
+}
+
+.resolved{
+  border-left: 5px solid #45383F;
+}
+
+.feedback-container .top h2{
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1.2rem;
+  color: #45383F;
+  width: fit-content;
+  display: inline-block;
+}
+
+.feedback-container .top a{
+  width: fit-content;
+}
+
+.feedback-container .top .created-at{
+  color: #857472;
+}
+
+.feedback-container .top .actions-btn{
+  width: fit-content;
+}
+
+.feedback-container .body-container{
+  margin: 10px;
+  margin-left: 60px;
+}
+
+.feedback-container:hover{
+  transform: translateY(-0.25rem);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.feedback-container .submit-btn{
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px;
+}
+
+.feedback-container .submit-btn img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.feedback-container .submit-btn-group{
+  gap: 5px;
+}
+
+.popup-menu {
+  display: none;
+  position: absolute;
+  background: #DEDEDE;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  padding: 10px;
+  border-radius: 15px;
+}
+
+.popup-menu button img{
+  height: 20px;
+  width: auto;
+}
+
+.popup-menu button{
+  display: flex;
+  color: #45383F;
+  padding: 5px;
+  font-size: 0.8rem;
+  height: fit-content;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.popup-menu button:hover{
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+.popup-menu.active {
+  display: flex;
+  flex-direction: column;
+}
+
+.triple-dot-btn {
+  cursor: pointer;
+  position: relative;
+}
+
+.feedback-container .edit-textarea{
+  color: #596e9b;
+  height: 2.5rem;
+  padding: 10px;
+}
+
+.edit-active{
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-active .submit-btn{
+  border-radius: 15px;
+  width: fit-content;
+  padding: 5px 10px;
+
+}
+
+#feedbacks-container .replies-container .textarea{
+  border: 1px solid #45383F;
+  overflow: hidden;
+  color: #596e9b;
+  height: 4rem;
+}
+
+
+.replies-container .submit-btn{
+  width: fit-content;
+  border-radius: 15px;
+  padding: 5px 10px;
+}
+
+.replies-container {
+  display: none; /* Hidden by default */
+}
+.replies-container.active {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;/* Visible when the active class is applied */
+}
+
+.replies-container .submit-btn-group {
+  display: none; /* Hidden by default */
+}
+.replies-container .field.textarea:focus + .submit-btn-group {
+  display: flex; /* Show when textarea is focused */
+}
+
+

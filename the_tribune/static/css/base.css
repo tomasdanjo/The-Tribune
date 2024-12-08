@@ -142,6 +142,7 @@
   justify-content: center;
   border-radius: 15px;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
   /* border: 1px solid #f2f2f2; */
 }
 
@@ -194,6 +195,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
 }
 
 .img-container img{
@@ -240,4 +242,106 @@
   align-items: center;
   background-color: #596e9b;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-group{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btn-group > #back-btn{
+  display: flex;
+  flex-shrink: 0;
+  width: fit-content;
+  height: 100%;
+  gap: 10px;
+  color: #46445C;
+  padding: 5px 10px;
+  border-radius: 15px;
+  transition: all 0.1s ease-in;
+
+}
+
+
+
+.btn-group > #back-btn:hover, 
+.submit-btn-group .submit-btn:hover{
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  transform: translateY(-0.25rem);
+}
+
+.btn-group .submit-btn-group{
+  display: flex;
+  gap: 20px;
+}
+
+.submit-btn-group .submit-btn{
+  padding: 10px 20px;
+  text-transform: uppercase;
+  border-radius: 15px;
+  transition: all 0.1s ease-in;
+  color: #46445C;
+}
+
+.submit-btn-group .highlight-btn{
+  background-color: #46445C;
+  color: #f2f2f2;
+
+}
+
+.field{
+  width: 100%;
+  background-color: transparent;
+  padding: 20px;
+  border-radius: 15px;
+
+}
+
+.field:hover{
+  
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  background-color: rgb(233, 231, 231);
+}
+
+.field:focus{
+  outline: none;
+}
+
+.form-field .textarea {
+  width: 100%;
+  height: auto;
+  min-height: 4rem;
+  line-height: auto;
+  resize: none;
+  padding: 20px;
+  box-sizing: border-box;
+  overflow-y: hidden; /* Key change: prevents scrollbar */
+}
+
+.dropdown{
+  width: fit-content;
+  margin: 20px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.9rem;
+}
+
+.dropdown select {
+  padding: 10px; /* Add padding */
+  padding-right: 40px; /* Space for icon */
+  border: none;
+  background-color: transparent;
+  font-size: 16px; /* Font size */
+  width: 100%; /* Full width */
+}
+
+.dropdown  select:focus {
+  outline: none;
+}
+
+.dropdown  select option {
+  background-color: #f2f2f2;
+  padding: 10px;
 }

@@ -25,3 +25,9 @@ class Feedback(models.Model):
 
   def __str__(self):
       return f"Feedback for Article ID {self.article.id} by {self.editor.first_name if self.editor else 'Anonymous'}"
+
+class Reply(models.Model):
+   reply = models.TextField()
+   created_at = models.DateTimeField(auto_now_add=True)
+   author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+   feedback = models.ForeignKey(Feedback,on_delete=models.CASCADE,related_name="replies")
