@@ -429,7 +429,6 @@ def update_profile(request,id):
     return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
 
 
-<<<<<<< HEAD
 
 def tag_search_view(request):
     query = request.GET.get('search', '')
@@ -441,8 +440,6 @@ def tag_search_view(request):
         articles = Article.objects.none()  
 
     return render(request, 'tag-search.html', {'tags': tags, 'articles': articles, 'query': query})
-=======
-    return render(request, 'view_profile.html', {'user_profile': user_profile})
 
 
 def filter_feedbacks(request, id):
@@ -632,4 +629,3 @@ def delete_reply(request, reply_id):
         except Reply.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Reply not found."})
     return JsonResponse({"status": "error", "message": "Invalid request method."})
->>>>>>> origin/tomasdanjo

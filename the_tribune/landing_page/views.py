@@ -48,7 +48,7 @@ def landing_page(request):
 
     # Sort articles and limit to top 10
     top_stories = top_stories.order_by(
-        '-num_likes',  # Highest likes
+        '-num_likes',  # Highest likes  
         '-num_comments',  # Highest comments
         '-date_published',  # Most recent
         '-tag_popularity'  # Popular tag

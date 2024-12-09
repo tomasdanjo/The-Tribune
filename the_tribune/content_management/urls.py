@@ -15,11 +15,11 @@ urlpatterns = [
     path('archive/<int:id>', archive_view, name='archive'),
     path('publish_article/<int:id>', publish_article, name='publish_article'),
     path('submit_feedback/<int:article_id>/', submit_feedback, name='submit_feedback'),
-
-
     path('editor_dashboard/<int:article_id>/', delete_draft, name='delete_draft'),
     path('update_profile/<int:id>',update_profile, name='update_profile'),
-    path('view_profile/<int:id>',view_profile, name='view_profile'),
+    path('writer_view_profile/<int:id>',writer_view_profile, name='writer_view_profile'),
+    path('editor_View_profile/<int:id>',editor_view_profile, name='editor_view_profile'),
+    path('tags/', tag_search_view, name='tag-search'),
     path('filter_feedbacks/<int:id>/',filter_feedbacks, name='filter_feedbacks'),
     path('resolve_feedback/<int:feedback_id>/', resolve_feedback, name='resolve_feedback'),
     path('delete_feedback/<int:feedback_id>/', delete_feedback, name='delete_feedback'),
