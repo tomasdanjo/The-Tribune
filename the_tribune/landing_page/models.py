@@ -21,3 +21,13 @@ class Subscription(models.Model):
 
     def __str__(self):
         return self.email
+    
+class ContactSubmission(models.Model):
+   name = models.TextField()
+   email = models.EmailField()
+   message = models.TextField()
+   date_sent = models.DateTimeField(auto_now_add=True)
+
+   def __str__(self):
+        return f"Message from {self.name} ({self.email})"
+  

@@ -24,7 +24,8 @@
             </p>
 
             <div>
-                <form action="/submit-contact" method="POST">
+                <form method="POST">
+                    {% csrf_token %}
                     <div>
                         <label for="name">Your Name</label>
                         <input type="text" id="name" name="name" required class="input">
@@ -41,7 +42,9 @@
                         class="input"></textarea>
                     </div>
 
-                    <button type="submit">
+                    <p id="response-container"></p>
+
+                    <button type="button" onclick="submitContactForm()" id="submit-btn">
                         Submit
                     </button>
                 </form>
@@ -64,6 +67,46 @@
 
 
 {% include 'footer.html' %}
+
+<script>
+    function submitContactForm(){
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        console.log(name);
+        $.ajax({
+            url: "{% url 'contact_us' %}", // Dynamically set the URL
+            type: "POST",
+            data: {
+                name: name,
+                email: email,
+                message: message,
+                csrfmiddlewaretoken: document.querySelector('[name=csrfmiddlewaretoken]').value // Add CSRF token
+            },
+            beforeSend: function () {
+                $('#submit-btn').text("Sending");
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    $('#response-container').html(response.success);
+                    $('#submit-btn').text("Submit");
+                    $('#name').val('');
+                    $('#email').val('');
+                    $('#message').val('');
+
+                    $('#contact-us')[0].reset(); // Reset the form
+                } else {
+                    alert('Failed to send feedback. Please try again.');
+                }
+            },
+            error: function () {
+                alert('An error occurred while sending message. Please try again.');
+            },
+        });
+
+    }
+    
+</script>
 
 
 

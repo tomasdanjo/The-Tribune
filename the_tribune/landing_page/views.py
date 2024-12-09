@@ -2,7 +2,7 @@ from django.shortcuts import render,get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
 from article.models import Article
-from .models import Comment, Subscription
+from .models import Comment, Subscription, ContactSubmission
 from django.contrib import messages 
 from django.utils import timezone
 from .forms import CommentForm
@@ -379,10 +379,24 @@ def job_openings(request):
     return render(request, 'job-opening.html')
 
 def contact_us(request):
-    current_date = datetime.now().strftime('%b %d, %Y')  
-    context = {
-        'show_search':True,
-        'current_date':current_date
 
-    }
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        if not name or not email or not message:
+            return JsonResponse({'error': 'All fields are required.'}, status=400)
+
+        # Save the contact message
+        ContactSubmission.objects.create(name=name, email=email, message=message)
+        return JsonResponse({'status':'success','success': 'Thank you for contacting us! Your message has been received.'}, status=200)
+    else:
+
+        current_date = datetime.now().strftime('%b %d, %Y')  
+        context = {
+            'show_search':True,
+            'current_date':current_date
+
+        }
     return render(request, 'contact-us.html', context)
