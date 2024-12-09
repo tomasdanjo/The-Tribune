@@ -12,6 +12,14 @@ from django.template.loader import render_to_string
 from .models import Feedback
 import json
 
+
+
+def tag_search_view(request, tag_id):
+    tag = get_object_or_404(Tag, id=tag_id)
+    articles = Article.objects.filter(tag=tag, status='published').order_by('-date_published')
+
+    return render(request, 'tag-search.html', {'tag': tag, 'articles': articles})
+
 # from django import form
 def writer_view_profile(request, id):
     try:
@@ -427,19 +435,6 @@ def update_profile(request,id):
         biographyform = ProfileBiographyForm(instance=user_profile)
     # Render the template with the form
     return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
-
-
-
-def tag_search_view(request):
-    query = request.GET.get('search', '')
-    if query:
-        tags = Tag.objects.filter(tag_name__icontains=query)
-        articles = Article.objects.filter(tag__in=tags)
-    else:
-        tags = Tag.objects.all() 
-        articles = Article.objects.none()  
-
-    return render(request, 'tag-search.html', {'tags': tags, 'articles': articles, 'query': query})
 
 
 def filter_feedbacks(request, id):
