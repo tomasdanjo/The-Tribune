@@ -346,10 +346,22 @@ def view_profile(request, id):
     return render(request, 'view_profile.html', {'user_profile': user_profile,})
 
 def about_us(request):
-    return render(request, 'about-us.html')
+    current_date = datetime.now().strftime('%b %d, %Y')  
+    context = {
+        'show_search':True,
+        'current_date':current_date
+
+    }
+    return render(request, 'about-us.html',context)
 
 def mission_statement(request):
-    return render(request, 'mission-statement.html')
+    current_date = datetime.now().strftime('%b %d, %Y')  
+    context = {
+        'show_search':True,
+        'current_date':current_date
+
+    }
+    return render(request, 'mission-statement.html',context)
 
 def ai_guidelines(request):
     return render(request, 'ai-guidelines.html')

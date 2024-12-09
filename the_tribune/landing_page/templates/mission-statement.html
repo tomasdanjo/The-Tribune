@@ -1,15 +1,102 @@
-<H1>MISSION STATEMENT</H1>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    Our Mission
+{% endblock %}
 
-<H3>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
-    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, 
-    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, 
-    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, 
-    justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. 
-    Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, 
-    dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-     Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
-     tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, 
-     blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien 
-     ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.
-      Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales,
-       augue velit cursus nunc,</H3>
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css\static_pages.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+
+
+{% include 'header.html' %}
+<div id="mission">
+    <div class="content-container">
+        <h2>
+            Why Choose The Tribune?
+        </h2>
+        <h3>
+            We are more than just a news outlet. The Tribune is a platform for dialogue, a champion of truth, and a beacon for those seeking clarity in an ever-changing world. Join us as we strive to inform and empower, one story at a time.
+        </h3>
+        <div class="section-grid">
+            <div class="section">
+                <h2>
+                    Our Mission
+                </h2>
+                <h3>
+                    To provide reliable, unbiased, and high-quality news that reflects the diverse voices of our community while championing transparency, accountability, and the pursuit of truth.
+                </h3>
+            </div>
+            <div class="section">
+                <h2>
+                    Our Vision
+                </h2>
+                <h3>
+                    To be a leading platform for meaningful conversations, bridging gaps in understanding and fostering a more informed and engaged society.
+                </h3>
+            </div>
+            <div class="section">
+                <h2>
+                    What We Cover
+                </h2>
+                <h3>
+                    <ul>
+                        <li>
+                            <span>Breaking News</span>
+                             Stay updated with the latest developments from around the world.
+                        </li>
+                        <li>
+                            <span>Politics and Policy</span>
+                             Insights and analysis on decisions shaping our world.
+                        </li>
+                        <li>
+                            <span>Community and Culture</span>
+                             Stories that celebrate and explore the richness of our communities.
+                        </li>
+                        <li>
+                            <span>Science and Technology</span>
+                            Discover the innovations and ideas shaping our future.
+                        </li>
+                        <li>
+                            <span>Opinion and Editorials</span> Diverse perspectives that challenge and inspire.
+                        </li>
+                    </ul>
+                </h3>
+            </div>
+
+        </div>
+    
+            
+
+        
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% include 'footer.html' %}
+{% endblock %}
+
+
+
