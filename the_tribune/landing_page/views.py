@@ -411,7 +411,24 @@ def contact_us(request):
     return render(request, 'contact-us.html', context)
 
 def category_view(request,id):
-    category = get_object_or_404(Category,id=id)
-    articles = Article.objects.all().filter(category=category)
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None  # Handle the case where no UserProfile is found
+    else:
+        user = None 
 
-    return render(request,'category-view.html',{'category':category,'articles':articles})
+    category = get_object_or_404(Category,id=id)
+    articles = Article.objects.all().filter(category=category).order_by('-date_published')
+    current_date = datetime.now().strftime('%b %d, %Y') 
+
+    context = {
+        'category':category,
+        'articles':articles,
+        'show_search':True,
+        'current_date':current_date,
+        'auth_user':user
+    }
+
+    return render(request,'category-view.html',context)
