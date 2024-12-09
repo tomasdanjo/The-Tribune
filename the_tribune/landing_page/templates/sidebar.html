@@ -2,19 +2,9 @@
   <div id="sidebar-content">
     {% if user.is_authenticated %}
 
-    <a class="img-container" 
-       href="{% if auth_user.is_writer %}{% url 'writer_view_profile' auth_user.id %}
-            {% elif auth_user.is_editor %}{% url 'editor_view_profile' auth_user.id %}
-            {% else %}{% url 'view_profile' auth_user.id %}{% endif %}">
-        {% if auth_user.profile_picture %}
-            <img src="{{ auth_user.profile_picture.url }}" alt="Profile Picture">
-        {% else %}
-            <p>
-                {{ auth_user.first_name|slice:":1" }}.
-                {{ auth_user.last_name|slice:":1" }}.
-            </p>
-        {% endif %}
-    </a>
+
+
+    {% include 'profile-picture.html' with user=auth_user %}
     
     <h2 class="user-full-name">
         {{ auth_user.first_name }} {{ auth_user.last_name }}

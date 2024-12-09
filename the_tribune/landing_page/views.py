@@ -379,6 +379,13 @@ def job_openings(request):
     return render(request, 'job-opening.html')
 
 def contact_us(request):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None  # Handle the case where no UserProfile is found
+    else:
+        user = None 
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -396,7 +403,8 @@ def contact_us(request):
         current_date = datetime.now().strftime('%b %d, %Y')  
         context = {
             'show_search':True,
-            'current_date':current_date
+            'current_date':current_date,
+            'auth_user':user
 
         }
     return render(request, 'contact-us.html', context)

@@ -79,7 +79,8 @@
           <!-- form to add comments here -->
            <div id="add-comment-wrapper">
               <div class="reader-profile">
-                  <span class="profile-initials">{{ request.user.first_name|slice:":1" }}.{{ request.user.last_name|slice:":1" }}.</span>
+                {% include 'profile-picture.html' with user=auth_user %}
+                  <!-- <span class="profile-initials">{{ request.user.first_name|slice:":1" }}.{{ request.user.last_name|slice:":1" }}.</span> -->
               </div>
 
               <div id="add-comment-form">
@@ -111,7 +112,7 @@
 
       {% if comment_count > 5 %}
         <div id="show-more-container">
-            <button id="load-more-btn" data-offset="0" onclick="loadMoreComments({{ article.id }})">Show More Comments</button>
+            <button id="load-more-btn" data-offset="0" onclick="loadMoreComments({{ article.id }})">Show More</button>
         </div>
       {% endif %}
     

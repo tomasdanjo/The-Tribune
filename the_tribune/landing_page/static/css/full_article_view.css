@@ -355,6 +355,10 @@ hr {
   font-size: 1rem;
 }
 
+.reader-profile #img-container{
+  border-radius: 50%;
+}
+
 .reader-profile span {
   height: fit-content;
 }
@@ -528,6 +532,21 @@ hr {
 #header #sidebar-btn{
   background-color: #60525a;
 }
+
+#load-more-btn{
+  margin: 20px;
+  padding: 10px 20px;
+  border-radius: 15px;
+  transition: all 0.1s ease;
+  background-color: #45383f;
+  color: #f2f2f2;
+}
+
+#load-more-btn:hover{
+  transform: translateY(-0.25rem);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
 
 
 
