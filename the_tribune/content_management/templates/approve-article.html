@@ -19,6 +19,9 @@
   <div class="btn-group">
     <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
   
+    
+    
+    {% if user.is_authenticated and user.userprofile == article.editor %}
     <div class="submit-btn-group">
       <button onclick="showArchiveForm()" class="submit-btn">
           Archive
@@ -28,6 +31,9 @@
           Publish
       </button>
     </div>
+      {% endif %}
+    
+    
         
   </div>
   
