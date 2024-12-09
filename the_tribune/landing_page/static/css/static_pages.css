@@ -126,7 +126,7 @@
   padding: 40px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
   border-radius: 15px;
-  transition: all 0.3s ease-in;
+  transition: all 0.1s ease-in;
 }
 
 #ai-guidelines h2{
