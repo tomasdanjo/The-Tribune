@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{category.get_category_name_display}}
+
+
+{% endblock %}
+
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css\base.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include 'header.html' %}
+
+
+
+  <div class="articles-container">
+      {% for article in articles %}
+          <div class="article-card">
+              {% if article.photo_id %}
+                  <div class="article-card-photo-container">
+                      <img 
+                          src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
+                          alt="Photo for {{ article.headline }}" 
+                      >
+                  </div>
+              {% endif %}
+              <p class="card-category">{{ article.category.get_category_name_display }}</p>
+              <h2 class="card-headline">
+                  <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+              </h2>
+              <p class="card-published-date">{{ article.date_published }}</p>
+          </div>
+      {% empty %}
+          <p>No articles found.</p>
+      {% endfor %}
+  </div>
+
+
+
+
+
+{% include 'footer.html' %}
+
+
+
+{% endblock %}
+
+

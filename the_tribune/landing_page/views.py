@@ -21,6 +21,7 @@ from django.contrib.auth.models import AnonymousUser
 def landing_page(request):
     article_id = request.session.get('article_id')
     
+    user = None 
     if request.user.is_authenticated:
         try:
             user = UserProfile.objects.get(user_credentials=request.user)
@@ -408,3 +409,9 @@ def contact_us(request):
 
         }
     return render(request, 'contact-us.html', context)
+
+def category_view(request,id):
+    category = get_object_or_404(Category,id=id)
+    articles = Article.objects.all().filter(category=category)
+
+    return render(request,'category-view.html',{'category':category,'articles':articles})

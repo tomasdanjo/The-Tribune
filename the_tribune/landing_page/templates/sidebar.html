@@ -1,34 +1,43 @@
 <div id="sidebar" class="hidden">
   <div id="sidebar-content">
     {% if user.is_authenticated %}
+      {% include 'profile-picture.html' with user=auth_user %}
+      <h2 class="user-full-name">
+          {{ auth_user.first_name }} {{ auth_user.last_name }}
+      </h2>
+      {% if not auth_user.is_reader %}
+      <div class="designation">
+          <p>
+            {% if auth_user.is_writer %}
+              Writer
+            {% elif auth_user.is_editor %}
+              Editor
+            {% endif %}
+          </p>
+      </div>
+      {% endif %}
 
-
-
-    {% include 'profile-picture.html' with user=auth_user %}
-    
-    <h2 class="user-full-name">
-        {{ auth_user.first_name }} {{ auth_user.last_name }}
-    </h2>
-    {% if not auth_user.is_reader %}
-    <div class="designation">
-        <p>
-          {% if auth_user.is_writer %}
-            Writer
-          {% elif auth_user.is_editor %}
-            Editor
-          {% endif %}
-        </p>
-    </div>
+      <form method="POST" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit">
+              Log out
+          </button>
+      </form>
+    {% else %}
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'category_view' 1 %}">Latest News</a>
+      <a href="{% url 'category_view' 2 %}">Sports</a>
+      <a href="{% url 'category_view' 3 %}">Entertainment</a>
+      <a href="{% url 'category_view' 6 %}">Opinion</a>
+      <a href="{% url 'category_view' 8 %}">Featured Topics</a>
+      <a href="{% url 'category_view' 9 %}">Environment</a>
+      <a href="{% url 'category_view' 7 %}">Editorials</a>
+      <a href="{% url 'category_view' 10 %}">Science & Tech.</a>
+      <a href="{% url 'category_view' 4 %}">Technology</a>
+      <a href="{% url 'category_view' 5 %}">Lifestyle</a>  
     {% endif %}
 
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">
-            Log out
-        </button>
-    </form>
 
-    {% endif %}
   </div>
 </div>
 

@@ -631,3 +631,4 @@ def delete_reply(request, reply_id):
         except Reply.DoesNotExist:
             return JsonResponse({"status": "error", "message": "Reply not found."})
     return JsonResponse({"status": "error", "message": "Invalid request method."})
+
