@@ -1,9 +1,25 @@
+{% load static %}
 <div id="sidebar" class="hidden">
   <div id="sidebar-content">
-    {% if user.is_authenticated %}
+    {% if not user.is_authenticated %}
+      <div class="logo-container">
+        <img src="{% static 'icons\logo.svg' %}" alt="">
+      </div>
+      <a href="{% url 'home' %}" class="category-link">Home</a>
+      <a href="{% url 'category_view' 1 %}" class="category-link">Latest News</a>
+      <a href="{% url 'category_view' 2 %}" class="category-link">Sports</a>
+      <a href="{% url 'category_view' 3 %}" class="category-link">Entertainment</a>
+      <a href="{% url 'category_view' 6 %}" class="category-link">Opinion</a>
+      <a href="{% url 'category_view' 8 %}" class="category-link">Featured Topics</a>
+      <a href="{% url 'category_view' 9 %}" class="category-link">Environment</a>
+      <a href="{% url 'category_view' 7 %}" class="category-link">Editorials</a>
+      <a href="{% url 'category_view' 10 %}" class="category-link">Science & Tech.</a>
+      <a href="{% url 'category_view' 4 %}" class="category-link">Technology</a>
+      <a href="{% url 'category_view' 5 %}" class="category-link">Lifestyle</a> 
+    {% else %}
       {% include 'profile-picture.html' with user=auth_user %}
       <h2 class="user-full-name">
-          {{ auth_user.first_name }} {{ auth_user.last_name }}
+        {{ auth_user.first_name }} {{ auth_user.last_name }}
       </h2>
       {% if not auth_user.is_reader %}
       <div class="designation">
@@ -16,25 +32,27 @@
           </p>
       </div>
       {% endif %}
+      <a href="{% url 'view_profile' auth_user.id %}" class="category-link">Profile</a>
+      {% if auth_user.is_writer %}
+      <a href="{% url 'writer_dashboard' %}" class="category-link">Dashboard</a>
+      {% elif auth_user.is_editor %}
+      <a href="{% url 'editor_dashboard' %}" class="category-link">Dashboard</a>
+      {% endif %}
+    {% endif %}
 
-      <form method="POST" action="{% url 'logout' %}">
-          {% csrf_token %}
-          <button type="submit">
-              Log out
-          </button>
-      </form>
+
+      
+     
+
+    {% if not user.is_authenticated %}
+    <button>log in</button>
     {% else %}
-      <a href="{% url 'home' %}" class="category-link">Home</a>
-      <a href="{% url 'category_view' 1 %}" class="category-link">Latest News</a>
-      <a href="{% url 'category_view' 2 %}" class="category-link">Sports</a>
-      <a href="{% url 'category_view' 3 %}" class="category-link">Entertainment</a>
-      <a href="{% url 'category_view' 6 %}" class="category-link">Opinion</a>
-      <a href="{% url 'category_view' 8 %}" class="category-link">Featured Topics</a>
-      <a href="{% url 'category_view' 9 %}" class="category-link">Environment</a>
-      <a href="{% url 'category_view' 7 %}" class="category-link">Editorials</a>
-      <a href="{% url 'category_view' 10 %}" class="category-link">Science & Tech.</a>
-      <a href="{% url 'category_view' 4 %}" class="category-link">Technology</a>
-      <a href="{% url 'category_view' 5 %}" class="category-link">Lifestyle</a>  
+    <form method="POST" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button type="submit" class="auth-btn">
+          Log out
+      </button>
+    </form>
     {% endif %}
 
 

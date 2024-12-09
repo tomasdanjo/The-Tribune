@@ -1,6 +1,6 @@
 {% for article in articles %}
 <div class="article-card">
-  <p class="category">{{ article.category.get_category_name_display }}</p>
+  <a class="category" href="{% url 'category_view' article.category.id %}">{{ article.category.get_category_name_display }}</a>
   {% if article.photo_id %}
   <div class="img-container">
     <img
@@ -11,7 +11,7 @@
   </div>
   {% endif %}
   <div>
-    <p class="tag">{{ article.tag.tag_name }}</p>
+    <a class="tag" href="{% url 'tag_view' article.tag.id %}">{{ article.tag.tag_name }}</a>
     <h2 class="headline">
       <a 
         {% if article.status == 'published' %}

@@ -226,4 +226,60 @@
   margin: 10px 0px;
 }
 
+#the-team{
+  margin: 50px 15rem;
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  grid-auto-rows: auto;
+  gap: 40px;
+}
+
+#the-team .section{
+  display: flex;
+  flex-direction: column;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  transition: all 0.1s ease;
+}
+
+#the-team .section:hover{
+  scale: 1.05;
+  transform: translateY(-0.25rem);
+}
+
+#the-team .section .img-container{
+  width: 100%;
+  height: 20rem;
+}
+
+.img-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 15px 15px 0px 0px;
+}
+
+#the-team div:nth-child(1){
+  grid-column: 1/-1;
+  color: #596E9B;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 3rem;
+  text-align: center;
+}
+
+#the-team .section .text-container{
+  padding: 10px;
+  width: 100%;
+}
+
+.text-container h3{
+  color: #596E9B;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  text-align: center;
+  width: 100%;
+}
+
+
 

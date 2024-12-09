@@ -1,77 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Team</title>
-</head>
-<body>
-    <header>
-        <h1>Meet Our Team</h1>
-    </header>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    The Team
+{% endblock %}
 
-    <section class="team-container">
-        <div class="team-member">
-            {% comment %} <img src="{% static 'images/member1.jpg' %}" alt="Member 1" class="profile-img"> } {% endcomment %}
-            <h2>Thomas Danjo M. Manulat</h2>
-            <p>Role: Lorem Ipsum</p>
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css\base.css' %}">
+    <link rel="stylesheet" href="{% static 'css\static_pages.css' %}">
+{% endblock %}
+
+
+{% block content %}
+{% include 'header.html' %}
+
+<div id="the-team">
+    <div>
+        <h2>Meet The Team</h2>
+    </div>
+    <div class="section">
+        <div class="img-container">
+            <img src="../../media/profile_pics/ryantimagos.jpg" alt="">
         </div>
-        
-        <div class="team-member">
-            {% comment %} <img src="{% static 'images/member2.jpg' %}" alt="Member 2" class="profile-img"> {% endcomment %}
-            <h2>Paul Jes Marc F. Flores</h2>
-            <p>Role: Lorem Ipsum</p>
+        <div class="text-container">
+            <h3>Ryan Jay Anthony C. Timagos</h3>
         </div>
-        
-        <div class="team-member">
-            {% comment %} <img src="{% static 'images/member3.jpg' %}" alt="Member 3" class="profile-img"> {% endcomment %}
-            <h2>Ryan Jay Anthony C. Timagos</h2>
-            <p>Role: Pinaka Cute :)</p>
+    </div>
+
+    <div class="section">
+        <div class="img-container">
+            <img src="../../media/profile_pics/thomasdanjo.jpg" alt="">
         </div>
-    </section>
+        <div class="text-container">
+            <h3>Thomas Danjo M. Manulat</h3>
+        </div>
+    </div>
+    <div class="section">
+        <div class="img-container">
+            <img src="../../media/profile_pics/paulflores.jpg" alt="">
+        </div>
+        <div class="text-container">
+            <h3>Paul Jes Marc Flores</h3>
+        </div>
+    </div>
 
-    <footer>
-        <p>© 2024 The Tribune</p>
-    </footer>
+</div>
 
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-        }
-        
-        header h1 {
-            margin-top: 30px;
-        }
-        
-        .team-container {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-top: 50px;
-        }
-        
-        .team-member {
-            width: 200px;
-            text-align: center;
-        }
 
-        .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin-bottom: 10px;
-        }
+{% include 'footer.html' %}
 
-        .team-member h2 {
-            margin: 10px 0;
-        }
 
-        footer {
-            margin-top: 50px;
-            font-size: 14px;
-        }
-    </style>
-</body>
-</html>
+
+{% endblock %}
+
+
