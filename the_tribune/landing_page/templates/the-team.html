@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Team</title>
+</head>
+<body>
+    <header>
+        <h1>Meet Our Team</h1>
+    </header>
+
+    <section class="team-container">
+        <div class="team-member">
+            {% comment %} <img src="{% static 'images/member1.jpg' %}" alt="Member 1" class="profile-img"> } {% endcomment %}
+            <h2>Thomas Danjo M. Manulat</h2>
+            <p>Role: Lorem Ipsum</p>
+        </div>
+        
+        <div class="team-member">
+            {% comment %} <img src="{% static 'images/member2.jpg' %}" alt="Member 2" class="profile-img"> {% endcomment %}
+            <h2>Paul Jes Marc F. Flores</h2>
+            <p>Role: Lorem Ipsum</p>
+        </div>
+        
+        <div class="team-member">
+            {% comment %} <img src="{% static 'images/member3.jpg' %}" alt="Member 3" class="profile-img"> {% endcomment %}
+            <h2>Ryan Jay Anthony C. Timagos</h2>
+            <p>Role: Pinaka Cute :)</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 The Tribune</p>
+    </footer>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        
+        header h1 {
+            margin-top: 30px;
+        }
+        
+        .team-container {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 50px;
+        }
+        
+        .team-member {
+            width: 200px;
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+
+        .team-member h2 {
+            margin: 10px 0;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+        }
+    </style>
+</body>
+</html>

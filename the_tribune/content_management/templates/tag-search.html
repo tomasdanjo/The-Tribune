@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Articles by Tag</title>
+</head>
+<body>
+    <h1>Search Articles by Tag</h1>
+    
+    <!-- Search Form -->
+    <form method="GET" action="{% url 'tag-search' %}">
+        <input type="text" name="search" placeholder="Search tags..." value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+    
+    <hr>
+
+    <!-- Search Results -->
+    {% if query %}
+        <h2>Tags matching: "{{ query }}"</h2>
+        {% if tags %}
+            <ul>
+                {% for tag in tags %}
+                    <li>{{ tag.tag_name }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No tags found matching "{{ query }}".</p>
+        {% endif %}
+        
+        <h2>Articles under matching tags</h2>
+        {% if articles %}
+            <ul>
+                {% for article in articles %}
+                    <li>
+                        <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
+                       
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No articles found for matching tags.</p>
+        {% endif %}
+    {% else %}
+        <p>Search for tags to find related articles.</p>
+    {% endif %}
+</body>
+</html>

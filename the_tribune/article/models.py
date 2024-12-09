@@ -6,14 +6,16 @@ class Category(models.Model):
     CATEGORY_CHOICES = [
         ('news', 'News'),
         ('sports', 'Sports'),
+        ('religion', 'Religion'),
         ('entertainment', 'Entertainment'),
         ('technology', 'Technology'),
         ('lifestyle', 'Lifestyle'),
         ('opinion','Opinion'),
-        ('editorial','editorial'),
+        ('editorial','Editorial'),
         ('featured_topics','Featured Topics'),
         ('environment','Environment'),
         ('sci_and_tech','Science & Tech.')
+        
 
     ]
 

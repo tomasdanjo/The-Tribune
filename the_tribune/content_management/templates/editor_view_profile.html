@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 {% block title %}
-    {{ user_profile.first_name }}  {{ user_profile.last_name }}
+    Editor Dashboard
 {% endblock %}
-    
+
 {% block content %}
 
 <!-- update_profile_picture.html -->
@@ -51,19 +51,16 @@
                 
             </div>
         </div>
-    </div><div class="flex flex-col items-center text-center ml-4">
-                <p class="font-semibold text-gray-800">{{ user_profile.first_name }} {{ user_profile.last_name }}</p>
-                {% if not user.userprofile.is_reader %}
-                    <p class="text-gray-600 text-sm mt-1">
-                        {% if user.userprofile.is_writer %}
-                            Writer
-                        {% elif user.userprofile.is_editor %}
-                            Editor
-                        {% endif %}
-                    </p>
-                {% endif %}
+        <div id="content">
+            <div id="published-section" class="article-section">
+                <h2>Published Articles</h2>
+                <div class="article-card-container">
+                    <div class="article-card-grid">
+                        {{ published }}
+                    </div>
+                </div>
             </div>
-        </div>
+    </div>
 
     <!-- Back Button -->
     <div class="mt-4 mb-2 text-center">
@@ -72,6 +69,6 @@
         </button>
     </div>
 </div>
-test test test
+
 
 {% endblock %}
