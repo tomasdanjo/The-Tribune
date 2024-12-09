@@ -349,7 +349,7 @@ def about_us(request):
     return render(request, 'about-us.html')
 
 def mission_statement(request):
-    return render(request, 'mission-us.html')
+    return render(request, 'mission-statement.html')
 
 def ai_guidelines(request):
     return render(request, 'ai-guidelines.html')

@@ -70,13 +70,15 @@ hr {
 }
 
 #article-content-container {
-  width: calc(100% - 50px);
+  /* width: calc(100% - 50px); */
+  width: 100%;
 }
 
 #photo-container {
   display: flex;
   flex-direction: column;
   margin: 10px 0px;
+  width: 100%;
 }
 
 #photo-container img {
