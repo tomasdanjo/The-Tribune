@@ -20,6 +20,8 @@ urlpatterns = [
     path('writer_view_profile/<int:id>',writer_view_profile, name='writer_view_profile'),
     path('editor_View_profile/<int:id>',editor_view_profile, name='editor_view_profile'),
     path('tags/<int:tag_id>/', tag_search_view, name='tag-search'),
+    path('view_profile/<int:id>',writer_view_profile, name='writer_view_profile'),
+    path('view_profile/<int:id>',editor_view_profile, name='editor_view_profile'),
     path('filter_feedbacks/<int:id>/',filter_feedbacks, name='filter_feedbacks'),
     path('resolve_feedback/<int:feedback_id>/', resolve_feedback, name='resolve_feedback'),
     path('delete_feedback/<int:feedback_id>/', delete_feedback, name='delete_feedback'),
@@ -27,6 +29,7 @@ urlpatterns = [
     path('reply/add/<int:feedback_id>/', add_reply, name='add_reply'),
     path('reply/update/<int:reply_id>/', update_reply, name='update_reply'),
     path('delete_reply/<int:reply_id>/', delete_reply, name='delete_reply'),
+    
 
 
 

@@ -268,7 +268,7 @@ def edit_article(request, id):
                 article.editor = writer
 
             action = request.POST.get('action')
-            article.status = "draft" if action == "save_draft" else "submitted" if action == "submit_review" else "published"
+            article.status = "draft" if action == "save_draft" else "submitted" if action == "submit_review" or action=="save" else "published"
             article.save()
 
             return redirect('writer_dashboard' if writer.is_writer else 'editor_dashboard')
@@ -278,8 +278,11 @@ def edit_article(request, id):
         photo_form = Photo_Form(instance=article.photo)
         tag_form = Tag_Form(instance=article.tag)
         photo_instance=article.photo
+    
+    print(article.status)
 
     return render(request, 'create_article.html', {
+        'article':article,
         'article_form': article_form,
         'photo_form': photo_form,
         'tag_form': tag_form,
@@ -321,7 +324,7 @@ def approve_article(request,id):
 
 def archive_view(request,id):
     article = get_object_or_404(Article,id=id)
-    feedback = Feedback.objects.filter(article=article)
+    feedbacks = Feedback.objects.filter(article=article)[:1]
     user = None
     try:
         user = UserProfile.objects.get(user_credentials=request.user)
@@ -332,7 +335,7 @@ def archive_view(request,id):
 
     context = {
         'article':article,
-        'feedback':feedback,
+        'feedbacks':feedbacks,
         'auth_user':user,
         'current_date':current_date,
         'show_search':True,

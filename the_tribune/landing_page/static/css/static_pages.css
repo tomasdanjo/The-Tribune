@@ -1,0 +1,109 @@
+#about-us{
+  display: flex;
+  width: calc(100%-100px);
+  margin: 100px;
+  height: 70vh;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  transition: all 0.3s ease-in;
+}
+
+#about-us .img-container{
+  flex-grow: 1;
+  background: linear-gradient(45deg,#46445C, #45383F);
+  padding: 100px;
+  border-radius: 15px 0px 0px 15px ;
+}
+
+.img-container img{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0px;
+}
+
+#about-us .content-container{
+  width: 60%;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+#about-us:hover{
+  transform: translateY(-0.25rem);
+}
+
+.content-container h2{
+  font-size: 2rem;
+  color: #596E9B;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-weight: 500;
+  justify-self: flex-start;
+}
+
+.content-container h3{
+  margin: 10px 0px;
+  text-align: justify;
+  font-family: 'Poppins',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 1.2rem;
+}
+
+.content-container span{
+  background: linear-gradient(45deg,#46445C, #45383F);
+  font-weight: 400;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-style: italic;
+
+}
+
+#mission{
+  margin: 100px;
+  border-radius: 15px;
+  /* box-shadow: 1px 1px 5px rgba(0,0,0,0.3); */
+  padding: 50px 100px;
+}
+
+#mission .section-grid{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-auto-rows: auto;
+  gap: 20px;
+  margin: 20px;
+}
+
+#mission > .content-container .section-grid:nth-of-type(1) > :nth-child(3) {
+  grid-column: 1/-1;
+}
+
+.section-grid .section{
+  padding: 40px;
+  border-radius: 15px;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.3);
+  transition: all 0.1s ease;
+
+}
+
+.section-grid .section:hover{
+  transform: translateY(-0.25rem);
+  background-color: #f2f2f2;
+}
+
+
+#mission .section span{
+  font-style: normal;
+  font-weight: 300;
+}
+
+.section ul{
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  grid-auto-rows: auto;
+  gap: 40px;
+}
+
+.section ul li{
+  display: flex;
+  flex-direction: column;
+}

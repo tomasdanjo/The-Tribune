@@ -8,6 +8,7 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/full_article_view.css' %}"> 
+    <link rel="stylesheet" href="{% static 'css/draft.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/archive.css' %}"> 
 
 {% endblock %}
@@ -19,15 +20,37 @@
   <div class="btn-group">
     <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
   
+    
+    
+    {% if user.is_authenticated %}
     <div class="submit-btn-group">
-      <button onclick="showArchiveForm()" class="submit-btn">
-          Archive
-      </button>
-  
-      <button onclick="showPublishForm()" class="submit-btn highlight-btn">
-          Publish
-      </button>
+      {% if user.userprofile == article.editor %}
+        
+          <button onclick="showArchiveForm()" class="submit-btn">
+              Archive
+          </button>
+      {% endif %}
+      
+      {% if user.userprofile == article.writer or user.userprofile == article.editor %}
+        <a class="submit-btn highlight-btn" id="edit-btn" href="{% url 'edit_article' article.id %}"><img src="{% static 'icons\edit.svg' %}" alt=""> Edit</a>
+      {% endif %}
+
+      {% if user.userprofile == article.editor %}
+      
+          <button onclick="showPublishForm()" class="submit-btn highlight-btn">
+              Publish
+          </button>
+        
+      {% endif %}
+
+      
     </div>
+    {% endif %}
+
+    
+
+    
+    
         
   </div>
   

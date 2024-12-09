@@ -16,11 +16,28 @@
 
   {% include 'header.html' %}
 
-  <div>
-    {% include 'article-template.html' %}
-    {% include 'feedback-template.html' %}
+  <div id="action-group">
+    <div class="btn-group">
+      <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
+    </div>
   </div>
 
+  <div id="main">
+    <div id="article-wrapper">
+      <div>
+        {% include 'article-template.html' %}
+      </div>
+    </div>
+  
+    <div id="feedbacks-wrapper">
+  
+      <div id="feedbacks-container">
+        {% include 'feedback-template.html' %}
+      </div>
+  
+    </div>
+  
+  </div>
   
 
  
