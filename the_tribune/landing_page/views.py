@@ -364,7 +364,13 @@ def mission_statement(request):
     return render(request, 'mission-statement.html',context)
 
 def ai_guidelines(request):
-    return render(request, 'ai-guidelines.html')
+    current_date = datetime.now().strftime('%b %d, %Y')  
+    context = {
+        'show_search':True,
+        'current_date':current_date
+
+    }
+    return render(request, 'ai-guidelines.html',context)
 
 def the_team(request):
     return render(request, 'the-team.html')
@@ -373,4 +379,10 @@ def job_openings(request):
     return render(request, 'job-opening.html')
 
 def contact_us(request):
-    return render(request, 'contact-us.html')
+    current_date = datetime.now().strftime('%b %d, %Y')  
+    context = {
+        'show_search':True,
+        'current_date':current_date
+
+    }
+    return render(request, 'contact-us.html', context)
