@@ -1,16 +1,182 @@
-<h1>AI GUIDELINES</h1>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    AI Guidelines
+{% endblock %}
+
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+    <link rel="stylesheet" href="{% static 'css\static_pages.css' %}">
+{% endblock %}
 
 
-<h3>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
-    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, 
-    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, 
-    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, 
-    justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. 
-    Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, 
-    dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-     Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
-     tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, 
-     blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien 
-     ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.
-      Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales,
-       augue velit cursus nunc,</h3>
+{% block content %}
+{% include 'header.html' %}
+
+<div id="ai-guidelines">
+    <div class="section">
+        <h2>Uphold Journalistic Integrity</h2>
+        <ul>
+            <li>
+                <span>Accuracy</span>
+                <h3>AI-generated content should be fact-checked rigorously before publication to ensure it meets The Tribune’s standards for accuracy and reliability.</h3>
+            </li>
+            <li>
+                <span>Sources</span>
+                <h3>Ensure that AI-generated articles or insights are supported by verified and credible sources. AI should never fabricate or speculate information.</h3>
+            </li>
+        </ul>
+
+    </div>
+    <div class="section">
+        <h2>Transparency and Disclosure</h2>
+        <ul>
+            <li>
+                <span>Clear Labeling</span>
+                <h3>Any content produced by AI should be clearly labeled as such, so readers can distinguish between human-written and AI-assisted articles.</h3>
+            </li>
+            <li>
+                <span>Methodology Disclosure</span>
+                <h3>When AI tools are used for data analysis or content creation, the methodology and type of AI used should be disclosed to maintain trust.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Fairness and Bias Minimization</h2>
+        <ul>
+            <li>
+                <span>Bias Audits</span>
+                <h3>AI models must be regularly audited to identify and minimize any biases. These audits should be conducted by diverse teams to ensure impartiality.</h3>
+            </li>
+            <li>
+                <span>Balanced Representation</span>
+                <h3>AI-generated content should strive to represent multiple perspectives and avoid reinforcing stereotypes or promoting biased narratives.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Privacy and Data Ethics</h2>
+        <ul>
+            <li>
+                <span>User Privacy</span>
+                <h3>AI tools must adhere to stringent data privacy laws and best practices to protect user information.</h3>
+            </li>
+            <li>
+                <span>Ethical Data Use</span>
+                <h3>Ensure that data used to train AI models is sourced ethically and, where applicable, anonymized to prevent misuse.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Human Oversight</h2>
+        <ul>
+            <li>
+                <span>Editorial Review</span>
+                <h3>AI-generated articles must go through human editorial review before publication. Editors should assess the content for clarity, factual correctness, and adherence to The Tribune’s editorial standards.</h3>
+            </li>
+            <li>
+                <span>Collaboration</span>
+                <h3>AI should be seen as an assistant to human journalists, helping them produce content faster, but not as a replacement for human insight and oversight.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Engagement and Interactivity</h2>
+        <ul>
+            <li>
+                <span>User Interaction</span>
+                <h3>AI should be used to facilitate meaningful engagement with readers, such as responding to inquiries, providing recommendations, and personalizing content in a way that maintains the organization's tone and values.</h3>
+            </li>
+            <li>
+                <span>Feedback Loop</span>
+                <h3>Collect reader feedback on AI-generated content and use it to improve the algorithms and refine future outputs.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Ethical Advertising</h2>
+        <ul>
+            <li>
+                <span>Non-Invasive</span>
+                <h3>Use AI in a way that does not compromise user trust through intrusive advertising or content placement.</h3>
+            </li>
+            <li>
+                <span>Ad Transparency</span>
+                <h3>Ensure that any AI-driven ad placement is disclosed to readers so that they are aware of when content is sponsored or personalized.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Security and Safety</h2>
+        <ul>
+            <li>
+                <span>Data Security</span>
+                <h3>Protect the AI systems and data they use against unauthorized access, data breaches, and potential misuse.
+                </h3>
+            </li>
+            <li>
+                <span>Cybersecurity Measures</span>
+                <h3>Regularly update AI tools and systems to protect against vulnerabilities.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>AI Limitations Awareness</h2>
+        <ul>
+            <li>
+                <span>Knowledge Boundaries</span>
+                <h3>AI should be used for tasks that align with its capabilities. Do not rely on AI for tasks it cannot accurately handle, such as investigative journalism that requires human intuition and critical thinking.
+                </h3>
+            </li>
+            <li>
+                <span>Quality Control</span>
+                <h3>Ensure that AI-generated content is continually monitored and updated to prevent outdated or incorrect information from being disseminated.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+    <div class="section">
+        <h2>Commitment to Human-Centric AI</h2>
+        <ul>
+            <li>
+                <span>Support for Journalists</span>
+                <h3>AI should be used as a tool that enhances journalists' work, rather than replacing them. Training for staff on how to work effectively with AI should be provided.
+                </h3>
+            </li>
+            <li>
+                <span>Diversity and Inclusion</span>
+                <h3>AI technologies should be designed and implemented with inclusivity in mind, considering diverse viewpoints and ensuring that underrepresented voices are reflected and respected.</h3>
+            </li>
+        </ul>
+
+    </div>
+
+
+These guidelines aim to foster the responsible use of AI at The Tribune while maintaining high journalistic standards and trust with readers.
+
+</div>
+
+
+
+{% include 'footer.html' %}
+
+
+
+{% endblock %}
+
+
