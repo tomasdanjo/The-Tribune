@@ -9,6 +9,7 @@ from datetime import date
 import calendar
 
 def search_article(request):
+    user = None
     if request.user.is_authenticated:
         try:
             user = UserProfile.objects.get(user_credentials=request.user)
@@ -99,7 +100,9 @@ def search_article(request):
         'has_tag': has_tag,
         'category_id': category_id,
         'current_date':current_date,
-        'auth_user':user
+        'auth_user':user,
+        'show_search':False
+
         
     }
 
