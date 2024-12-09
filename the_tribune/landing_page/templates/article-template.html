@@ -2,7 +2,7 @@
 
 <article >
   <header>
-      <p id="tag-name">{{ article.tag.tag_name }}</p>
+      <a id="tag-name" href="{% url 'tag_view' article.tag.id %}">{{ article.tag.tag_name }}</a>
       <hr>
       <h1 id="headline">{{ article.headline }}</h1>
       <a id="writer-name" href="{% url 'view_profile' article.writer.id %}">{{ article.writer.first_name }} {{ article.writer.last_name }}</a>

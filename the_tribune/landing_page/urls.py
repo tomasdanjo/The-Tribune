@@ -22,4 +22,5 @@ urlpatterns = [
     path('job-opening/', job_openings, name='job_openings'),
     path('contact-us/', contact_us, name='contact_us'),
     path('category/<int:id>/',category_view, name='category_view'),
+    path('tag/<int:id>/',tag_view, name='tag_view'),
 ]

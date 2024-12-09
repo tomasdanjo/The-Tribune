@@ -189,6 +189,7 @@ body{
   flex-direction: column;
   gap: 10px;
   align-items: center;
+  justify-content: center ;
 }
 
 #sidebar-content .img-container{
@@ -471,3 +472,20 @@ footer > div a:hover {
 footer:nth-child(2) {
   gap: 10px;
 }
+
+#sidebar-content .category-link{
+  width: 100%;
+  padding: 10px 20px;
+  color: #596e9b;
+  border-radius: 15px;
+  transition: all 0.1s ease;
+  font-weight: 500;
+}
+
+#sidebar-content .category-link:hover{
+  transform: translateY(-0.25rem);
+  transform: translateX(0.25rem);
+  scale: 1.1;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+

@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{tag.tag_name}}
+{% endblock %}
+
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css\base.css' %}">
+<link rel="stylesheet" href="{% static 'css\category_view.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include 'header.html' %}
+
+<div id="articles-wrapper">
+  <h2>{{tag.tag_name}}</h2>
+
+  <div class="articles-container">
+    {% for article in articles %}
+        <div class="article-card">
+            {% if article.photo_id %}
+            <div class="article-card-photo-container">
+                <img
+                src="{{ MEDIA_URL }}{{ article.photo.photo.url }}"
+                alt="Photo for {{ article.headline }}"
+                />
+            </div>
+            {% endif %}
+            <div class="card-text-container">
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
+                <h2 class="card-headline">
+                    <a href="{% url 'full_article_view' article.id %}"
+                    >{{ article.headline }}</a
+                    >
+                </h2>
+
+                <a class="card-writer" href="{% url 'view_profile' article.writer.id %}">{{article.writer.first_name}} {{article.writer.last_name}}</a>
+                <p class="card-published-date">{{ article.date_published }}</p>
+                
+            </div>
+        </div>
+    {% empty %}
+        <p>No articles found.</p>
+    {% endfor %}
+
+</div>
+</div>
+
+  
+
+
+
+  
+
+
+
+
+
+{% include 'footer.html' %}
+
+
+
+{% endblock %}
+
+

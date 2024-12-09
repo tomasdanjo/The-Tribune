@@ -1,7 +1,7 @@
 from django.shortcuts import render,get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from article.models import Article
+from article.models import Article, Tag
 from .models import Comment, Subscription, ContactSubmission
 from django.contrib import messages 
 from django.utils import timezone
@@ -432,3 +432,26 @@ def category_view(request,id):
     }
 
     return render(request,'category-view.html',context)
+
+def tag_view(request,id):
+    if request.user.is_authenticated:
+        try:
+            user = UserProfile.objects.get(user_credentials=request.user)
+        except UserProfile.DoesNotExist:
+            user = None  # Handle the case where no UserProfile is found
+    else:
+        user = None 
+
+    tag = get_object_or_404(Tag,id=id)
+    articles = Article.objects.all().filter(tag=tag).order_by('-date_published')
+    current_date = datetime.now().strftime('%b %d, %Y') 
+
+    context = {
+        'tag':tag,
+        'articles':articles,
+        'show_search':True,
+        'current_date':current_date,
+        'auth_user':user
+    }
+
+    return render(request,'tag-view.html',context)

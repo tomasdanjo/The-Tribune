@@ -23,6 +23,8 @@
   height: 100%;
   border-radius: 15px;
   transition: all 0.1s ease;
+  display: flex;
+  flex-direction: column;
 }
 
 .article-card:hover{
@@ -71,4 +73,5 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
+  flex-grow: 1;
 }
