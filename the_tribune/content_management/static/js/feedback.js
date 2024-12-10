@@ -100,7 +100,7 @@ function resolveFeedback(feedbackId) {
       }
     },
     error: function () {
-      alert("An error occurred while resolving the feedback.");
+      // alert("An error occurred while resolving the feedback.");
     },
   });
 }

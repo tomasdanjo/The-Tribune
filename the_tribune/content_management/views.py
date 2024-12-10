@@ -28,7 +28,7 @@ def tag_search_view(request, tag_id):
 
 # Create your views here.
 def writer_dashboard_view(request):
-    articles = Article.objects.filter(writer = request.user.userprofile)
+    articles = Article.objects.filter(writer = request.user.userprofile).order_by('-date_published')
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     submitted = articles.filter(status='submitted')
@@ -54,7 +54,6 @@ def writer_dashboard_view(request):
         'current_date':current_date,
         'show_search':True,
         'unread_notifs':unread_notifs,
-        
         'read_notifs':read_notifs
 
     }
@@ -66,7 +65,7 @@ def writer_dashboard_view(request):
 
 def editor_dashboard_view(request):
 
-    articles = Article.objects.filter(editor=request.user.userprofile)
+    articles = Article.objects.filter(editor=request.user.userprofile).order_by('-date_published')
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     archived = articles.filter(status='archived')
@@ -79,6 +78,11 @@ def editor_dashboard_view(request):
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
     review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
+    notifications = Notification.objects.all().filter(user=request.user).order_by('-created_at')
+
+    unread_notifs = notifications.filter(is_read=False)
+    read_notifs = notifications.filter(is_read=True)
+
     context = {
         'articles':articles,
         'published':published,
@@ -86,7 +90,9 @@ def editor_dashboard_view(request):
         'archived':archived,
         'review':review,
         'current_date':current_date,
-        'show_search':True
+        'show_search':True,
+        'unread_notifs':unread_notifs,
+        'read_notifs':read_notifs
 
     }
 
@@ -489,7 +495,7 @@ def filter_feedbacks(request, id):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
-@csrf_exempt
+    
 def resolve_feedback(request, feedback_id):
 
     if request.method == 'POST':
