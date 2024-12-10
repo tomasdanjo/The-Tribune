@@ -73,7 +73,7 @@
               <h4>Start the Conversation!</h4>
               <p>Be a part of our global community of The Tribune members and discuss stories while getting access to exclusive content and events. Your subscription helps support press freedom.</p>
               
-              <a href="{% url 'login' %}">Join The Tribune to Comment</a>
+              <a href="{% url 'login' %}?article_id={{ article.id }}">Join The Tribune to Comment</a>
           </div>
       {% else %}
           <!-- form to add comments here -->

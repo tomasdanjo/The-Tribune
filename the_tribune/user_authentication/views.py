@@ -10,6 +10,14 @@ from landing_page.views import full_article
 
 
 def login_view(request):
+    from_sidebar = request.GET.get('from_sidebar')
+    if from_sidebar:
+        request.session['from_sidebar'] = True
+
+    article_id = request.GET.get('article_id')
+    if article_id:
+        request.session['article_id'] = article_id
+
     if request.method == "POST":
         form = Login_Form(request.POST)
         if form.is_valid():
@@ -43,10 +51,14 @@ def login_view(request):
                                 return redirect('editor_dashboard')  
                             elif user_profile.is_reader:
                                 article_id = request.session.get('article_id')
+                                from_sidebar = request.session.get('from_sidebar')
                                 if article_id:
                                     print(article_id)
                                     del request.session['article_id']  # Clear session after redirect
                                     return redirect('full_article_view', id=article_id)
+                                elif from_sidebar:
+                                    del request.session['from_sidebar']
+                                    return redirect('home')
                                 else:
                                     messages.info(request, 'Login successful! Redirecting to home.')
                                     return redirect('home')
@@ -84,8 +96,9 @@ def signup_view(request):
                 # Create the user profile
 
                 article_id = request.session.get('article_id')
+                from_sidebar = request.session.get('from_sidebar')
 
-                if article_id:
+                if article_id or from_sidebar:
                     is_reader = True
                 else:
                     is_reader = False
