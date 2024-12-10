@@ -176,8 +176,8 @@ def create_article(request):
                 notif_title = "Article Published"
                 notif_message = f"You have published the article '{article.headline}'. Click to view."
                 link = f"/article/{article.id}"
-                notification_type = "publish"
-                editor = article.editor  # Example notification type
+                notification_type = "publish" 
+                editor=article.editor 
                 create_notification(editor.user_credentials, notif_title, notif_message,notification_type ,link )
 
 
