@@ -325,27 +325,34 @@ def delete_draft(request, article_id):
 
 def update_profile(request,id):
     # Get the user profile for the currently logged-in user
-    user_profile = get_object_or_404(UserProfile,id=id)
+    profile = get_object_or_404(UserProfile,id=id)
     # If the request method is POST, we want to handle the form submission
     if request.method == 'POST':
-        pictureform = ProfilePictureForm(request.POST, request.FILES, instance=user_profile)
-        biographyform = ProfileBiographyForm(request.POST,instance=user_profile)
+        pictureform = ProfilePictureForm(request.POST, request.FILES, instance=profile)
+        biographyform = ProfileBiographyForm(request.POST,instance=profile)
 
         if pictureform.is_valid():
             pictureform.save()  
         if biographyform.is_valid():
             biographyform.save()
 
-        if user_profile.is_editor:
+        if profile.is_editor:
                 return redirect('editor_dashboard')  # Redirect
-        elif user_profile.is_writer:
+        elif profile.is_writer:
                 return redirect('writer_dashboard')  # Redirect
     else:
         # GET request, so pre-fill the form with the current profile picture
-        pictureform = ProfilePictureForm(instance=user_profile)
-        biographyform = ProfileBiographyForm(instance=user_profile)
+        pictureform = ProfilePictureForm(instance=profile)
+        biographyform = ProfileBiographyForm(instance=profile)
     # Render the template with the form
-    return render(request, 'update_profile_picture.html', {'pictureform': pictureform,'biographyform':biographyform, 'user_profile': user_profile})
+    current_date = datetime.now().strftime('%b %d, %Y') 
+    context = {
+        'pictureform': pictureform,
+        'biographyform':biographyform, 
+        'profile': profile,
+        'current_date':current_date
+    }
+    return render(request, 'update_profile_picture.html', context)
 
 def tag_search_view(request):
     query = request.GET.get('search', '')
@@ -357,7 +364,6 @@ def tag_search_view(request):
         articles = Article.objects.none()  
 
     return render(request, 'tag-search.html', {'tags': tags, 'articles': articles, 'query': query})
-    return render(request, 'view_profile.html', {'user_profile': user_profile})
 
 
 def filter_feedbacks(request, id):

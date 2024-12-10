@@ -11,9 +11,17 @@
             <div class="card-text-container">
                 <p class="card-category">{{ article.category.get_category_name_display }}</p>
                 <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}"
-                    >{{ article.headline }}</a
-                    >
+                    <a 
+                    {% if article.status == 'published' %}
+                      href="{% url 'full_article_view' article.id %}"
+                    {% elif article.status == 'archived' %} 
+                      href="{% url 'archive' article.id %}"
+                    {% elif article.status == 'draft' %}
+                      href="{% url 'draft' article.id %}"
+                    {% elif article.status == 'submitted' %}
+                      href="{% url 'approve' article.id %}"
+                    {% endif %}
+                    >{{ article.headline }}</a>
                 </h2>
 
                 <a class="card-writer" href="{% url 'view_profile' article.writer.id %}">{{article.writer.first_name}} {{article.writer.last_name}}</a>

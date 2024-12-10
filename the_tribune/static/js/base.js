@@ -17,3 +17,4 @@ function autoResize(textarea) {
   // If content exceeds one line, expand
   textarea.style.height = `${textarea.scrollHeight}px`;
 }
+
