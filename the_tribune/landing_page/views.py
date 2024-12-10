@@ -14,6 +14,8 @@ from datetime import datetime
 from article.models import Category
 from user_authentication.models import UserProfile
 from django.contrib.auth.models import AnonymousUser
+import json
+
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
@@ -210,6 +212,25 @@ def add_comment(request, article_id):
         return JsonResponse({'comments_html': comments_html,'comment_count':comments.count()})
     else:
         return JsonResponse({'error': 'Comment cannot be empty.'}, status=400)
+
+@require_POST
+def update_comment(request, comment_id):
+    if request.method == "POST":
+        try:
+            # Fetch the comment object by its ID
+            comment = Comment.objects.get(id=comment_id)
+
+            # Get the updated comment from the request body (as JSON)
+            updated_comment = json.loads(request.body).get('comment')
+
+            # Update the comment text
+            comment.content = updated_comment
+            comment.save()
+
+            return JsonResponse({'success': True})
+        except Comment.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Comment not found'}, status=404)
+    return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=400)
 
 
 @login_required

@@ -22,4 +22,5 @@ urlpatterns = [
     path('contact-us/', contact_us, name='contact_us'),
     path('category/<int:id>/',category_view, name='category_view'),
     path('tag/<int:id>/',tag_view, name='tag_view'),
+    path('comment/update/<int:comment_id>/', update_comment, name='update_comment'),
 ]
