@@ -17,7 +17,7 @@
       <a href="{% url 'category_view' 4 %}" class="category-link">Technology</a>
       <a href="{% url 'category_view' 5 %}" class="category-link">Lifestyle</a> 
     {% else %}
-      {% include 'profile-picture.html' %}
+      {% include 'profile-picture.html' with profile=request.user.userprofile %}
       <h2 class="user-full-name">
         {{ request.user.userprofile.first_name }} {{ request.user.userprofile.last_name }}
       </h2>

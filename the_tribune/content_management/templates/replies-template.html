@@ -3,7 +3,7 @@
         <div class="reply-container" id="reply-container-{{ reply.id }}">
             <div class="top">
                 <div class="left"> 
-                    {% include 'profile-picture.html' with user=reply.author %}
+                    {% include 'profile-picture.html' with profile=reply.author %}
                     <div>
                         <a href="{% url 'view_profile' reply.author.id %}"><h2>{{ reply.author.first_name }} {{ reply.author.last_name }}</h2></a>
                         <p class="created-at">{{ reply.created_at }}</p>

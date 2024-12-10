@@ -528,23 +528,18 @@ def delete_reply(request, reply_id):
 
 
 def view_profile(request, id):
-    user = None
-    try:
-        user = UserProfile.objects.get(id=id)
-    except UserProfile.DoesNotExist:
-        user = None
-
     # Fetch published articles authored by the user
-    articles = Article.objects.filter(writer=user)
+    profile = UserProfile.objects.get(id=id)
+
+    articles = Article.objects.filter(writer=profile)
+    current_date = datetime.now().strftime('%b %d, %Y')
     published_articles = articles.filter(status='published')
 
-    # Render published articles into an HTML string
-    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
-
     context = {
-        'user': request.user,
-        'articles': articles,
-        'published': published_html,
+        'profile':profile,
+        'articles': published_articles,
+        'current_date':current_date,
+        'show_search':True
     }
 
     return render(request, 'view_profile.html', context)

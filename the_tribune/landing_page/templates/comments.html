@@ -6,7 +6,7 @@
   {% for comment in comments %}
   <div class="comment-group">
       <div class="reader-profile">
-          {% include 'profile-picture.html' with user=comment.commenter %}
+          {% include 'profile-picture.html' with profile=comment.commenter %}
         </div>
       <div class="comment-container-wrapper">
           <div class="name-date-container">

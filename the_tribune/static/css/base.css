@@ -267,6 +267,7 @@ body{
   padding: 5px 10px;
   border-radius: 15px;
   transition: all 0.1s ease-in;
+  align-items: center;
 
 }
 
@@ -289,6 +290,8 @@ body{
   border-radius: 15px;
   transition: all 0.1s ease-in;
   color: #46445C;
+  display: flex;
+  gap: 10px;
 }
 
 .submit-btn-group .highlight-btn{

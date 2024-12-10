@@ -3,7 +3,7 @@
 <div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}" onclick="showReplyForm(event)" id="feedback-container-{{feedback.id}}">
     <div class="top">
         <div class="left"> 
-            {% include 'profile-picture.html' %}
+            {% include 'profile-picture.html' with profile=feedback.author %}
             <div>
                 <a href="{% url 'view_profile' feedback.editor.id %}"><h2>{{ feedback.editor.first_name }} {{ feedback.editor.last_name }}</h2></a>
                 

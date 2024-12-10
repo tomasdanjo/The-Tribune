@@ -121,7 +121,7 @@
     <div>
       <div id="feedback-form-container">
         <div id="form-profile-container" class="form-field">
-          {% include 'profile-picture.html' %}
+          {% include 'profile-picture.html' with profile=request.user.userprofile %}
           <textarea name="feedback" id="feedback-text" placeholder="What do you think?"
           class="field textarea"
           ></textarea>
