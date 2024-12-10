@@ -1,4 +1,5 @@
 {% load static %}
+<input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
 {% for feedback in feedbacks %}
 <div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}" onclick="showReplyForm(event)" id="feedback-container-{{feedback.id}}">
     <div class="top">
@@ -38,7 +39,7 @@
     </div>
 
     <div class="replies-container">
-        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        
         <textarea name="" id="" class="field textarea" placeholder="Reply"></textarea>
         <div class="submit-btn-group">
             <button class="submit-btn" onclick="hideRepliesContainer(event)">Cancel</button> 
@@ -54,4 +55,4 @@
 {% endfor %}
 
 {% load static %}
-<script src="{% static 'js\feedback.js' %}"></script>
+<script src="{% static 'js/feedback.js' %}"></script>

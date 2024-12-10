@@ -20,7 +20,7 @@ from notification.views import create_notification
 
 # Create your views here.
 def writer_dashboard_view(request):
-    articles = Article.objects.filter(writer = request.user.userprofile)
+    articles = Article.objects.filter(writer = request.user.userprofile).order_by('-date_published')
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     submitted = articles.filter(status='submitted')
@@ -58,7 +58,7 @@ def writer_dashboard_view(request):
 
 def editor_dashboard_view(request):
 
-    articles = Article.objects.filter(editor=request.user.userprofile)
+    articles = Article.objects.filter(editor=request.user.userprofile).order_by('-date_published')
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     archived = articles.filter(status='archived')
@@ -481,7 +481,7 @@ def filter_feedbacks(request, id):
 
     return JsonResponse({"status": "error", "message": "Invalid request method"})
 
-@csrf_exempt
+    
 def resolve_feedback(request, feedback_id):
 
     if request.method == 'POST':
