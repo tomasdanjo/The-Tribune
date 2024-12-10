@@ -25,10 +25,10 @@ def writer_dashboard_view(request):
     archived = articles.filter(status='archived')
     current_date = datetime.now().strftime('%b %d, %Y')
 
-    published = render_to_string('article-card.html',{'articles':published},request=request)
-    drafts = render_to_string('article-card.html',{'articles':drafts},request=request)
-    submitted = render_to_string('article-card.html',{'articles':submitted},request=request)
-    archived = render_to_string('article-card.html',{'articles':archived},request=request)
+    published = render_to_string('category-article-card.html',{'articles':published},request=request)
+    drafts = render_to_string('category-article-card.html',{'articles':drafts},request=request)
+    submitted = render_to_string('category-article-card.html',{'articles':submitted},request=request)
+    archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
 
     context = {
         'articles':articles,

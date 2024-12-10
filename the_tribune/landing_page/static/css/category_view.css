@@ -60,11 +60,12 @@
   color: #46445C;
   font-size: 1.2rem;
   font-weight: 400;
+  margin: 10px 0px;
 }
 
 .card-published-date{
   color: #857373;
-  margin-top: 10px;
+  margin-top: auto;
   justify-self: end;
 
 }
