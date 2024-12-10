@@ -70,8 +70,35 @@
         </div>
     
 
-        <div id="notification-section">
+        <div id="notification-section"
+            class="notification-container" >
+        
+            <div class="notification-tabs submit-btn-group">
+                <button class="active submit-btn" id="unread-tab" onclick="showUnreadNotifications()">
+                    Unread
+                </button>
+                <button class="submit-btn" id="read-tab" onclick="showReadNotifications()">
+                    Read
+                </button>
+                
+                <button class="mark-all-btn submit-btn" id="mark-all-btn" onclick="markAllAsRead()">
+                    <i class="fas fa-check-double"></i> Mark all as read
+                </button>
 
+                
+            </div>
+    
+            
+            <div id="unread-notif-container" class="notification-list">
+                
+                {% include 'notification-card.html' with notifications=unread_notifs%}
+                
+                
+            </div>
+    
+            <div id="read-notif-container" class="notification-list" style="display: none;">
+                {% include 'notification-card.html' with notifications=read_notifs%}
+            </div>
         </div>
     </div>
 

@@ -14,13 +14,10 @@ from datetime import datetime
 from article.models import Category,ArticleAnalytics
 from user_authentication.models import UserProfile
 from django.contrib.auth.models import AnonymousUser
-<<<<<<< HEAD
 import json
 
-=======
 from django.utils import timezone
 from django.db import models
->>>>>>> tomasdanjo
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
