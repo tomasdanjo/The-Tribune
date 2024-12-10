@@ -504,7 +504,7 @@ footer:nth-child(2) {
   object-fit: contain;
 }
 
-#sidebar-content form{
+#sidebar-content form,#sidebar-content #join-btn{
   width: 100%;
   margin-top: auto;
 }
@@ -531,5 +531,15 @@ footer:nth-child(2) {
 #sidebar-content #img-container{
   height: 5rem;
   width: 5rem;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
+
+#sidebar-content #join-btn{
+  background: linear-gradient(90deg, #46445c, #596e9b);
+  text-align: center;
+}
+
+#sidebar-content #join-btn:hover{
+  background: #45383F;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
 }
