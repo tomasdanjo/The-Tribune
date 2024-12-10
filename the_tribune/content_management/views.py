@@ -11,6 +11,7 @@ from datetime import datetime
 from django.template.loader import render_to_string
 from .models import Feedback
 import json
+from django.db.models import Q
 
 # from django import form
 
@@ -531,7 +532,11 @@ def view_profile(request, id):
     # Fetch published articles authored by the user
     profile = UserProfile.objects.get(id=id)
 
-    articles = Article.objects.filter(writer=profile)
+
+    articles = Article.objects.filter(
+    Q(writer=profile) | Q(editor=profile), 
+    status='published').order_by('-date_published')
+
     current_date = datetime.now().strftime('%b %d, %Y')
     published_articles = articles.filter(status='published')
 

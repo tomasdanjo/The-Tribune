@@ -14,7 +14,7 @@
 
 {% block content %}
 
-  {% include 'header.html' %}
+  {% include 'header.html' with profile=request.user.userprofile %}
 
   <div id="action-group">
     <div class="btn-group">
