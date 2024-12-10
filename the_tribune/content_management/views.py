@@ -46,7 +46,6 @@ def writer_dashboard_view(request):
         'current_date':current_date,
         'show_search':True,
         'unread_notifs':unread_notifs,
-        
         'read_notifs':read_notifs
 
     }
@@ -71,6 +70,11 @@ def editor_dashboard_view(request):
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
     review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
+    notifications = Notification.objects.all().filter(user=request.user).order_by('-created_at')
+
+    unread_notifs = notifications.filter(is_read=False)
+    read_notifs = notifications.filter(is_read=True)
+
     context = {
         'articles':articles,
         'published':published,
@@ -78,7 +82,9 @@ def editor_dashboard_view(request):
         'archived':archived,
         'review':review,
         'current_date':current_date,
-        'show_search':True
+        'show_search':True,
+        'unread_notifs':unread_notifs,
+        'read_notifs':read_notifs
 
     }
 
