@@ -2,12 +2,12 @@
 
 <header id="header">
   <div id="date-container">
-            {% if user.is_authenticated %}
-                {% if user.userprofile.is_writer or user.userprofile.is_editor %}
+            {% if request.user.is_authenticated %}
+                {% if request.user.userprofile.is_writer or request.user.userprofile.is_editor %}
                 <button onclick="openSidebar()" id="sidebar-btn">
                     <div id="button-wrapper">
-                        {% include 'profile-picture.html' with user=auth_user %}
-                        <p>{{auth_user.first_name}} {{auth_user.last_name}}</p>
+                        {% include 'profile-picture.html' with profile=request.user.userprofile %}
+                        <p>{{request.user.userprofile.first_name}} {{request.user.userprofile.last_name}}</p>
                     </div>
                 </button>
                 {% else %}

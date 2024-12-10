@@ -27,3 +27,4 @@ class Notification(models.Model):
     user_id = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
     
     
+    

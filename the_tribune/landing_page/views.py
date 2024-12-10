@@ -1,8 +1,8 @@
 from django.shortcuts import render,get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.contrib.auth.decorators import login_required
-from article.models import Article
-from .models import Comment, Subscription
+from article.models import Article, Tag
+from .models import Comment, Subscription, ContactSubmission
 from django.contrib import messages 
 from django.utils import timezone
 from .forms import CommentForm
@@ -21,14 +21,7 @@ from django.contrib.auth.models import AnonymousUser
 def landing_page(request):
     article_id = request.session.get('article_id')
     
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None  # Handle unauthenticated users
-
+    
     if article_id:  
         del request.session['article_id']  # Clear session after redirect
     
@@ -68,7 +61,6 @@ def landing_page(request):
 
     context =  {
         'articles': articles,
-        'auth_user':user,
         'current_date':current_date,
         'news_articles':news_articles,
         'sports_articles':sports_articles,
@@ -89,22 +81,15 @@ def landing_page(request):
     return render(request, 'landing_page.html',context)
 
 def full_article(request, id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None 
-
     article = get_object_or_404(Article,id=id)
     comment_count = Comment.objects.filter(article_id=id).count()
     comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
     related_stories_count = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published').count()
 
-    request.session['article_id'] = id
+    # request.session['article_id'] = id
     print("Comment count: ",comment_count)
+
 
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 
@@ -115,7 +100,6 @@ def full_article(request, id):
         'related_stories':related_stories,
         'comment_form':comment_form,
         'related_stories_count':related_stories_count,
-        'auth_user':user,
         'current_date':current_date,
         'show_search':True
     }
@@ -340,10 +324,7 @@ def delete_comment(request, comment_id):
             return JsonResponse({'error': 'You are not authorized to delete this comment.'}, status=403)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
-def view_profile(request, id):
-    user_profile = get_object_or_404(UserProfile, id=id)
-    
-    return render(request, 'view_profile.html', {'user_profile': user_profile,})
+
 
 def about_us(request):
     current_date = datetime.now().strftime('%b %d, %Y')  
@@ -364,7 +345,13 @@ def mission_statement(request):
     return render(request, 'mission-statement.html',context)
 
 def ai_guidelines(request):
-    return render(request, 'ai-guidelines.html')
+    current_date = datetime.now().strftime('%b %d, %Y')  
+    context = {
+        'show_search':True,
+        'current_date':current_date
+
+    }
+    return render(request, 'ai-guidelines.html',context)
 
 def the_team(request):
     return render(request, 'the-team.html')
@@ -373,4 +360,52 @@ def job_openings(request):
     return render(request, 'job-opening.html')
 
 def contact_us(request):
-    return render(request, 'contact-us.html')
+
+    if request.method == "POST":
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        if not name or not email or not message:
+            return JsonResponse({'error': 'All fields are required.'}, status=400)
+
+        # Save the contact message
+        ContactSubmission.objects.create(name=name, email=email, message=message)
+        return JsonResponse({'status':'success','success': 'Thank you for contacting us! Your message has been received.'}, status=200)
+    else:
+
+        current_date = datetime.now().strftime('%b %d, %Y')  
+        context = {
+            'show_search':True,
+            'current_date':current_date,
+
+        }
+    return render(request, 'contact-us.html', context)
+
+def category_view(request,id):
+    category = get_object_or_404(Category,id=id)
+    articles = Article.objects.all().filter(category=category).order_by('-date_published')
+    current_date = datetime.now().strftime('%b %d, %Y') 
+
+    context = {
+        'category':category,
+        'articles':articles,
+        'show_search':True,
+        'current_date':current_date,
+    }
+
+    return render(request,'category-view.html',context)
+
+def tag_view(request,id):
+    tag = get_object_or_404(Tag,id=id)
+    articles = Article.objects.all().filter(tag=tag).order_by('-date_published')
+    current_date = datetime.now().strftime('%b %d, %Y') 
+
+    context = {
+        'tag':tag,
+        'articles':articles,
+        'show_search':True,
+        'current_date':current_date,
+    }
+
+    return render(request,'tag-view.html',context)

@@ -4,7 +4,7 @@
   <div class="btn-group">
       <a href="javascript:history.back()" id="back-btn"><img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p></a>
       <div class="submit-btn-group">
-          {% if article.status == 'draft' %}
+          {% if article.status == 'draft' or article.status == null %}
             
             <button type="submit"  name="action" value="save_draft" class="submit-btn" onclick="return validateForm();">Save as Draft</button>
             {% if writer.is_writer %}

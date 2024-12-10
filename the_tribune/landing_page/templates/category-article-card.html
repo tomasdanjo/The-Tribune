@@ -1,0 +1,34 @@
+{% for article in articles %}
+        <div class="article-card">
+            {% if article.photo_id %}
+            <div class="article-card-photo-container">
+                <img
+                src="{{ MEDIA_URL }}{{ article.photo.photo.url }}"
+                alt="Photo for {{ article.headline }}"
+                />
+            </div>
+            {% endif %}
+            <div class="card-text-container">
+                <p class="card-category">{{ article.category.get_category_name_display }}</p>
+                <h2 class="card-headline">
+                    <a 
+                    {% if article.status == 'published' %}
+                      href="{% url 'full_article_view' article.id %}"
+                    {% elif article.status == 'archived' %} 
+                      href="{% url 'archive' article.id %}"
+                    {% elif article.status == 'draft' %}
+                      href="{% url 'draft' article.id %}"
+                    {% elif article.status == 'submitted' %}
+                      href="{% url 'approve' article.id %}"
+                    {% endif %}
+                    >{{ article.headline }}</a>
+                </h2>
+
+                <a class="card-writer" href="{% url 'view_profile' article.writer.id %}">{{article.writer.first_name}} {{article.writer.last_name}}</a>
+                <p class="card-published-date">{{ article.date_published }}</p>
+                
+            </div>
+        </div>
+    {% empty %}
+        <p>No articles found.</p>
+    {% endfor %}

@@ -2,12 +2,14 @@
 {% load static %}
 
 {% block title %}
-    {{ user.userprofile.first_name}} {{ user.userprofile.last_name }}
+    {{ request.user.userprofile.first_name}} {{ request.user.userprofile.last_name }}
 {% endblock %}
 
 {% block style %}
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    <link rel="stylesheet" href="{% static 'css/category_view.css' %}"> 
     <link rel="stylesheet" href="{% static 'css/writer-editor.css' %}"> 
 {% endblock %}
 
@@ -34,7 +36,7 @@
         <div id="published-section" class="article-section">
             <h2>Published Articles</h2>
             <div class="article-card-container">
-                <div class="article-card-grid">
+                <div class="articles-container">
                     {{ published }}
                 </div>
             </div>

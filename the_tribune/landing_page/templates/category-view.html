@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+    {{category.get_category_name_display}}
+{% endblock %}
+
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css\base.css' %}">
+<link rel="stylesheet" href="{% static 'css\category_view.css' %}">
+{% endblock %}
+
+
+{% block content %}
+
+{% include 'header.html' %}
+
+<div id="articles-wrapper">
+  <h2>{{category.get_category_name_display}}</h2>
+
+  <div class="articles-container">
+    {% include 'category-article-card.html' %}
+    </div>
+</div>
+
+  
+
+
+
+  
+
+
+
+
+
+{% include 'footer.html' %}
+
+
+
+{% endblock %}
+
+

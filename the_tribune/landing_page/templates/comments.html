@@ -6,8 +6,8 @@
   {% for comment in comments %}
   <div class="comment-group">
       <div class="reader-profile">
-          <span class="profile-initials">{{ comment.commenter.user_credentials.first_name|slice:":1" }}.{{ comment.commenter.user_credentials.last_name|slice:":1" }}.</span>
-      </div>
+          {% include 'profile-picture.html' with profile=comment.commenter %}
+        </div>
       <div class="comment-container-wrapper">
           <div class="name-date-container">
               <h3 class="commenter-name">{{ comment.commenter.user_credentials.first_name}} {{ comment.commenter.user_credentials.last_name}}</h3>

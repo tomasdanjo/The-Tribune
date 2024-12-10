@@ -20,6 +20,7 @@
     <a href="">Top Stories</a>
     <a href="#news-section">Latest News</a>
     <a href="#sports-section">Sports</a>
+    <a href="#entertainment-section">Entertainment</a>
     <a href="#opinion-section">Opinion</a>
     <a href="#feature-section">Featured Topics</a>
     <a href="#environment-section">Environment</a>
@@ -97,27 +98,11 @@
     </div>
 
     <div class="articles-container">
-        {% for article in news_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=news_articles %}
     </div>
 </div>
+
+
 
 <div id="sports-section" class="section">
     <div class="section-header-container">
@@ -129,25 +114,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in sports_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=sports_articles %}
     </div>
 </div>
 
@@ -161,25 +128,8 @@
     </div>
 
     <div class="articles-container">
-        {% for article in entertainment_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=entertainment_articles %}
+        
     </div>
 </div>
 
@@ -193,25 +143,8 @@
     </div>
 
     <div class="articles-container">
-        {% for article in opinion_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=opinion_articles %}
+        
     </div>
 </div>
 
@@ -225,25 +158,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in technology_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=technology_articles %}
     </div>
 </div>
 
@@ -258,25 +173,9 @@
     </div>
 
     <div class="articles-container">
-        {% for article in lifestyle_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=lifestyle_articles %}
+
+        
     </div>
 </div>
 
@@ -290,25 +189,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in editorial_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=editorial_articles %}
     </div>
 </div>
 
@@ -322,25 +203,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in feature_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=feature_articles %}
     </div>
 </div>
 
@@ -354,25 +217,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in environment_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=environment_articles %}
     </div>
 </div>
 
@@ -386,25 +231,7 @@
     </div>
 
     <div class="articles-container">
-        {% for article in scitech_articles %}
-            <div class="article-card">
-                {% if article.photo_id %}
-                    <div class="article-card-photo-container">
-                        <img 
-                            src="{{ MEDIA_URL }}{{ article.photo.photo.url }}" 
-                            alt="Photo for {{ article.headline }}" 
-                        >
-                    </div>
-                {% endif %}
-                <p class="card-category">{{ article.category.get_category_name_display }}</p>
-                <h2 class="card-headline">
-                    <a href="{% url 'full_article_view' article.id %}">{{ article.headline }}</a>
-                </h2>
-                <p class="card-published-date">{{ article.date_published }}</p>
-            </div>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
+        {% include 'landing-article-card.html' with articles=scitech_articles %}
     </div>
 </div>
 
@@ -513,152 +340,6 @@
 });
 
 </script>
-
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const container = document.querySelector('.articles-container');
-    const prevButton = document.getElementById('prev-button');
-    const nextButton = document.getElementById('next-button');
-    const cards = document.querySelectorAll('.article-card');
-    
-    // Get container width and card width
-    const containerWidth = container.clientWidth;
-    const cardWidth = 0.2 * containerWidth; // Fixed card width
-    const gap = 40; // Gap between cards
-    const totalCardWidth = cardWidth + gap;
-    
-    // Calculate max visible cards
-    const maxVisibleCards = Math.floor(containerWidth / totalCardWidth);
-    
-    let currentIndex = 0;
-
-    function updateCardVisibility() {
-    // Reset all cards
-    cards.forEach(card => {
-        card.style.display = 'none';
-        card.classList.remove('swipe-left', 'swipe-right', 'fade-in');
-    });
-    
-    // Show correct subset of cards
-    for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
-        cards[i].style.display = 'block';
-        setTimeout(() => cards[i].classList.add('fade-in'), 100); // Add fade-in with a slight delay
-    }
-    
-    // Update button visibility
-    prevButton.style.display = currentIndex > 0 ? 'inline-block' : 'none';
-    nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'inline-block' : 'none';
-}
-
-
-    // Next button handler with animation
-    nextButton.addEventListener('click', function() {
-        if (currentIndex + maxVisibleCards < cards.length) {
-            // Add swipe animation to current visible cards
-            for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
-                cards[i].classList.add('swipe-left');
-            }
-            
-            // Increment index
-            currentIndex += maxVisibleCards;
-            
-            // Adjust if we've gone too far
-            if (currentIndex + maxVisibleCards > cards.length) {
-                currentIndex = cards.length - maxVisibleCards;
-            }
-            
-            // Use setTimeout to allow animation to complete before updating
-            setTimeout(() => {
-                updateCardVisibility();
-            }, 300); // Match the CSS transition time
-        }
-    });
-
-    // Previous button handler with animation
-    prevButton.addEventListener('click', function() {
-        if (currentIndex > 0) {
-            // Add swipe animation to current visible cards
-            for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
-                cards[i].classList.add('swipe-right');
-            }
-            
-            // Decrement index
-            currentIndex = Math.max(0, currentIndex - maxVisibleCards);
-            
-            // Use setTimeout to allow animation to complete before updating
-            setTimeout(() => {
-                updateCardVisibility();
-            }, 300); // Match the CSS transition time
-        }
-    });
-
-    // Initial setup
-    updateCardVisibility();
-});
-</script> -->
-
-<!-- <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    const container = document.querySelector('.articles-container');
-    const prevButton = document.getElementById('prev-button');
-    const nextButton = document.getElementById('next-button');
-    const cards = document.querySelectorAll('.article-card');
-    
-    // Get container width and card width
-    const containerWidth = container.clientWidth;
-    const cardWidth = 0.2*containerWidth; // Fixed card width
-    const gap = 40; // Gap between cards
-    const totalCardWidth = cardWidth + gap;
-    
-    // Calculate max visible cards
-    const maxVisibleCards = Math.floor(containerWidth / totalCardWidth);
-    
-    let currentIndex = 0;
-
-    // Function to update visibility
-    function updateCardVisibility() {
-        // Hide all cards first
-        cards.forEach(card => card.style.display = 'none');
-        
-        // Show correct subset of cards
-        for (let i = currentIndex; i < currentIndex + maxVisibleCards && i < cards.length; i++) {
-            cards[i].style.display = 'block';
-        }
-        
-        // Update button visibility
-        prevButton.style.display = currentIndex > 0 ? 'inline-block' : 'none';
-        nextButton.style.display = currentIndex + maxVisibleCards < cards.length ? 'inline-block' : 'none';
-    }
-
-    // Next button handler
-    nextButton.addEventListener('click', function() {
-        // Increment by the maximum number of visible cards
-        if (currentIndex + maxVisibleCards < cards.length) {
-            currentIndex += maxVisibleCards;
-            
-            // Adjust if we've gone too far
-            if (currentIndex + maxVisibleCards > cards.length) {
-                currentIndex = cards.length - maxVisibleCards;
-            }
-            
-            updateCardVisibility();
-        }
-    });
-
-    // Previous button handler
-    prevButton.addEventListener('click', function() {
-        // Decrement by the maximum number of visible cards
-        if (currentIndex > 0) {
-            currentIndex = Math.max(0, currentIndex - maxVisibleCards);
-            updateCardVisibility();
-        }
-    });
-
-    // Initial setup
-    updateCardVisibility();
-});
-</script> -->
-
 
 
     {% include 'footer.html' %}

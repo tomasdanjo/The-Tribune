@@ -1,15 +1,118 @@
-<H1>CONTACT US</H1>
 
-<h3>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. 
-    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, 
-    ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, 
-    fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, 
-    justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. 
-    Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, 
-    dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet.
-     Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, 
-     tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, 
-     blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien 
-     ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo.
-      Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales,
-       augue velit cursus nunc,</h3>
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}
+    About Us
+{% endblock %}
+
+{% block style %}
+<!-- <link rel="stylesheet" href="{% static 'css\full_article_view.css' %}"> -->
+<link rel="stylesheet" href="{% static 'css\base.css' %}">
+    <link rel="stylesheet" href="{% static 'css\static_pages.css' %}">
+{% endblock %}
+
+
+{% block content %}
+{% include 'header.html' %}
+
+
+
+    <main id="contact-us" class="content-container">
+        <div class="section">
+            <h2>Contact Us</h2>
+            <p>
+                We value your feedback and inquiries. Please feel free to reach out to us using the form below or via our contact information.
+            </p>
+
+            <div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div>
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required class="input">
+                    </div>
+
+                    <div>
+                        <label for="email">Your Email</label>
+                        <input type="email" id="email" name="email" required class="input">
+                    </div>
+
+                    <div>
+                        <label for="message">Your Message</label>
+                        <textarea id="message" name="message" rows="5" required
+                        class="input"></textarea>
+                    </div>
+
+                    <p id="response-container"></p>
+
+                    <button type="button" onclick="submitContactForm()" id="submit-btn">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+        
+
+        <div class="section">
+            <h2>Other Contact Information</h2>
+            <p><span>Email</span><a href="mailto:contact@thetribune.com">contact@thetribune.com</a></p>
+            <p><span>Phone</span> +1 234 567 890</p>
+            <p><span>Address</span>123 Tribune Street, Media City, NY 10001</p>
+        </div>
+    </main>
+
+
+
+
+
+
+
+{% include 'footer.html' %}
+
+<script>
+    function submitContactForm(){
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const message = document.getElementById('message').value;
+        console.log(name);
+        $.ajax({
+            url: "{% url 'contact_us' %}", // Dynamically set the URL
+            type: "POST",
+            data: {
+                name: name,
+                email: email,
+                message: message,
+                csrfmiddlewaretoken: document.querySelector('[name=csrfmiddlewaretoken]').value // Add CSRF token
+            },
+            beforeSend: function () {
+                $('#submit-btn').text("Sending");
+            },
+            success: function (response) {
+                if (response.status === 'success') {
+                    $('#response-container').html(response.success);
+                    $('#submit-btn').text("Submit");
+                    $('#name').val('');
+                    $('#email').val('');
+                    $('#message').val('');
+
+                    $('#contact-us')[0].reset(); // Reset the form
+                } else {
+                    alert('Failed to send feedback. Please try again.');
+                }
+            },
+            error: function () {
+                alert('An error occurred while sending message. Please try again.');
+            },
+        });
+
+    }
+    
+</script>
+
+
+
+{% endblock %}
+
+
+
+

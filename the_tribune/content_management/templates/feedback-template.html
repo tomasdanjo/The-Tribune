@@ -3,7 +3,7 @@
 <div class="feedback-container {{feedback.status}}" data-id="{{ feedback.id }}" onclick="showReplyForm(event)" id="feedback-container-{{feedback.id}}">
     <div class="top">
         <div class="left"> 
-            {% include 'profile-picture.html' with user=feedback.editor %}
+            {% include 'profile-picture.html' with profile=feedback.editor %}
             <div>
                 <a href="{% url 'view_profile' feedback.editor.id %}"><h2>{{ feedback.editor.first_name }} {{ feedback.editor.last_name }}</h2></a>
                 
@@ -15,7 +15,7 @@
             {% if feedback.status != 'resolved' %}
                 <button class="submit-btn" onclick="resolveFeedback({{feedback.id}})"><img src="{% static 'icons\check.svg' %}" alt=""></button>
             {% endif %}
-            {% if auth_user == feedback.editor %}
+            {% if request.user.userprofile == feedback.editor %}
             <button class="submit-btn triple-dot-btn" onclick="togglePopup(this,event)">
                 <img src="{% static 'icons/triple-dot.svg' %}" alt="">
             </button>

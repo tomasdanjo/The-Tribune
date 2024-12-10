@@ -9,6 +9,8 @@ from datetime import date
 import calendar
 
 def search_article(request):
+    
+
     current_year = datetime.now().year
     years = range(2000, current_year + 1)[::-1]
     months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
@@ -78,7 +80,7 @@ def search_article(request):
     categories = Category.objects.all()
 
     current_date = datetime.now().strftime('%b %d, %Y')  
-
+   
     context = {
         'articles': articles,
         'tags': tags,
@@ -93,8 +95,6 @@ def search_article(request):
         'has_tag': has_tag,
         'category_id': category_id,
         'current_date':current_date,
-        'show_search':False
-
         
     }
 

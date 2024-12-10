@@ -2,9 +2,13 @@
 
 <article >
   <header>
+<<<<<<< HEAD
     <p id="tag-name">
         <a href="{% url 'tag-search' article.tag.id %}">{{ article.tag.tag_name }}</a>
     </p>
+=======
+      <a id="tag-name" href="{% url 'tag_view' article.tag.id %}">{{ article.tag.tag_name }}</a>
+>>>>>>> tomasdanjo
       <hr>
       <h1 id="headline">{{ article.headline }}</h1>
       <a id="writer-name" href="{% url 'view_profile' article.writer.id %}">{{ article.writer.first_name }} {{ article.writer.last_name }}</a>
