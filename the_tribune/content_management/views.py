@@ -12,6 +12,8 @@ from django.template.loader import render_to_string
 from .models import Feedback
 import json
 from django.db.models import Q
+from notification.models import *
+from notification.views import create_notification
 
 # from django import form
 
@@ -29,6 +31,7 @@ def writer_dashboard_view(request):
     drafts = render_to_string('category-article-card.html',{'articles':drafts},request=request)
     submitted = render_to_string('category-article-card.html',{'articles':submitted},request=request)
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
+    notifications = Notification.objects.all().filter(user=request.user.userprofile)
 
     context = {
         'articles':articles,
@@ -37,7 +40,8 @@ def writer_dashboard_view(request):
         'submitted':submitted,
         'archived':archived,
         'current_date':current_date,
-        'show_search':True
+        'show_search':True,
+        'notifications':notifications
 
     }
 
@@ -56,10 +60,10 @@ def editor_dashboard_view(request):
     
     current_date = datetime.now().strftime('%b %d, %Y')
 
-    published = render_to_string('article-card.html',{'articles':published},request=request)
-    drafts = render_to_string('article-card.html',{'articles':drafts},request=request)
-    archived = render_to_string('article-card.html',{'articles':archived},request=request)
-    review = render_to_string('article-card.html',{'articles':review},request=request)
+    published = render_to_string('category-article-card.html',{'articles':published},request=request)
+    drafts = render_to_string('category-article-card.html',{'articles':drafts},request=request)
+    archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
+    review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
     context = {
         'articles':articles,
@@ -283,8 +287,16 @@ def archive_article(request, article_id):
 
 def publish_article(request, id):
     article = get_object_or_404(Article, id=id)
+    writer = article.writer
     article.status = 'published'
     article.save()
+
+    notif_message = f"Your article {article.headline} has been published. View it now"
+    link=f"/article/{article.id}"
+
+    create_notification(writer,notif_message,link)
+
+
     return redirect('editor_dashboard') 
 
 
@@ -305,7 +317,9 @@ def submit_feedback(request, article_id):
                 ),
                 '-created_at'  # Maintain the ordering by date within each status group
             ) # Fetch all feedbacks
-        
+
+
+
             # Render the feedback template as a string
             feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks,},request=request)
             return JsonResponse({'status': 'success','feedback_html':feedback_html})

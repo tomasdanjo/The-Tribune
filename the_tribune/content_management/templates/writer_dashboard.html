@@ -71,7 +71,11 @@
     
 
         <div id="notification-section">
-
+            {% for notification in notifications %}
+                {% if notification.link != null %}
+                <a href="{{notification.link}}">{{notification.message}}</a>
+                {% endif %}
+            {% endfor %}
         </div>
     </div>
 

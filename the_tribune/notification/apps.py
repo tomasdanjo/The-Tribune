@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UserAuthenticationConfig(AppConfig):
+class NotificationConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'user_authentication'
+    name = 'notification'
