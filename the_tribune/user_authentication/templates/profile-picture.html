@@ -1,7 +1,7 @@
-<a id="img-container" href="{% url 'view_profile' user.id %}">
+<a id="img-container" href="{% url 'view_profile' request.user.userprofile.id %}">
   {% if user.profile_picture %}       
-    <img src="{{ user.profile_picture.url }}" alt="Profile Picture">       
+    <img src="{{ request.user.userprofile.profile_picture.url }}" alt="Profile Picture">       
   {% else %}
-    <p>{{ user.first_name|slice:":1" }}.{{ user.last_name|slice:":1" }}.</p> 
+    <p>{{ request.user.userprofile.first_name|slice:":1" }}.{{ request.user.userprofile.last_name|slice:":1" }}.</p> 
   {% endif %}
 </a>

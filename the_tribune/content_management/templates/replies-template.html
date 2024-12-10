@@ -12,7 +12,7 @@
                 </div>
 
                 <div class="actions-btn submit-btn-group">
-                  {% if auth_user == reply.author %}
+                  {% if request.user.userprofile == reply.author %}
                   <button class="submit-btn triple-dot-btn" onclick="togglePopup(this,event)">
                       <img src="{% static 'icons\triple-dot.svg' %}" alt="">
                   </button>

@@ -13,62 +13,11 @@ from .models import Feedback
 import json
 
 # from django import form
-def writer_view_profile(request, id):
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
-
-    user_profile = get_object_or_404(UserProfile, id=id)
-
-    # Fetch published articles authored by the user
-    articles = Article.objects.filter(writer=user)
-    published_articles = articles.filter(status='published')
-
-    # Render published articles into an HTML string
-    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
-
-    context = {
-        'auth_user': user,
-        'user_profile': user_profile,
-        'articles': articles,
-        'published': published_html,
-    }
-
-    return render(request, 'writer_view_profile.html', context)
-
-def editor_view_profile(request, id):
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
-
-    user_profile = get_object_or_404(UserProfile, id=id)
-
-    # Fetch published articles authored by the user
-    articles = Article.objects.filter(editor=user)
-    published_articles = articles.filter(status='published')
-
-    # Render published articles into an HTML string
-    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
-
-    context = {
-        'auth_user': user,
-        'user_profile': user_profile,
-        'articles': articles,
-        'published': published_html,
-    }
-
-    return render(request, 'editor_view_profile.html', context)
 
 
 # Create your views here.
 def writer_dashboard_view(request):
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
-    articles = Article.objects.filter(writer = user)
+    articles = Article.objects.filter(writer = request.user.userprofile)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     submitted = articles.filter(status='submitted')
@@ -81,7 +30,6 @@ def writer_dashboard_view(request):
     archived = render_to_string('article-card.html',{'articles':archived},request=request)
 
     context = {
-        'auth_user':user, 
         'articles':articles,
         'published':published,
         'drafts':drafts,
@@ -98,13 +46,8 @@ def writer_dashboard_view(request):
     return render(request,'writer_dashboard.html',context)
 
 def editor_dashboard_view(request):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None
 
-    articles = Article.objects.filter(editor=user)
+    articles = Article.objects.filter(editor=request.user.userprofile)
     published = articles.filter(status='published')
     drafts = articles.filter(status='draft')
     archived = articles.filter(status='archived')
@@ -118,7 +61,6 @@ def editor_dashboard_view(request):
     review = render_to_string('article-card.html',{'articles':review},request=request)
 
     context = {
-        'auth_user':user, 
         'articles':articles,
         'published':published,
         'drafts':drafts,
@@ -208,22 +150,15 @@ def create_article(request):
         'tag_form': tag_form,
         'editors': editors,
         'writer': writer,
-        'auth_user':writer,
         'current_date':current_date
     })
 
 def draft_article(request,id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None
     article = get_object_or_404(Article,id=id)
     current_date = datetime.now().strftime('%b %d, %Y')
 
     context = {
         'article':article,
-        'auth_user':user,
         'current_date':current_date,
         'show_search':False
     }
@@ -281,7 +216,6 @@ def edit_article(request, id):
         'editors': editors,
         'writer': writer,
         'selected_editor': article.editor.id if article.editor else None, 
-        'auth_user':writer,
         'photo_instance':photo_instance,
         'current_date':current_date
     })
@@ -290,12 +224,6 @@ def edit_article(request, id):
 def approve_article(request,id):
     article = get_object_or_404(Article,id=id)
     current_date = datetime.now().strftime('%b %d, %Y')
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
-
 
     feedbacks = Feedback.objects.filter(article=article).order_by(
                 models.Case(
@@ -309,7 +237,6 @@ def approve_article(request,id):
     context = {
         'article':article,
         'current_date':current_date,
-        'auth_user':user,
         'feedbacks':feedbacks
     }
     return render(request,'approve-article.html',context)
@@ -317,18 +244,11 @@ def approve_article(request,id):
 def archive_view(request,id):
     article = get_object_or_404(Article,id=id)
     feedbacks = Feedback.objects.filter(article=article)[:1]
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
-    
     current_date = datetime.now().strftime('%b %d, %Y')
 
     context = {
         'article':article,
         'feedbacks':feedbacks,
-        'auth_user':user,
         'current_date':current_date,
         'show_search':True,
     }
@@ -369,11 +289,6 @@ def publish_article(request, id):
 
 @csrf_exempt  # Use this decorator if needed, or include CSRF middleware for this view
 def submit_feedback(request, article_id):
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
     if request.method == 'POST':
         article_id = article_id
         feedback_text = request.POST.get('feedback')
@@ -391,7 +306,7 @@ def submit_feedback(request, article_id):
             ) # Fetch all feedbacks
         
             # Render the feedback template as a string
-            feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks,'auth_user':user},request=request)
+            feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks,},request=request)
             return JsonResponse({'status': 'success','feedback_html':feedback_html})
 
         return JsonResponse({'status': 'error', 'message': 'Invalid data'})
@@ -445,11 +360,6 @@ def tag_search_view(request):
 
 
 def filter_feedbacks(request, id):
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
 
     if request.method == "POST":
         article = get_object_or_404(Article, id=id)
@@ -468,7 +378,7 @@ def filter_feedbacks(request, id):
             feedbacks = Feedback.objects.filter(article=article, status=status)  # Filter by status
 
         feedback_html = render_to_string(
-            "feedback-template.html", {"feedbacks": feedbacks,'auth_user':user}, request=request
+            "feedback-template.html", {"feedbacks": feedbacks,}, request=request
         )
         return JsonResponse({"status": "success", "feedback_html": feedback_html})
 
@@ -476,11 +386,6 @@ def filter_feedbacks(request, id):
 
 @csrf_exempt
 def resolve_feedback(request, feedback_id):
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
 
     if request.method == 'POST':
         feedback = get_object_or_404(Feedback, id=feedback_id)
@@ -507,7 +412,7 @@ def resolve_feedback(request, feedback_id):
         # Render the updated feedback list
         feedback_html = render_to_string(
             'feedback-template.html',
-            {'feedbacks': feedbacks,'auth_user':user},
+            {'feedbacks': feedbacks,},
             request=request
         )
         return JsonResponse({'status': 'success', 'feedback_html': feedback_html})
@@ -515,11 +420,6 @@ def resolve_feedback(request, feedback_id):
     return JsonResponse({'status': 'error', 'message': 'Invalid request method.'})
 
 def delete_feedback(request, feedback_id):
-    user = None
-    try:
-        user = UserProfile.objects.get(user_credentials=request.user)
-    except UserProfile.DoesNotExist:
-        user = None
 
     if request.method == 'POST':
         feedback = get_object_or_404(Feedback, id=feedback_id)
@@ -545,7 +445,7 @@ def delete_feedback(request, feedback_id):
         # Render the updated feedback list
         feedback_html = render_to_string(
             'feedback-template.html',
-            {'feedbacks': feedbacks,'auth_user':user},
+            {'feedbacks': feedbacks,},
             request=request
         )
         return JsonResponse({'status': 'success', 'feedback_html': feedback_html})
@@ -566,12 +466,6 @@ def update_feedback(request, feedback_id):
 
 @csrf_exempt  # Use CSRF token in production for security
 def add_reply(request, feedback_id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None
-
     if request.method == 'POST':
         data = json.loads(request.body)
         reply_text = data.get('reply')
@@ -588,7 +482,7 @@ def add_reply(request, feedback_id):
 
         # Retrieve all replies for the feedback to update the UI
         replies = Reply.objects.filter(feedback=feedback)
-        replies_html = render_to_string('replies-template.html', {'replies': replies,'auth_user':user},request=request)
+        replies_html = render_to_string('replies-template.html', {'replies': replies,},request=request)
 
         response_data = {
             'success': True,
@@ -632,3 +526,26 @@ def delete_reply(request, reply_id):
             return JsonResponse({"status": "error", "message": "Reply not found."})
     return JsonResponse({"status": "error", "message": "Invalid request method."})
 
+
+def view_profile(request, id):
+    user = None
+    try:
+        user = UserProfile.objects.get(id=id)
+    except UserProfile.DoesNotExist:
+        user = None
+
+    # Fetch published articles authored by the user
+    articles = Article.objects.filter(writer=user)
+    published_articles = articles.filter(status='published')
+
+    # Render published articles into an HTML string
+    published_html = render_to_string('article-card.html', {'articles': published_articles}, request=request)
+
+    context = {
+        'user': request.user,
+        'articles': articles,
+        'published': published_html,
+    }
+
+    return render(request, 'view_profile.html', context)
+    

@@ -1,10 +1,22 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
-    {{ user_profile.first_name }}  {{ user_profile.last_name }}
+    {{ request.user.userprofile.first_name }}  {{ request.user.userprofile.last_name }}
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/view-profile.css' %}">
 {% endblock %}
     
 {% block content %}
+
+{% include 'header.html' %}
+
+<div>
+    
+</div>
 
 <!-- update_profile_picture.html -->
 <div class="container mx-auto mt-10 px-4">
@@ -65,13 +77,13 @@
             </div>
         </div>
 
-    <!-- Back Button -->
-    <div class="mt-4 mb-2 text-center">
-        <button onclick="window.history.back()" class="inline-block bg-gray-500 hover:bg-gray-800 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all duration-200 ease-in-out transform hover:scale-105">
-            Back
-        </button>
-    </div>
+
 </div>
-test test test
+
+<button onclick="window.history.back()">
+    Back
+</button>
+
+{% include 'footer.html' %}
 
 {% endblock %}

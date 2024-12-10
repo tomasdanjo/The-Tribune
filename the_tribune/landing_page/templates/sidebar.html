@@ -17,25 +17,25 @@
       <a href="{% url 'category_view' 4 %}" class="category-link">Technology</a>
       <a href="{% url 'category_view' 5 %}" class="category-link">Lifestyle</a> 
     {% else %}
-      {% include 'profile-picture.html' with user=auth_user %}
+      {% include 'profile-picture.html' %}
       <h2 class="user-full-name">
-        {{ auth_user.first_name }} {{ auth_user.last_name }}
+        {{ request.user.userprofile.first_name }} {{ request.user.userprofile.last_name }}
       </h2>
-      {% if not auth_user.is_reader %}
+      {% if not request.user.userprofile.is_reader %}
       <div class="designation">
           <p>
-            {% if auth_user.is_writer %}
+            {% if request.user.userprofile.is_writer %}
               Writer
-            {% elif auth_user.is_editor %}
+            {% elif request.user.userprofile.is_editor %}
               Editor
             {% endif %}
           </p>
       </div>
       {% endif %}
-      <a href="{% url 'view_profile' auth_user.id %}" class="category-link">Profile</a>
-      {% if auth_user.is_writer %}
+      <a href="{% url 'view_profile' request.user.userprofile.id %}" class="category-link">Profile</a>
+      {% if request.user.userprofile.is_writer %}
       <a href="{% url 'writer_dashboard' %}" class="category-link">Dashboard</a>
-      {% elif auth_user.is_editor %}
+      {% elif request.user.userprofile.is_editor %}
       <a href="{% url 'editor_dashboard' %}" class="category-link">Dashboard</a>
       {% endif %}
     {% endif %}

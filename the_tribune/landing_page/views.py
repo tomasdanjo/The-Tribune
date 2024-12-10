@@ -21,15 +21,7 @@ from django.contrib.auth.models import AnonymousUser
 def landing_page(request):
     article_id = request.session.get('article_id')
     
-    user = None 
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None  # Handle unauthenticated users
-
+    
     if article_id:  
         del request.session['article_id']  # Clear session after redirect
     
@@ -69,7 +61,6 @@ def landing_page(request):
 
     context =  {
         'articles': articles,
-        'auth_user':user,
         'current_date':current_date,
         'news_articles':news_articles,
         'sports_articles':sports_articles,
@@ -90,14 +81,6 @@ def landing_page(request):
     return render(request, 'landing_page.html',context)
 
 def full_article(request, id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None 
-
     article = get_object_or_404(Article,id=id)
     comment_count = Comment.objects.filter(article_id=id).count()
     comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
@@ -117,7 +100,6 @@ def full_article(request, id):
         'related_stories':related_stories,
         'comment_form':comment_form,
         'related_stories_count':related_stories_count,
-        'auth_user':user,
         'current_date':current_date,
         'show_search':True
     }
@@ -342,10 +324,7 @@ def delete_comment(request, comment_id):
             return JsonResponse({'error': 'You are not authorized to delete this comment.'}, status=403)
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
-def view_profile(request, id):
-    user_profile = get_object_or_404(UserProfile, id=id)
-    
-    return render(request, 'view_profile.html', {'user_profile': user_profile,})
+
 
 def about_us(request):
     current_date = datetime.now().strftime('%b %d, %Y')  
@@ -381,13 +360,6 @@ def job_openings(request):
     return render(request, 'job-opening.html')
 
 def contact_us(request):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None 
 
     if request.method == "POST":
         name = request.POST.get('name')
@@ -406,20 +378,11 @@ def contact_us(request):
         context = {
             'show_search':True,
             'current_date':current_date,
-            'auth_user':user
 
         }
     return render(request, 'contact-us.html', context)
 
 def category_view(request,id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None 
-
     category = get_object_or_404(Category,id=id)
     articles = Article.objects.all().filter(category=category).order_by('-date_published')
     current_date = datetime.now().strftime('%b %d, %Y') 
@@ -429,20 +392,11 @@ def category_view(request,id):
         'articles':articles,
         'show_search':True,
         'current_date':current_date,
-        'auth_user':user
     }
 
     return render(request,'category-view.html',context)
 
 def tag_view(request,id):
-    if request.user.is_authenticated:
-        try:
-            user = UserProfile.objects.get(user_credentials=request.user)
-        except UserProfile.DoesNotExist:
-            user = None  # Handle the case where no UserProfile is found
-    else:
-        user = None 
-
     tag = get_object_or_404(Tag,id=id)
     articles = Article.objects.all().filter(tag=tag).order_by('-date_published')
     current_date = datetime.now().strftime('%b %d, %Y') 
@@ -452,7 +406,6 @@ def tag_view(request,id):
         'articles':articles,
         'show_search':True,
         'current_date':current_date,
-        'auth_user':user
     }
 
     return render(request,'tag-view.html',context)

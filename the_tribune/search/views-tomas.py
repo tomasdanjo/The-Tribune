@@ -80,13 +80,6 @@ def search_article(request):
     categories = Category.objects.all()
 
     current_date = datetime.now().strftime('%b %d, %Y')  
-
-    user = None
-    if request.user.is_authenticated:
-            try:
-                user = UserProfile.objects.get(user_credentials=request.user)
-            except UserProfile.DoesNotExist:
-                user = None
    
     context = {
         'articles': articles,
@@ -102,7 +95,6 @@ def search_article(request):
         'has_tag': has_tag,
         'category_id': category_id,
         'current_date':current_date,
-        'auth_user':user
         
     }
 
