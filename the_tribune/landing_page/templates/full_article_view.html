@@ -12,9 +12,18 @@
 
 {% block content %}
 
-<a href="{% url 'article_analytics' article_id=article.id %}">View Analytics</a>
 
 {% include 'header.html' %}
+
+{% if request.user.userprofile == article.writer or request.user.userprofile == article.editor %}
+<div class="fixed-bottom-left">
+    <a href="{% url 'article_analytics' article_id=article.id %}">
+        <i class="fa-solid fa-chart-simple"></i> View Analytics
+    </a>
+</div>
+{% endif %}
+
+
 
 {% include 'article-template.html' %}
 

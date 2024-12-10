@@ -548,5 +548,26 @@ hr {
 }
 
 
+.fixed-bottom-left {
+  position: fixed;
+  bottom: 50px; /* Adjust as needed */
+  left: 50px; /* Adjust as needed */
+  z-index: 1000; /* Ensure it's above other elements */
+  background-color: #596e9b;/* Optional: Add a background for visibility */
+  padding: 10px; /* Optional: Add some padding */
+  border-radius: 5px; /* Optional: Round the corners */
+  color: white; /* Optional: Style the text */
+  transition: all 0.1s ease;
+
+}
+
+.fixed-bottom-left a { /* Ensure the link is visible */
+  text-decoration: none; /* Remove underline */
+}
+
+.fixed-bottom-left:hover {
+  transform: translateY(-0.25rem);
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
+}
 
 

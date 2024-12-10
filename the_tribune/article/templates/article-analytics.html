@@ -8,13 +8,25 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'css\base.css' %}">
   <link rel="stylesheet" href="{% static 'css\category_view.css' %}"> 
+  <link rel="stylesheet" href="{% static 'css\writer-editor.css' %}">
   <link rel="stylesheet" href="{% static 'css\analytics.css' %}">
 {% endblock%}
 
 {% block content %}
 {% include 'header.html' %}
-<div class="container">
+
+<main>
+  <div class="btn-group submit-btn-group">
+    <button onclick="window.history.back()" id="back-btn">
+    <img src="{% static 'icons\back.svg' %}" alt=""><p>Back</p>
+    </button>
+  </div>
+  
+  <div class="container">
+
+  
   <div id="article-container">
+    
     {% include 'category-article-card.html' %}
   </div>
     
@@ -24,6 +36,8 @@
         
     </div>
 </div>
+</main>
+
 
 
 <!-- Include Chart.js from CDN -->
