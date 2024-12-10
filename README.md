@@ -35,7 +35,7 @@ This project is created by:
 
 # Functional Requirements
 1.) Administrative Dashboard 
-- The Dashboard provides a view of the portal’s operations, including user management, content statistics, and overall access.
+- The Dashboard provides a view of the portal’s operations, including user management, and overall access.
 
 2.) Administrative Dashboard: Journalist Authentication and Authorization
 - Journalists must authenticate and be authorized to access the portal, ensuring only approved users can create, pitch, and manage content.
@@ -46,19 +46,13 @@ This project is created by:
 4.) Search Bar
 - The search bar allows users to easily find articles, news, and other related content by entering keywords or phrases.
   
-5.) Cross-platform sharing
-- Users must be able to share articles across various multimedia platforms and messaging apps for wider reach and engagement.
-  
-6.) Support Video and Audio Content
-- The portal must support the inclusion and playback of video and audio content within articles
-  
-7.) Content approval and Revisions
+5.) Content approval and Revisions
 - Submitted articles must go through a series of approval processes, allowing editors to review, approve, or request revisions.
 
-8.) Scheduled Content 
-- Journalists and editors must be able to schedule articles for future publication
+6.)  Summarize Article
+- The system provide functionality to generate summaries of articles for quick consumption
 
-9.) Subscribe to newsletter
+7.) Subscribe to newsletter
 - Users must be able to subscribe to a newsletter to instant receive updates and notifications on the latest stories and content posted on the portal.
 
 # Built-With
@@ -82,3 +76,10 @@ This project is created by:
 https://github.com/tomasdanjo/The-Tribune/blob/main/The%20Tribune%20ERD.pdf
 
 # UI/UX Design
+
+reader: https://github.com/tomasdanjo/The-Tribune/blob/main/Tribune.pdf 
+
+writer: https://github.com/tomasdanjo/The-Tribune/blob/main/Tribune%20(1).pdf 
+
+editor: https://github.com/tomasdanjo/The-Tribune/blob/main/Tribune%20(2).pdf
+
