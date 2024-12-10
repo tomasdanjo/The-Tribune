@@ -4,7 +4,7 @@
 
 {% if comments %}
   {% for comment in comments %}
-  <div class="comment-group">
+  <div class="comment-container {{comment.id}}" data-id="{{ comment.id }}" id="comment-container-{{comment.id}}">
       <div class="reader-profile">
           {% include 'profile-picture.html' with user=comment.commenter %}
         </div>
@@ -13,8 +13,27 @@
               <h3 class="commenter-name">{{ comment.commenter.user_credentials.first_name}} {{ comment.commenter.user_credentials.last_name}}</h3>
               <p>{{ comment.date_published }}</p>
           </div>
-          <p class="comment-content">{{ comment.content }}</p>
 
+          <div class="body-container" id="body-container-{{ comment.id }}" style="display: flex;">
+            <p class="comment-content">{{ comment.content }}</p>
+            {% if comment.commenter == request.user.userprofile %}
+            <div style="display: block;">
+
+            
+            <button id="editbtn" class="edit-btn" style="background: transparent; border: none; padding: 5px 0px; margin: 5px 0; 
+                      cursor: pointer; display: flex;" onclick="edit_comment({{comment.id}},event)">
+            <img src="{% static 'icons/edit-feedback.svg' %}" alt="Edit" style="vertical-align: middle; margin-right: 5px;"> 
+            Edit
+            </button>
+
+            <button id="deletebtn" class="delete-btn" style="background: transparent; border: none; padding: 5px 0px; margin: 5px 0; 
+                        cursor: pointer; display: flex;"  onclick="deleteComment({{ comment.id }})">
+            <img src="{% static 'icons/delete.svg' %}" alt="Delete" style="vertical-align: middle; margin-right: 5px;"> Delete
+            </button>
+          </div>
+            {% endif %}
+          </div>
+          
           
           <div class="interaction-buttons">
               <div>
@@ -51,16 +70,6 @@
           
       </div>
 
-      {% if comment.commenter == request.user.userprofile %}
-        <div class="comment-delete">
-            <button onclick="deleteComment({{ comment.id }})"
-              onmouseover="this.querySelector('img').src='{% static 'icons/delete-bold.svg' %}'"
-              onmouseout="this.querySelector('img').src='{% static 'icons/delete.svg' %}'"
-            >
-              <img src="{% static 'icons/delete.svg'%}" alt="">
-            </button>
-        </div>
-      {% endif %}
   </div>
       
  
@@ -69,7 +78,129 @@
 
 {% endif %}
 
+<script>
+  // Function to toggle the popup visibility
+  function togglePopup(event) {
+    event.stopPropagation();
+      const popup = document.getElementById('popup');
+      const button = event.target.closest('button'); // Get the button that was clicked
+  
+      // Get the button's position and size
+      const buttonRect = button.getBoundingClientRect();
+      
+      // Position the popup near the button
+      popup.style.top = `${buttonRect.top + window.scrollY + button.offsetHeight}px`; // Below the button
+      popup.style.left = `${buttonRect.left + window.scrollX}px`; // Align with the button's left edge
+      
+      // Toggle the display property (show or hide)
+      if (popup.style.display === 'none' || popup.style.display === '') {
+          popup.style.display = 'flex'; // Show the popup
+      } else {
+          popup.style.display = 'none'; // Hide the popup
+      }
+  }
 
+  function edit_comment(commentID,event){
+    event.stopPropagation();
+
+    const bodyContainer = document.getElementById(`body-container-${commentID}`);
+    const originalComment = bodyContainer.querySelector("p").textContent;
+    const feedbackContainer = document.getElementById(`body-container-${commentID}`).closest(".feedback-container");
+    bodyContainer.style.display = 'block'
+    // Replace the body container content with a textarea and save/cancel buttons
+    bodyContainer.innerHTML = `
+          <textarea id="edit-textarea-${commentID}" class="textarea field edit-textarea" data-original-content="${originalComment}" required>${originalComment}</textarea>
+          <div class="edit-actions submit-btn-group">
+              <button class="cancel-btn submit-btn" onclick="cancelEdit(${commentID}, '${originalComment}')">Cancel</button>
+              <button class="save-btn submit-btn highlight-btn" onclick="saveComment(${commentID},event)">Save</button>
+          </div>
+      `;
+
+    bodyContainer.classList.add("edit-active");
+
+    const textareas = document.querySelectorAll("textarea.textarea");
+
+    textareas.forEach((textarea) => {
+      // Initial auto-resize
+      autoResize(textarea);
+
+      // Add event listeners for input and change
+      textarea.addEventListener("input", () => autoResize(textarea));
+      textarea.addEventListener("change", () => autoResize(textarea));
+    });
+
+    const textarea = document.getElementById(`edit-textarea-${commentID}`);
+    textarea.addEventListener('click', (e) => {
+      e.stopPropagation(); // Stops the event from propagating up to parent elements
+    });
+    
+    remove_injected_Attr();
+
+  }
+
+  function cancelEdit(commentID, originalComment) {
+    const bodyContainer = document.getElementById(`body-container-${commentID}`);
+    bodyContainer.style.display = 'flex';
+    
+    // Store the current HTML of the body container (which includes the buttons)
+    const bodyHTML = `
+        <p class="comment-content">${originalComment}</p>
+        <div style="display: block;">
+        <button id="editbtn" class="edit-btn" style="background: transparent; border: none; padding: 5px 10px; margin: 5px 0; 
+                  cursor: pointer; display: flex;" onclick="edit_comment(${commentID}, event)">
+        <img src="{% static 'icons/edit-feedback.svg' %}" alt="Edit" style="vertical-align: middle; margin-right: 5px;"> 
+        Edit
+        </button>
+        <button id="deletebtn" class="delete-btn" style="background: transparent; border: none; padding: 5px 10px; margin: 5px 0; 
+                  cursor: pointer; display: flex;" onclick="deleteComment(${commentID})">
+        <img src="{% static 'icons/delete.svg' %}" alt="Delete" style="vertical-align: middle; margin-right: 5px;"> 
+        Delete
+        </button>
+        </div>
+    `;
+    
+    // Replace body content with the original comment and restore buttons
+    bodyContainer.innerHTML = bodyHTML;
+
+    // Remove "edit-active" class to stop the edit mode
+    bodyContainer.classList.remove("edit-active");
+
+}
+
+
+function saveComment(commentID, event) {
+  event.stopPropagation();
+  const textarea = document.getElementById(`edit-textarea-${commentID}`);
+  const updatedComment = textarea.value;
+
+  // Send an AJAX request to update the feedback on the server
+  fetch(`/comment/update/${commentID}/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "X-CSRFToken": document.querySelector("[name=csrfmiddlewaretoken]").value,
+    },
+    body: JSON.stringify({ comment: updatedComment }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        // Update the UI with the new comment
+        const bodyContainer = document.getElementById(`body-container-${commentID}`);
+        bodyContainer.innerHTML = `<p>${updatedComment}</p>`;
+        bodyContainer.classList.remove("edit-active");
+        cancelEdit(commentID, updatedComment)
+
+      } else {
+        alert("Failed to update feedback.");
+      }
+    })
+    .catch((error) => console.error("Error:", error));
+
+  remove_injected_Attr(); // Ensure this function is defined to remove any injected styles or attributes
+}
+
+  </script>
 
 
 
