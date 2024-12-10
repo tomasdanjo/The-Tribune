@@ -18,8 +18,8 @@ import json
 
 from django.utils import timezone
 from django.db import models
-from transformers import pipeline
-summarizer = pipeline('summarization')  
+# from transformers import pipeline
+# summarizer = pipeline('summarization')  
 
 def landing_page(request):
     article_id = request.session.get('article_id')
