@@ -78,7 +78,7 @@ def editor_dashboard_view(request):
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
     review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
-    notifications = Notification.objects.all().filter(user=request.user).order_by('-created_at')
+    notifications = Notification.objects.all().filter(user=request.user).order_by('created_at')
 
     unread_notifs = notifications.filter(is_read=False)
     read_notifs = notifications.filter(is_read=True)
@@ -146,6 +146,7 @@ def create_article(request):
             action = request.POST.get('action')
             if action == "save_draft":
                 article.status = "draft"
+                article.save()
 
                 notif_title = "Article Saved as Draft"
                 notif_message = f"New article '{article.headline}' saved as draft."
@@ -156,6 +157,7 @@ def create_article(request):
 
             elif action == "submit_review":
                 article.status = "submitted"
+                article.save()
 
                 notif_title = "Article Submitted for Review"
                 notif_message = f"New article '{article.headline}' has been submitted for review."
@@ -165,6 +167,8 @@ def create_article(request):
 
                 
             elif action == "publish":
+                article.status = "published"
+                article.save()
                 
                 notif_title = "Article Published"
                 notif_message = f"Your article '{article.headline}' has been published! Click to view."
@@ -175,16 +179,16 @@ def create_article(request):
 
                 notif_title = "Article Published"
                 notif_message = f"You have published the article '{article.headline}'. Click to view."
-                link = f"/article/{article.id}"
+                
                 notification_type = "publish" 
                 editor=article.editor 
                 create_notification(editor.user_credentials, notif_title, notif_message,notification_type ,link )
 
 
-                article.status = "published"
+                
 
-            article.save()  # Save the article
-            
+              # Save the article
+      
 
             # Redirect based on user role
             if writer.is_writer:
@@ -745,14 +749,14 @@ def mark_notification_read(request, notification_id):
 
 def get_unread_notifications(request):
     # Fetch read notifications from your database
-    unread_notifications = Notification.objects.filter(user=request.user, is_read=False)
+    unread_notifications = Notification.objects.filter(user=request.user, is_read=False).order_by('-created_at')
     
     # Render the notifications with the 'notification-card.html' template
     return render(request, 'notification-card.html', {'notifications': unread_notifications})
 
 def get_read_notifications(request):
     # Fetch read notifications from your database
-    read_notifications = Notification.objects.filter(user=request.user, is_read=True)
+    read_notifications = Notification.objects.filter(user=request.user, is_read=True).order_by('-created_at')
     
     # Render the notifications with the 'notification-card.html' template
     return render(request, 'notification-card.html', {'notifications': read_notifications})
