@@ -1,8 +1,11 @@
-.container{
+main{
   padding: 50px 100px;
+}
+
+.container{
   display: flex;
   gap: 40px;
-  width: 100vw;
+  margin: 40px;
 }
 
 #canvas-container{
