@@ -32,6 +32,7 @@
           </p>
       </div>
       {% endif %}
+      <a href="{% url 'home' %}" class="category-link">Home</a>
       <a href="{% url 'view_profile' request.user.userprofile.id %}" class="category-link">Profile</a>
       {% if request.user.userprofile.is_writer %}
       <a href="{% url 'writer_dashboard' %}" class="category-link">Dashboard</a>
