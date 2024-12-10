@@ -71,6 +71,8 @@ This project is created by:
   
 # Gant Chart
 
+https://cebuinstituteoftechnology-my.sharepoint.com/:x:/g/personal/thomasdanjo_manulat_cit_edu/Ed0H_ZBgSGVLnIiTzn2Tc5IBglnCca1VWgWpFa6ymNDoWw?e=en7JqQ
+
 # ERD
 
 https://github.com/tomasdanjo/The-Tribune/blob/main/The%20Tribune%20ERD.pdf
