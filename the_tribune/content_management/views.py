@@ -329,7 +329,7 @@ def archive_article(request, article_id):
             notif_message = f"You have archived the article '{article.headline}'."
             link = f"/archive/{article.id}"
             notification_type = "archive"  # Example notification type
-            create_notification(request.user.userprofile, notif_title, notif_message, notification_type,link )
+            create_notification(request.user, notif_title, notif_message, notification_type,link )
 
             
 
