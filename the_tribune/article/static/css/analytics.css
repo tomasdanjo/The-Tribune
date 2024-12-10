@@ -1,0 +1,25 @@
+.container{
+  padding: 50px 100px;
+  display: flex;
+  gap: 40px;
+  width: 100vw;
+}
+
+#canvas-container{
+  flex-grow: 1;
+}
+
+#canvas-container h3{
+  color: #596e9b;
+  font-family: 'Oswald',system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-size: 2rem;
+  font-weight: 500;
+}
+
+canvas{
+  width: auto;
+}
+
+#article-container{
+  width: 30%;
+}

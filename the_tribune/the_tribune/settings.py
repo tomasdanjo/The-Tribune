@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'landing_page',
     'search',
     'notification',
+    'rest_framework',
 
 
 ]

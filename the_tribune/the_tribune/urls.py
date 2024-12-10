@@ -25,9 +25,17 @@ urlpatterns = [
     path('',include('search.urls')),
     path('',include('landing_page.urls')),
     path('',include('content_management.urls')),
+    path('',include('article.urls')),
     path('__reload__/', include('django_browser_reload.urls')),
 
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+from rest_framework.routers import DefaultRouter
+from article.views import ArticleAnalyticsViewSet
+
+router = DefaultRouter()
+router.register(r'article-analytics', ArticleAnalyticsViewSet)
+urlpatterns += router.urls
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

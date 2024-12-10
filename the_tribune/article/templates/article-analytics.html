@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Insights 
+{% endblock%}
+
+{% block style %}
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css\base.css' %}">
+  <link rel="stylesheet" href="{% static 'css\category_view.css' %}"> 
+  <link rel="stylesheet" href="{% static 'css\analytics.css' %}">
+{% endblock%}
+
+{% block content %}
+{% include 'header.html' %}
+<div class="container">
+  <div id="article-container">
+    {% include 'category-article-card.html' %}
+  </div>
+    
+    <div id="canvas-container">
+        <h3>Article Insights</h3>
+        <canvas id="analyticsChart"></canvas>
+        
+    </div>
+</div>
+
+
+<!-- Include Chart.js from CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var ctx = document.getElementById('analyticsChart').getContext('2d');
+    var chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ dates_json|safe }},
+            datasets: [
+                {
+                    label: 'Views',
+                    data: {{ views_json|safe }},
+                    borderColor: '#45383f',
+                    fill: false
+                },
+                {
+                    label: 'Comments',
+                    data: {{ comments_json|safe }},
+                    borderColor: '#596e9b',
+                    fill: false
+                },
+                {
+                    label: 'Shares',
+                    data: {{ shares_json|safe }},
+                    borderColor: '#857472',
+                    fill: false
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Article Performance Over Time'
+            },
+            scales: {
+                x: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Date'
+                    }
+                },
+                y: {
+                    display: true,
+                    title: {
+                        display: true,
+                        text: 'Count'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %}
