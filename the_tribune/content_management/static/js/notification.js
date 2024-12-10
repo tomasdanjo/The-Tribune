@@ -1,8 +1,5 @@
-$(document).ready(function() {
-  {% if not unread_notifs %}
-      $('#mark-all-btn').hide();
-  {% endif %}
-});
+
+
 
 
 
