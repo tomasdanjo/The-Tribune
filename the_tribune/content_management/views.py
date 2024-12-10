@@ -78,7 +78,7 @@ def editor_dashboard_view(request):
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
     review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
-    notifications = Notification.objects.all().filter(user=request.user).order_by('created_at')
+    notifications = Notification.objects.all().filter(user=request.user).order_by('-created_at')
 
     unread_notifs = notifications.filter(is_read=False)
     read_notifs = notifications.filter(is_read=True)
@@ -153,7 +153,7 @@ def create_article(request):
                 link = f"/draft/{article.id}"
                 notification_type = "draft"  # Example notification type
                 create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link)
-
+                
 
             elif action == "submit_review":
                 article.status = "submitted"
@@ -164,6 +164,7 @@ def create_article(request):
                 link = f"/approve_article/{article.id}"
                 notification_type = "review"  # Example notification type
                 create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link)
+                create_notification(editor.user_credentials, notif_title, notif_message, notification_type,link)
 
                 
             elif action == "publish":

@@ -31,8 +31,8 @@
       <p>{{current_date}}</p>
   </div>
   
-  <div id="header-logo"><img src="{% static '\icons\full-logo.svg' %}" alt="">
-  </div>
+  <a href ='{% url "home" %}' id="header-logo"><img src="{% static '\icons\full-logo.svg' %}" alt="">
+  </a>
 
     {% if article.status == 'draft' %}
         {% if request.user.userprofile ==  article.writer or request.user.userprofile ==  article.editor%}

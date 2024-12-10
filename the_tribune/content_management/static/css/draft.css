@@ -146,6 +146,15 @@ input[type="date"]:focus{
   border-radius: 25px;
 }
 
+#deletebtn{
+  background-color: #46445C;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+#deletebtn:hover{
+  background-color: #46445C;
+}
 
 

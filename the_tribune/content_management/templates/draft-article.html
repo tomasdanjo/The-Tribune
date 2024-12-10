@@ -19,8 +19,10 @@
 
     <form method="POST" action="{% url 'delete_draft' article_id=article.id %}" style="position: absolute; left: 70%; margin-top: 15px;">
       {% csrf_token %}
-      <button id="deletebtn" type="submit" style="background-color: red; padding: 10px; border-radius: 15px; color: white;" onclick="return confirm('Are you sure you want to delete this draft?')">Delete Draft</button>
-    </form>
+      <div class="submit-btn-group">
+        <button id="deletebtn" type="submit" class="submit-btn highlight-btn" onclick="return confirm('Are you sure you want to delete this draft?')">Delete Draft<i class="fa-solid fa-delete-left"></i></button>
+    </div>    
+  </form>
 
 
   {% include 'article-template.html' %}
@@ -40,16 +42,5 @@
     
   </script>
 
-<script>
-  document.getElementById('deletebtn').addEventListener('mouseover', function() {
-      this.style.backgroundColor = '#c0392b';  
-      this.style.transform = 'scale(1.10)';    
-  });
-
-  document.getElementById('deletebtn').addEventListener('mouseout', function() {
-      this.style.backgroundColor = '#e74c3c';  
-      this.style.transform = 'scale(1)';       
-  });
-</script>
 
 {% endblock %}
