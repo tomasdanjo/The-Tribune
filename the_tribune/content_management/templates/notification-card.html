@@ -1,0 +1,50 @@
+{% for notification in notifications %}
+<div class="notification-item">
+  <div class="notification-icon">
+    {% if notification.notification_type == 'article' %}
+    <i class="fa-regular fa-newspaper"></i>
+    {% elif notification.notification_type == 'feedback' %}
+    <i class="fa-regular fa-comment"></i>
+    {% elif notification.notification_type == 'profile' %}
+    <i class="fa-regular fa-user"></i>
+    {% elif notification.notification_type == 'draft' %}
+    <i class="fa-regular fa-pen-to-square"></i>
+    {% elif notification.notification_type == 'review' %}
+    <i class="fa-brands fa-searchengin"></i>
+    {% elif notification.notification_type == 'publish' %}
+    <i class="fa-solid fa-signs-post"></i>
+    {% elif notification.notification_type == 'article_edit' %}
+    <i class="fa-solid fa-file-pen"></i>
+    {% elif notification.notification_type == 'archive' %}
+    <i class="fa-solid fa-inbox"></i>
+    {% elif notification.notification_type == 'reply' %}
+    <i class="fa-solid fa-reply"></i>
+    {% else %}
+    <i class="fa-solid fa-bell-concierge"></i>
+    {% endif %}
+  </div>
+  <div class="notification-content">
+    <strong>{{ notification.title }}</strong>
+    <p>{{ notification.message }}</p>
+    <small>{{ notification.created_at|timesince }} ago</small>
+    {% if notification.link %}
+    <a href="{{ notification.link }}" data-notification-id="{{ notification.id }}">View Details</a>
+    {% endif %}
+  </div>
+  <div class="notification-actions">
+    <!-- Triple-dot button -->
+    <button class="triple-dot-btn" onclick="toggleOptionsMenu(this)">⋮</button>
+    <!-- Options menu -->
+    <div class="options-menu">
+      {% if not notification.is_read %}
+        <button class="mark-read-btn" onclick="markAsRead({{ notification.id }})"><p>Mark as Read</p></button>
+      {% else %}
+        <button class="mark-unread-btn" onclick="markAsUnread({{ notification.id }})"><p>Mark as Unread</p></button>
+      {% endif %}
+      
+      
+    </div>
+  </div>
+</div>
+{% endfor %}
+

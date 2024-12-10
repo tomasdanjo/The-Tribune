@@ -26,6 +26,13 @@ urlpatterns = [
     path('reply/add/<int:feedback_id>/', add_reply, name='add_reply'),
     path('reply/update/<int:reply_id>/', update_reply, name='update_reply'),
     path('delete_reply/<int:reply_id>/', delete_reply, name='delete_reply'),
+    path('notifications/mark_all_read/', mark_all_notifications_read, name='mark_all_notifications_read'),
+    path('notifications/mark_read/<int:notification_id>/', mark_notification_read, name='mark_notification_read'),
+    path('notifications/read/', get_read_notifications, name='get_read_notifications'),
+    path('notifications/unread/', get_unread_notifications, name='get_unread_notifications'),
+    path('mark-as-read/', mark_as_read, name='mark_as_read'),
+    path('mark-as-unread/', mark_as_unread, name='mark_as_unread'),
+
     
 
 

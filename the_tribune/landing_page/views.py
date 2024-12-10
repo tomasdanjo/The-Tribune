@@ -11,11 +11,16 @@ from django.views.decorators.http import require_POST
 from django.templatetags.static import static
 from django.db.models import Count
 from datetime import datetime
-from article.models import Category
+from article.models import Category,ArticleAnalytics
 from user_authentication.models import UserProfile
 from django.contrib.auth.models import AnonymousUser
+<<<<<<< HEAD
 import json
 
+=======
+from django.utils import timezone
+from django.db import models
+>>>>>>> tomasdanjo
 # from transformers import pipeline
 
 # summarizer = pipeline('summarization')  
@@ -82,31 +87,53 @@ def landing_page(request):
             
     return render(request, 'landing_page.html',context)
 
+
+
+
+
 def full_article(request, id):
-    article = get_object_or_404(Article,id=id)
+    article = get_object_or_404(Article, id=id)
+    
+    # Track article view
+    if article.status == 'published':
+        today = timezone.now().date()
+        
+        # Create or update daily analytics
+        analytics, created = ArticleAnalytics.objects.get_or_create(
+            article=article, 
+            date=today,
+            defaults={'views': 1, 'comments': 0, 'shares': 0}
+        )
+        
+        # Increment views, avoiding duplicate counts in the same session
+        if not request.session.get(f'viewed_article_{id}', False):
+            analytics.views += 1
+            analytics.save()
+            
+            # Mark article as viewed in this session
+            request.session[f'viewed_article_{id}'] = True
+    
+    # Existing view logic
     comment_count = Comment.objects.filter(article_id=id).count()
     comments = Comment.objects.filter(article_id=id).order_by('-date_published')[:5]
     related_stories = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published')[:3]
     related_stories_count = Article.objects.filter(tag_id=article.tag_id).exclude(id=article.id).order_by('-date_published').count()
 
-    # request.session['article_id'] = id
-    print("Comment count: ",comment_count)
-
-
     comment_form = CommentForm()
     current_date = datetime.now().strftime('%b %d, %Y') 
+    
     context = {
-        'article':article,
-        'comments':comments,
-        'comment_count':comment_count,
-        'related_stories':related_stories,
-        'comment_form':comment_form,
-        'related_stories_count':related_stories_count,
-        'current_date':current_date,
-        'show_search':True
+        'article': article,
+        'comments': comments,
+        'comment_count': comment_count,
+        'related_stories': related_stories,
+        'comment_form': comment_form,
+        'related_stories_count': related_stories_count,
+        'current_date': current_date,
+        'show_search': True
     }
 
-    return render(request,'full_article_view.html',context)
+    return render(request, 'full_article_view.html', context)
 
 def load_more_comments(request, article_id, offset):
 

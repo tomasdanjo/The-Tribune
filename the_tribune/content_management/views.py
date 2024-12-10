@@ -12,6 +12,8 @@ from django.template.loader import render_to_string
 from .models import Feedback
 import json
 from django.db.models import Q
+from notification.models import *
+from notification.views import create_notification
 
 
 
@@ -38,6 +40,11 @@ def writer_dashboard_view(request):
     submitted = render_to_string('category-article-card.html',{'articles':submitted},request=request)
     archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
 
+    notifications = Notification.objects.all().filter(user=request.user).order_by('-created_at')
+
+    unread_notifs = notifications.filter(is_read=False)
+    read_notifs = notifications.filter(is_read=True)
+
     context = {
         'articles':articles,
         'published':published,
@@ -45,7 +52,10 @@ def writer_dashboard_view(request):
         'submitted':submitted,
         'archived':archived,
         'current_date':current_date,
-        'show_search':True
+        'show_search':True,
+        'unread_notifs':unread_notifs,
+        
+        'read_notifs':read_notifs
 
     }
 
@@ -64,10 +74,10 @@ def editor_dashboard_view(request):
     
     current_date = datetime.now().strftime('%b %d, %Y')
 
-    published = render_to_string('article-card.html',{'articles':published},request=request)
-    drafts = render_to_string('article-card.html',{'articles':drafts},request=request)
-    archived = render_to_string('article-card.html',{'articles':archived},request=request)
-    review = render_to_string('article-card.html',{'articles':review},request=request)
+    published = render_to_string('category-article-card.html',{'articles':published},request=request)
+    drafts = render_to_string('category-article-card.html',{'articles':drafts},request=request)
+    archived = render_to_string('category-article-card.html',{'articles':archived},request=request)
+    review = render_to_string('category-article-card.html',{'articles':review},request=request)
 
     context = {
         'articles':articles,
@@ -130,12 +140,44 @@ def create_article(request):
             action = request.POST.get('action')
             if action == "save_draft":
                 article.status = "draft"
+
+                notif_title = "Article Saved as Draft"
+                notif_message = f"New article '{article.headline}' saved as draft."
+                link = f"/draft/{article.id}"
+                notification_type = "draft"  # Example notification type
+                create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link)
+
+
             elif action == "submit_review":
                 article.status = "submitted"
+
+                notif_title = "Article Submitted for Review"
+                notif_message = f"New article '{article.headline}' has been submitted for review."
+                link = f"/approve_article/{article.id}"
+                notification_type = "review"  # Example notification type
+                create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link)
+
+                
             elif action == "publish":
+                
+                notif_title = "Article Published"
+                notif_message = f"Your article '{article.headline}' has been published! Click to view."
+                link = f"/article/{article.id}"
+                notification_type = "publish"  # Example notification type
+                create_notification(writer.user_credentials, notif_title, notif_message,notification_type , link)
+
+
+                notif_title = "Article Published"
+                notif_message = f"You have published the article '{article.headline}'. Click to view."
+                link = f"/article/{article.id}"
+                notification_type = "publish"  # Example notification type
+                create_notification(editor.user_credentials, notif_title, notif_message,notification_type ,link )
+
+
                 article.status = "published"
 
             article.save()  # Save the article
+            
 
             # Redirect based on user role
             if writer.is_writer:
@@ -174,10 +216,6 @@ def draft_article(request,id):
     
     return render(request,'draft-article.html',context)
 
-
-
-
-
 def edit_article(request, id):
     article = get_object_or_404(Article, id=id)
     editors = UserProfile.objects.filter(is_editor=True)
@@ -206,6 +244,13 @@ def edit_article(request, id):
             action = request.POST.get('action')
             article.status = "draft" if action == "save_draft" else "submitted" if action == "submit_review" or action=="save" else "published"
             article.save()
+
+            notif_title = "Article Edited"
+            notif_message = f"You have edited the article '{article.headline}'. View Changes."
+            link = f"/draft/{article.id}"
+            notification_type = "article_edit"  # Example notification type
+            create_notification(request.user, notif_title, notif_message,  notification_type,link)
+
 
             return redirect('writer_dashboard' if writer.is_writer else 'editor_dashboard')
 
@@ -266,6 +311,7 @@ def archive_view(request,id):
 
 def archive_article(request, article_id):
     article = get_object_or_404(Article, id=article_id)
+    writer = article.writer
 
     if request.method == 'POST':
         archive_reason = request.POST.get('archive_reason')
@@ -281,6 +327,20 @@ def archive_article(request, article_id):
             article.status = 'archived'
             article.save()
 
+            notif_title = "Article Archived"
+            notif_message = f"Your article '{article.headline}' has been archived. View the editor's feedback."
+            link = f"/archive/{article.id}"
+            notification_type = "archive"  # Example notification type
+            create_notification(writer.user_credentials, notif_title, notif_message,notification_type, link )
+
+            notif_title = "Article Archived"
+            notif_message = f"You have archived the article '{article.headline}'."
+            link = f"/archive/{article.id}"
+            notification_type = "archive"  # Example notification type
+            create_notification(request.user.userprofile, notif_title, notif_message, notification_type,link )
+
+            
+
             messages.success(request, 'Article archived with feedback.')
             return redirect('editor_dashboard')
         else:
@@ -291,8 +351,20 @@ def archive_article(request, article_id):
 
 def publish_article(request, id):
     article = get_object_or_404(Article, id=id)
+    writer = article.writer
     article.status = 'published'
     article.save()
+
+    notif_title = "Article Published"
+    notif_message = f"Your article '{article.headline}' has been published! Click to view."
+    link = f"/article/{article.id}"
+    notification_type = "publish"  # Example notification type
+    create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link )
+
+
+
+
+
     return redirect('editor_dashboard') 
 
 
@@ -304,7 +376,8 @@ def submit_feedback(request, article_id):
 
         if article_id and feedback_text:
             article = Article.objects.get(id=article_id)
-            feedback = Feedback.objects.create(article=article, editor=request.user.userprofile, comment=feedback_text)
+            editor = request.user.userprofile
+            feedback = Feedback.objects.create(article=article, editor=editor, comment=feedback_text)
             feedbacks = Feedback.objects.filter(article=article).order_by(
                 models.Case(
                     models.When(status='pending', then=0),
@@ -313,7 +386,16 @@ def submit_feedback(request, article_id):
                 ),
                 '-created_at'  # Maintain the ordering by date within each status group
             ) # Fetch all feedbacks
-        
+
+            writer=article.writer
+
+            notif_title = "Article Feedback"
+            notif_message = f"{feedback.editor}: \"{feedback.comment}\" View article feedback"
+            link = f"/approve_article/{article.id}/"
+            notification_type = "feedback"  # Example notification type
+            create_notification(writer.user_credentials, notif_title, notif_message, notification_type,link)
+
+
             # Render the feedback template as a string
             feedback_html = render_to_string('feedback-template.html',{'feedbacks': feedbacks,},request=request)
             return JsonResponse({'status': 'success','feedback_html':feedback_html})
@@ -343,6 +425,14 @@ def update_profile(request,id):
             pictureform.save()  
         if biographyform.is_valid():
             biographyform.save()
+
+
+        notif_title = "Profile Update"
+        notif_message = "You have successfully updated your profile. Click to view changes."
+        link = f"/view_profile/{profile.id}"
+        notification_type = "profile"  # Example notification type
+        create_notification(profile.user_credentials,notif_title,notif_message,notification_type,link)
+
 
         if profile.is_editor:
                 return redirect('editor_dashboard')  # Redirect
@@ -407,6 +497,12 @@ def resolve_feedback(request, feedback_id):
         feedback.status = 'resolved'
         feedback.save()
 
+        article = feedback.article
+
+        notif = f"Your feedback \"{feedback.comment}\" on article \"{article.headline}\" has been resolved. Click to view."
+        link = f"/approve_article/{article.id}/" 
+        create_notification(feedback.editor.user_credentials,notif,link)
+
         # Fetch all feedbacks related to the article
         article = feedback.article
         selected_status = request.POST.get("status", "show-all")
@@ -438,6 +534,19 @@ def delete_feedback(request, feedback_id):
 
     if request.method == 'POST':
         feedback = get_object_or_404(Feedback, id=feedback_id)
+        article=feedback.article
+
+        # Create the notification details
+        notif_title = "Feedback Deleted"
+        notif_message = f"Your feedback \"{feedback.comment}\" on article \"{article.headline}\" has been deleted. Click to view article."
+        link = f"/approve_article/{article.id}/"
+        notification_type = "feedback"  # Example notification type
+
+        # Create the notification for the editor
+        create_notification(feedback.editor.user_credentials, notif_title, notif_message, notification_type, link)
+
+
+
         feedback.delete()
 
         # Fetch all feedbacks related to the article
@@ -472,6 +581,19 @@ def update_feedback(request, feedback_id):
         feedback = get_object_or_404(Feedback, id=feedback_id)
         data = json.loads(request.body)
         feedback.comment = data.get("comment", feedback.comment)
+        article = feedback.article
+
+        # Create the notification details
+        notif_title = "Feedback Updated"
+        notif_message = f"Your feedback \"{feedback.comment}\" on article \"{article.headline}\" has been updated. Click to view article."
+        link = f"/approve_article/{article.id}/"
+        notification_type = "feedback"  # Example notification type
+
+        # Create the notification for the editor
+        create_notification(feedback.editor.user_credentials, notif_title, notif_message, notification_type, link)
+
+
+
         feedback.save()
         return JsonResponse({"success": True})
     return JsonResponse({"success": False, "error": "Invalid request method."}, status=400)
@@ -487,13 +609,23 @@ def add_reply(request, feedback_id):
 
         if not reply_text:
             return JsonResponse({'success': False, 'error': 'Reply text is required'}, status=400)
-
+        author=request.user.userprofile
         feedback = Feedback.objects.get(id=feedback_id)
         reply = Reply.objects.create(
             feedback=feedback,
-            author=request.user.userprofile,  # Assuming the user is authenticated
+            author=author,  # Assuming the user is authenticated
             reply=reply_text
         )
+        article = feedback.article
+        # Create the notification details
+        notif_title = "New Reply to Your Feedback"
+        notif_message = f"{author.first_name} {author.last_name} replied \"{reply_text}\" to your feedback \"{feedback.comment}\" on article \"{article.headline}.\" Click to view."
+        link = f"/approve_article/{article.id}/"
+        notification_type = "reply_to_feedback"  # Example notification type
+
+        # Create the notification for the editor
+        create_notification(feedback.editor.user_credentials, notif_title, notif_message, notification_type, link)
+
 
         # Retrieve all replies for the feedback to update the UI
         replies = Reply.objects.filter(feedback=feedback)
@@ -521,6 +653,21 @@ def update_reply(request, reply_id):
             # Ensure the current user is allowed to edit this reply
             if request.user == reply.author.user_credentials:
                 reply.reply = updated_reply_text
+
+                author = reply.author
+                feedback = reply.feedback
+                article = feedback.article
+                # Create the notification details
+                notif_title = "Reply Edited"
+                notif_message = f"{author.first_name} {author.last_name} has edited their reply on your feedback \"{feedback.comment}\" on article \"{article.headline}.\" Click to view."
+                link = f"/approve_article/{article.id}/"
+                notification_type = "reply"  # Example notification type
+
+                # Create the notification for the editor
+                create_notification(feedback.editor.user_credentials, notif_title, notif_message, notification_type, link)
+
+
+
                 reply.save()
                 return JsonResponse({'success': True, 'reply': updated_reply_text})
             else:
@@ -535,6 +682,16 @@ def delete_reply(request, reply_id):
     if request.method == "POST":
         try:
             reply = Reply.objects.get(id=reply_id)
+           # Create the notification details
+            notif_title = "Reply Deleted"
+            notif_message = f"Your reply \"{reply.reply}\" on feedback \"{reply.feedback.comment}\" on article \"{reply.feedback.article.headline}\" has been deleted."
+            notification_type = "reply"  # Example notification type
+
+            # Create the notification for the author of the reply
+            create_notification(reply.author.user_credentials, notif_title, notif_message, notification_type)
+
+
+
             reply.delete()
             return JsonResponse({"status": "success"})  # Match "status" with your JS logic
         except Reply.DoesNotExist:
@@ -562,4 +719,64 @@ def view_profile(request, id):
     }
 
     return render(request, 'view_profile.html', context)
+
+# In views.py
+def mark_all_notifications_read(request):
+    if request.method == 'POST':
+        Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error'}, status=400)
+
+def mark_notification_read(request, notification_id):
+    try:
+        notification = Notification.objects.get(id=notification_id, user=request.user)
+        notification.is_read = True
+        notification.save()
+        return JsonResponse({'status': 'success'})
+    except Notification.DoesNotExist:
+        return JsonResponse({'status': 'error'}, status=404)
+
+def get_unread_notifications(request):
+    # Fetch read notifications from your database
+    unread_notifications = Notification.objects.filter(user=request.user, is_read=False)
     
+    # Render the notifications with the 'notification-card.html' template
+    return render(request, 'notification-card.html', {'notifications': unread_notifications})
+
+def get_read_notifications(request):
+    # Fetch read notifications from your database
+    read_notifications = Notification.objects.filter(user=request.user, is_read=True)
+    
+    # Render the notifications with the 'notification-card.html' template
+    return render(request, 'notification-card.html', {'notifications': read_notifications})
+    
+
+@csrf_exempt  # Remove this decorator in production and use proper CSRF protection
+def mark_as_read(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        notification_id = data.get('id')
+        
+        try:
+            notification = Notification.objects.get(id=notification_id)
+            notification.is_read = True  # Assuming there's an 'is_read' field
+            notification.save()
+            return JsonResponse({'success': True})
+        except Notification.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Notification not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})
+
+@csrf_exempt  # Remove this decorator in production and use proper CSRF protection
+def mark_as_unread(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        notification_id = data.get('id')
+        
+        try:
+            notification = Notification.objects.get(id=notification_id)
+            notification.is_read = False  # Assuming there's an 'is_read' field
+            notification.save()
+            return JsonResponse({'success': True})
+        except Notification.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Notification not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})

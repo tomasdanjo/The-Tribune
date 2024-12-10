@@ -1,5 +1,6 @@
 from django.db import models
 from user_authentication.models import UserProfile
+from django.utils import timezone
 # Create your models here.
 
 class Category(models.Model):
@@ -58,4 +59,13 @@ class Article(models.Model):
     tag = models.ForeignKey(Tag, on_delete=models.RESTRICT)
     category = models.ForeignKey('Category', on_delete=models.RESTRICT, default=1)
 
+class ArticleAnalytics(models.Model):
+    article = models.ForeignKey(Article, related_name='analytics', on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+    views = models.IntegerField(default=0)
+    comments = models.IntegerField(default=0)
+    shares = models.IntegerField(default=0)
 
+    class Meta:
+        unique_together = ('article', 'date')
+        ordering = ['date']
