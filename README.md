@@ -55,6 +55,9 @@ This project is created by:
 7.) Subscribe to newsletter
 - Users must be able to subscribe to a newsletter to instant receive updates and notifications on the latest stories and content posted on the portal.
 
+8.) Notification
+- Allows Editor/ Writer to be notified
+
 # Built-With
 
 - ![Python Badge](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=FFD43B)
