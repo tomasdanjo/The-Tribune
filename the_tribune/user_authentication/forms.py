@@ -5,7 +5,7 @@ class Login_Form(forms.Form):
     username = forms.CharField(       
         widget=forms.TextInput(attrs={
             'class': 'Username',
-            'placeholder': 'i.e thomasdanjo.manulat@cit.edu'
+            'placeholder': 'i.e thomasdanjo'
         }),
         required=True
     )
